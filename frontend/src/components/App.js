@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import Auth from "./Auth/index.jsx";
+import RouterComponent from "./RouterComponent";
 
 class App extends Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class App extends Component {
       //     );
       //   })}
       // </ul>
-        <Auth />
+        <RouterComponent />
     );
   }
 }

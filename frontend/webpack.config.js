@@ -1,4 +1,5 @@
 module.exports = {
+  // entry: './index.jsx',
   watch: true,
   module: {
     rules: [
@@ -10,5 +11,14 @@ module.exports = {
         }
       }
     ]
+  },
+  output: {
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  devServer: {
+    historyApiFallback: true,
   }
 };
