@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Auth from "../Auth";
 import SignUp from "../SignUp";
+import {LeadList} from "../LeadList";
 
 export default function App() {
   return (
@@ -23,20 +24,26 @@ export default function App() {
             <li>
               <Link to="/signup">SignUp</Link>
             </li>
+            <li>
+              <Link to="/api/lead2/">Protected Leads</Link> // по идее мы не должны напрямую обращаться к джанго-вьюхам
+            </li>
           </ul>
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/login">
+          <Route path="/login/">
             <Auth />
           </Route>
-          <Route path="/signup">
+          <Route path="/signup/">
             <SignUp />
           </Route>
           <Route path="/">
             <Home />
+          </Route>
+          <Route path="/api/lead2/">
+            <LeadList />
           </Route>
         </Switch>
       </div>
