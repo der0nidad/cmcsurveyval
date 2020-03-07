@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     # 'allauth.account',
     # 'rest_auth.registration',
     'auth_app',
+    'users',
+    'surveys',
 ]
 
 SITE_ID = 1
@@ -95,13 +97,30 @@ WSGI_APPLICATION = 'cmcsurveyval.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# move credentials to config
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cmcsurveyval',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': 3306,
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': 'SET default_storage_engine=INNODB; SET NAMES utf8mb4;',
+            'sql_mode': 'STRICT_ALL_TABLES',
+        },
+        'CONN_MAX_AGE': 0
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -141,3 +160,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'users.User'
