@@ -33,7 +33,7 @@ class AnswerVariant(models.Model):
     text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     order = models.IntegerField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    next_question = models.IntegerField(null=True) # id следующего вопроса. по идее - это должен быть nullable FK.
+    next_question = models.ForeignKey(null=True) # id следующего вопроса. по идее - это должен быть nullable FK.
     # как сохранять в базе id next_question - с фронта приходит дикт вида
     # { question_number_in_survey: next_question_number_in_survey}
     # переопределяем метод save у survey и по порядку сохраняем вопросы. если номер есть в этом дикте, то заносим его
