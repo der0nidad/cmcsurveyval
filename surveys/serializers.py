@@ -1,13 +1,30 @@
 from rest_framework import serializers
-from .models import Survey, Question
+from .models import Survey, Question, AnswerVariant
+
+
+class AnswerVariantCreateSerializer(serializers.ModelSerializer):
+    question_id = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question.id')
+
+    class Meta:
+        model = AnswerVariant
+        fields = ('id', 'text', 'order', 'question_id')
+
+    def create(self, validated_data):
+        answer_variant = AnswerVariant.objects.create(
+            question=validated_data['question']['id'],
+            text=validated_data['text'],
+            order=validated_data['order']
+        )
+        return answer_variant
 
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
+    answers_list = AnswerVariantCreateSerializer(read_only=True, many=True, source='question')
     survey_id = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all(), source='survey.id')
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'survey_id', 'order', 'question_type')
+        fields = ('id', 'text', 'survey_id', 'order', 'question_type', 'answers_list')
 
     def create(self, validated_data):
         question = Question.objects.create(
@@ -16,7 +33,6 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
             order=validated_data['order'],
             type=validated_data['question_type']
         )
-
         return question
 
 

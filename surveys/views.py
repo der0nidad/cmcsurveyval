@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 
-from surveys.models import Survey, Question
-from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer
+from surveys.models import Survey, Question, AnswerVariant
+from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, AnswerVariantCreateSerializer
 
 
 class SurveyCreate(generics.ListCreateAPIView):
@@ -14,3 +14,7 @@ class QuestionCreate(generics.ListCreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionCreateSerializer
 
+
+class AnswerVariantCreate(generics.ListCreateAPIView):
+    queryset = AnswerVariant.objects.all()
+    serializer_class = AnswerVariantCreateSerializer
