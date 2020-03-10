@@ -5,6 +5,6 @@ from .models import Lead
 from .serializers import LeadSerializer
 
 
-class LeadListCreate(LoginRequiredMixin, generics.ListCreateAPIView):
+class LeadListCreate(generics.ListCreateAPIView):
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer

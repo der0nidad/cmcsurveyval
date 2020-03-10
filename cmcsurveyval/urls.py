@@ -22,10 +22,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('leads.urls')),
     path('', include('frontend.urls')),
+    path('', include('surveys.urls')),
     # path('rest-auth/', include('rest_auth.urls')),
     # path('rest-auth/registration/', include('rest_auth.registration.urls')),
     # path('', include('django.contrib.auth.urls')),
     path('auth/', include('auth_app.urls')),
-    re_path('.*', views.index),
+    # re_path('.*', views.index),
 
 ]

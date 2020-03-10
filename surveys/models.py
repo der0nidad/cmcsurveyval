@@ -3,14 +3,15 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 DEFAULT_TEXT_FIELD_LENGTH = 200
-# Create your models here.
+
+
 class Survey(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_open = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    multiple_apply = models.BooleanField(default=True)
+    multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
 
 
 class Question(models.Model):
@@ -24,16 +25,20 @@ class Question(models.Model):
         (SMALL_TEXT, _('Text question')),
     )
     text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='survey_link')
     order = models.IntegerField()
-    type = models.CharField(max_length=2, choices=QUESTION_TYPE_CHOICES)
+    question_type = models.CharField(max_length=2, choices=QUESTION_TYPE_CHOICES)
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.question_type, self.text)
 
 
 class AnswerVariant(models.Model):
     text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     order = models.IntegerField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    next_question = models.ForeignKey(null=True) # id следующего вопроса. по идее - это должен быть nullable FK.
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question')
+    next_question = models.ForeignKey(Question, null=True, on_delete=models.CASCADE, related_name='next_question')
+    # id следующего вопроса. по идее - это должен быть nullable FK.
     # как сохранять в базе id next_question - с фронта приходит дикт вида
     # { question_number_in_survey: next_question_number_in_survey}
     # переопределяем метод save у survey и по порядку сохраняем вопросы. если номер есть в этом дикте, то заносим его
@@ -51,7 +56,6 @@ class AnswerSelect(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answer_variant = models.ForeignKey(AnswerVariant, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-
 
 # class TextQuestion(Question):
 #     pass
