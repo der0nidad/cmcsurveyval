@@ -1,11 +1,9 @@
 import React from 'react';
-import Container from "@material-ui/core/Container";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import Container from '@material-ui/core/Container';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
 
-
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -29,19 +27,17 @@ export class LeadList extends React.Component {
   // const classes = useStyles();
 
   componentDidMount() {
-    console.log(123)
+    console.log(123);
   }
 
   render() {
     return (
-    <Container component="main" maxWidth="xs">
-123
-    </Container>
-  );
+      <Container component="main" maxWidth="xs">
+        123
+      </Container>
+    );
   }
-
-
-};
+}
 
 // const Auth = () => {
 //     return (

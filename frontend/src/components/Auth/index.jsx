@@ -10,169 +10,152 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {getCookie} from "../../common/helpers/csrf";
+import { getCookie } from '../../common/helpers/csrf';
 
 function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>
+      {' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 }
 
-const classes = makeStyles(theme => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
+const classes = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 
 // const classes = useStyles();
 
-export class Auth extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-        };
+export default class Auth extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
     };
+  }
 
     logUserIn = () => {
-        const cookie = getCookie('csrftoken');
-        var formData = new FormData();
-        const { email, password } = this.state;
-        console.log(email, password)
-        formData.append('login', email);
-        formData.append('password', password);
-        formData.append('csrfmiddlewaretoken', cookie);
-        const next_url = window.location.search.slice(1).split('=')[1]; // очень костыльно
-        formData.append('next', next_url);
-        for (var p of formData) {
-            console.log(p);
-        }
-        fetch('/auth/login/', {
-            method: 'POST',
-            // headers: {
-            //     'Accept': 'application/json',
-            //     'Content-Type': 'application/json',
-            // },
-            // body: JSON.stringify({
-            //     login: 'yourValue',
-            //     password: 'yourOtherValue',
-            //     csrfmiddlewaretoken: cookie
-            // }),
-            body: formData,
-            bodyformat: 'formdata',
-        })
+      const cookie = getCookie('csrftoken');
+      const formData = new FormData();
+      const { email, password } = this.state;
+      console.log(email, password);
+      formData.append('login', email);
+      formData.append('password', password);
+      formData.append('csrfmiddlewaretoken', cookie);
+      const nextUrl = window.location.search.slice(1).split('=')[1]; // очень костыльно
+      formData.append('next', nextUrl);
+      fetch('/auth/login/', {
+        method: 'POST',
+        body: formData,
+        bodyformat: 'formdata',
+      });
     };
 
     handleEmailChange = (e) => {
-        this.setState({email: e.target.value});
+      this.setState({ email: e.target.value });
     };
+
     handlePasswordChange = (e) => {
-        this.setState({password: e.target.value});
+      this.setState({ password: e.target.value });
     };
 
     render() {
-        return (
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    {/*<form className={classes.form} noValidate>*/}
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        value={this.state.email}
-                        onChange={this.handleEmailChange}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary"/>}
-                        label="Remember me"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={this.logUserIn}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="/signup" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                    {/*</form>*/}
-                </div>
-                <Box mt={8}>
-                    <Copyright/>
-                </Box>
-            </Container>
-        );
-    };
+      const { email, password } = this.state;
+      return (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            {/* <form className={classes.form} noValidate> */}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={this.handleEmailChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={this.handlePasswordChange}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.logUserIn}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="/reset-password" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  Don`&apos`t have an account? Sign Up
+                </Link>
+              </Grid>
+            </Grid>
+            {/* </form> */}
+          </div>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </Container>
+      );
+    }
 }
-
-// const Auth = () => {
-//     return (
-//     <Button variant="contained" color="primary">
-//       Hello World
-//     </Button>
-//   );
-// };
