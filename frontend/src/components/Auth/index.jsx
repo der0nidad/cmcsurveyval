@@ -64,16 +64,21 @@ export default class Auth extends React.Component {
       const cookie = getCookie('csrftoken');
       const formData = new FormData();
       const { email, password } = this.state;
-      console.log(email, password);
       formData.append('login', email);
       formData.append('password', password);
       formData.append('csrfmiddlewaretoken', cookie);
       const nextUrl = window.location.search.slice(1).split('=')[1]; // очень костыльно
-      formData.append('next', nextUrl);
       fetch('/auth/login/', {
         method: 'POST',
         body: formData,
         bodyformat: 'formdata',
+      }).then(() => {
+        // TODO: replace to props.history.push('/smth'), when add redux etc
+        if (nextUrl) {
+          window.location.replace(nextUrl);
+        } else {
+          window.location.replace('/api/lead2');
+        }
       });
     };
 

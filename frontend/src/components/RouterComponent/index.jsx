@@ -1,13 +1,10 @@
-import React from "react";
+import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import {Auth} from "../Auth";
-import SignUp from "../SignUp";
-import {LeadList} from "../LeadList";
+  BrowserRouter as Router, Link, Route, Switch,
+} from 'react-router-dom';
+import Auth from '../Auth';
+import SignUp from '../SignUp';
+import { LeadList } from '../LeadList';
 
 export default function App() {
   return (
@@ -25,7 +22,9 @@ export default function App() {
               <Link to="/signup">SignUp</Link>
             </li>
             <li>
-              <Link to="/api/lead2/">Protected Leads</Link> // по идее мы не должны напрямую обращаться к джанго-вьюхам
+              <Link to="/api/lead2/">Protected Leads</Link>
+              {' '}
+              по идее мы не должны напрямую обращаться к джанго-вьюхам
             </li>
           </ul>
         </nav>
@@ -53,12 +52,4 @@ export default function App() {
 
 function Home() {
   return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
