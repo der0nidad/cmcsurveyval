@@ -1,18 +1,21 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 
-from auth_app.forms import RegisterForm
 from cmcsurveyval.settings import LOGIN_URL
 
 
 def login_view(request):
-    username, password = request.POST['username'], request.POST['password']
+    username, password = request.POST['login'], request.POST['password']
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({}, status=200)
+        user_obj = {
+            'username': username,
+            'id': user.id
+        }
+        return JsonResponse({'user': user_obj}, status=200)
     else:
         return JsonResponse({}, status=400)
 

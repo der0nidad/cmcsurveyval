@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("api/lead")
+    fetch("/api/lead/")
       .then(response => {
         if (response.status > 400) {
           return this.setState(() => {

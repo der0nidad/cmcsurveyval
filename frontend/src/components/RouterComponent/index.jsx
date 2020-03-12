@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Auth from "../Auth";
+import {Auth} from "../Auth";
 import SignUp from "../SignUp";
 import {LeadList} from "../LeadList";
 
