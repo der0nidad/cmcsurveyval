@@ -1,6 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +25,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const mapStateToProps = (state) => ({
+  count: state.initialReducer,
+});
+const mapDispatchToProps = (dispatch) => ({
+  handleIncrementClick: () => dispatch({ type: 'INCREMENT' }),
+  handleDecrementClick: () => dispatch({ type: 'DECREMENT' }),
+});
+export const DefaultComponent = ({ count, handleIncrementClick, handleDecrementClick }) => (
+  <div>
+    <h1>
+      Helloworld React & Redux!
+      {count}
+    </h1>
+    <button onClick={handleDecrementClick} type="button">Decrement</button>
+    <button onClick={handleIncrementClick} type="button">Increment</button>
+  </div>
+);
+
+DefaultComponent.propTypes = {
+  count: PropTypes.number.isRequired,
+  handleIncrementClick: PropTypes.func.isRequired,
+  handleDecrementClick: PropTypes.func.isRequired,
+};
+
+const DefaultContainer = connect(mapStateToProps, mapDispatchToProps)(DefaultComponent);
+
+
+// eslint-disable-next-line import/prefer-default-export
 export class LeadList extends React.Component {
   // const classes = useStyles();
 
@@ -33,7 +63,7 @@ export class LeadList extends React.Component {
   render() {
     return (
       <Container component="main" maxWidth="xs">
-        123
+        <DefaultContainer />
       </Container>
     );
   }

@@ -22,9 +22,12 @@ export default function App() {
               <Link to="/signup">SignUp</Link>
             </li>
             <li>
-              <Link to="/api/lead2/">Protected Leads</Link>
+              <Link to="/lead">Protected Leads2</Link>
               {' '}
               по идее мы не должны напрямую обращаться к джанго-вьюхам
+            </li>
+            <li>
+              <Link to="/someurl">SomeUrl</Link>
             </li>
           </ul>
         </nav>
@@ -41,7 +44,10 @@ export default function App() {
           <Route path="/">
             <Home />
           </Route>
-          <Route path="/api/lead2/">
+          <Route path="/lead">
+            <SignUp />
+          </Route>
+          <Route path="/someurl">
             <LeadList />
           </Route>
         </Switch>
