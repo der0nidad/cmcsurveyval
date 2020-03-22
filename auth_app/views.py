@@ -1,9 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import redirect
-
 from cmcsurveyval.settings import LOGIN_URL
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from rest_framework.generics import GenericAPIView
+
+from auth_app.serializers import SelfUserSerializer
 
 
 def login_view(request):
@@ -33,6 +36,10 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect(LOGIN_URL)
+
+
+class SelfUserView(LoginRequiredMixin, GenericAPIView):
+    serializer_class = SelfUserSerializer
 #
 #
 # # Create your views here.

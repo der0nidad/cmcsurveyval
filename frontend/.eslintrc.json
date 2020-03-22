@@ -24,5 +24,8 @@
         "react"
     ],
     "rules": {
+        "no-self-assign": "off",
+        "react/static-property-placement": "off",
+        "import/prefer-default-export": "off"
     }
 }

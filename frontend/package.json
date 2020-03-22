@@ -26,6 +26,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "redux-devtools": "^3.5.0",
+    "redux-logger": "^3.0.6",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
@@ -40,6 +41,8 @@
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "redux": "^4.0.5"
+    "react-router-redux": "^4.0.8",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   }
 }
