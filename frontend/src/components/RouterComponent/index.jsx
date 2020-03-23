@@ -91,6 +91,7 @@ class RouterComp extends React.Component {
         </Button>
         <Drawer
           open={menuOpened}
+          onClose={closeMenu}
         >
           {list('left')}
         </Drawer>
@@ -126,14 +127,14 @@ class RouterComp extends React.Component {
             <Route path="/signup/">
               <SignUp />
             </Route>
-            <Route path="/">
-              <Home />
-            </Route>
             <Route path="/lead">
               <SignUp />
             </Route>
             <Route path="/someurl">
               <LeadList />
+            </Route>
+            <Route path="/">
+              <Home />
             </Route>
           </Switch>
         </div>
