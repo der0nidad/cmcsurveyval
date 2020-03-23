@@ -77,7 +77,7 @@ export default class Auth extends React.Component {
         if (nextUrl) {
           window.location.replace(nextUrl);
         } else {
-          window.location.replace('/api/lead2');
+          window.location.replace('/');
         }
       });
     };

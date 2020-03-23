@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Auth from '../Auth';
 import SignUp from '../SignUp';
 import { LeadList } from '../LeadList';
-import { WHOAMI_START } from '../../store/actionTypes';
+import { whoAmIAction } from '../../store/actions/routerComponent.actions';
 
 function Home() {
   return <h2>Home2</h2>;
@@ -86,7 +86,7 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 const mapDispatchToProps = (dispatch) => ({
-  checkUserIsAuthentificated: () => dispatch({ type: WHOAMI_START }),
+  checkUserIsAuthenticated: () => dispatch(whoAmIAction()),
   handleDecrementClick: () => dispatch({ type: 'DECREMENT' }),
 });
 

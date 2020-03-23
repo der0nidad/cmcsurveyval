@@ -1,5 +1,5 @@
 from cmcsurveyval.settings import LOGIN_URL
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -38,8 +38,23 @@ def logout_view(request):
     return redirect(LOGIN_URL)
 
 
+# TODO: проверь, почему не работает редирект на страницу логина, если пользователь не залогинен
 class SelfUserView(LoginRequiredMixin, GenericAPIView):
+    model = get_user_model()
     serializer_class = SelfUserSerializer
+
+    def get(self, request):
+        print(request)
+        User = get_user_model()
+        user = User.objects.get(id=request.user.id)
+        user_response = {
+            'username': user.username,
+            'email': user.email,
+        }
+        # и зачем нам тогда сериалайзер?!
+        return JsonResponse({'user': user_response})
+
+#
 #
 #
 # # Create your views here.

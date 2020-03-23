@@ -1,3 +1,1 @@
-export const apiUrls = {
-  whoami: 'whoami',
-};
+export const whoAmI = 'auth/whoami/';
