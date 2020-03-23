@@ -4,25 +4,31 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Drawer } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import Divider from '@material-ui/core/Divider';
 import MailIcon from '@material-ui/icons/Mail';
 
+import Link from '@material-ui/core/Link';
 import { closeLeftMenu, openLeftMenu } from '../../store/actions/flags.actions';
 import { whoAmIAction } from '../../store/actions/routerComponent.actions';
-import { LeadList } from '../LeadList';
 import SignUp from '../SignUp';
 import Auth from '../Auth';
+import { UserProfile } from '../UserProfile';
+import { Surveys } from '../Surveys';
+import { Header } from '../Header';
 
 function Home() {
-  return <h2>Home2</h2>;
+  return (
+    <div>
+      <Header
+        pageTitle="Main Page"
+      />
+      <h2>Home2</h2>
+    </div>
+  );
 }
 
 class RouterComp extends React.Component {
@@ -54,29 +60,30 @@ class RouterComp extends React.Component {
 
   render() {
     const { menuOpened, closeMenu } = this.props;
-    const list = (anchor) => (
+    const pages = [
+      {
+        // TODO вынеси урлы отсюда и из роутера в одно место
+        title: 'Profile',
+        url: '/profile',
+      },
+      {
+        title: 'Surveys',
+        url: '/surveys',
+      },
+    ];
+    const list = () => (
       <div
-        // className={clsx(classes.list, {
-        //   [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-        // })}
         role="presentation"
         onClick={closeMenu}
         onKeyDown={closeMenu}
       >
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+          {pages.map((page, index) => (
+            <ListItem button key={page.title}>
+              <Link href={page.url}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={page.title} />
+              </Link>
             </ListItem>
           ))}
         </List>
@@ -84,42 +91,13 @@ class RouterComp extends React.Component {
     );
     return (
       <Router>
-        <Button
-          onClick={this.handleOpenMenu}
-        >
-          Open Menu
-        </Button>
         <Drawer
           open={menuOpened}
           onClose={closeMenu}
         >
-          {list('left')}
+          {list()}
         </Drawer>
         <div>
-          {/*  <nav> */}
-          {/*    <ul> */}
-          {/*      <li> */}
-          {/*        <Link to="/">Home</Link> */}
-          {/*      </li> */}
-          {/*      <li> */}
-          {/*        <Link to="/login">Login</Link> */}
-          {/*      </li> */}
-          {/*      <li> */}
-          {/*        <Link to="/signup">SignUp</Link> */}
-          {/*      </li> */}
-          {/*      <li> */}
-          {/*        <Link to="/lead">Protected Leads2</Link> */}
-          {/*        {' '} */}
-          {/*        по идее мы не должны напрямую обращаться к джанго-вьюхам */}
-          {/*      </li> */}
-          {/*      <li> */}
-          {/*        <Link to="/someurl">SomeUrl</Link> */}
-          {/*      </li> */}
-          {/*    </ul> */}
-          {/*  </nav> */}
-
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
           <Switch>
             <Route path="/login/">
               <Auth />
@@ -127,11 +105,11 @@ class RouterComp extends React.Component {
             <Route path="/signup/">
               <SignUp />
             </Route>
-            <Route path="/lead">
-              <SignUp />
+            <Route path="/surveys">
+              <Surveys />
             </Route>
-            <Route path="/someurl">
-              <LeadList />
+            <Route path="/profile">
+              <UserProfile />
             </Route>
             <Route path="/">
               <Home />
@@ -152,7 +130,6 @@ const mapDispatchToProps = (dispatch) => ({
   checkUserIsAuthenticated: () => dispatch(whoAmIAction()),
   openMenu: () => dispatch(openLeftMenu()),
   closeMenu: () => dispatch(closeLeftMenu()),
-  handleDecrementClick: () => dispatch({ type: 'DECREMENT' }),
 });
 
 export const RouterComponent = connect(mapStateToProps, mapDispatchToProps)(RouterComp);
