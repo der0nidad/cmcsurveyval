@@ -3,6 +3,14 @@ import { WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS } from '../actionTypes';
 
 const initialState = {
   user: null,
+  userPermissions: null,
+};
+const userSchemaExample = {
+  username: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  avatar: 'link/to/avatar.jpg',
 };
 
 const auth = (state = initialState, action) => {
