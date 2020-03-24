@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import Fab from '@material-ui/core/Fab';
@@ -12,25 +13,42 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Header } from '../Header';
+import { loadSurveysAction } from '../../store/actions/surveys.actions';
 
-const mapStateToProps = (state) => ({
-});
-const mapDispatchToProps = (dispatch) => ({
-  handleIncrementClick: () => dispatch({ type: 'INCREMENT' }),
-});
+
 class SurveysComponent extends React.Component {
   static propTypes = {
+    loadSurveys: PropTypes.func.isRequired,
+    surveys: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      author: PropTypes.string.isRequired,
+    })),
+    isLoading: PropTypes.bool,
   };
 
   static defaultProps = {
-
+    surveys: [],
+    isLoading: false,
   };
 
+  componentDidMount() {
+    const { loadSurveys } = this.props;
+    loadSurveys();
+    console.log('success');
+  }
+
+
   render() {
-    // const { items } = this.props;
-    const items = [{ name: 'My first suervey', author: 'Ivanov Ivan', id: 2 }, { name: 'My second suervey', author: 'Ivanov Ivan', id: 3 }];
-    const list = (items.map((survey, index) => (
+    const { isLoading, surveys } = this.props;
+    if (isLoading) {
+      return <CircularProgress />;
+    }
+    // const surveys = [{ name: 'My first suervey', author: 'Ivanov Ivan', id: 2 },
+    // { name: 'My second suervey', author: 'Ivanov Ivan', id: 3 }];
+    const list = (surveys.map((survey, index) => (
       <ListItem key={survey.id}>
         <Card>
           <CardContent>
@@ -72,4 +90,15 @@ class SurveysComponent extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  surveys: state.surveys.surveys,
+  isLoading: state.surveys.isLoading,
+  // очень хороший вопрос: возможно, стоит держать все подобные флаги во flags?? хз
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadSurveys: () => dispatch(loadSurveysAction()),
+});
+
 export const Surveys = connect(mapStateToProps, mapDispatchToProps)(SurveysComponent);
