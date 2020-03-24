@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
 import { Header } from '../Header';
 import { loadSurveysAction } from '../../store/actions/surveys.actions';
 
@@ -40,48 +41,54 @@ class SurveysComponent extends React.Component {
     console.log('success');
   }
 
+  loadSurveysByButton = () => {
+    const { loadSurveys } = this.props;
+    loadSurveys();
+  }
+
 
   render() {
     const { isLoading, surveys } = this.props;
+    let surveysListOrSpinner;
     if (isLoading) {
-      return <CircularProgress />;
+      surveysListOrSpinner = <CircularProgress />;
+    } else {
+      surveysListOrSpinner = (surveys.map((survey, index) => (
+        <ListItem key={survey.id}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                {survey.name}
+              </Typography>
+              <Typography color="textSecondary" gutterBottom>
+                {survey.author}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              {/* <Button size="small">Learn More</Button> */}
+              <IconButton title="Edit questions" aria-label="edit questions">
+                <HelpOutlineIcon />
+              </IconButton>
+              <IconButton title="Edit survey" aria-label="edit survey">
+                <EditIcon />
+              </IconButton>
+              <IconButton title="Delete survey" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+        </ListItem>
+      )));
     }
-    // const surveys = [{ name: 'My first suervey', author: 'Ivanov Ivan', id: 2 },
-    // { name: 'My second suervey', author: 'Ivanov Ivan', id: 3 }];
-    const list = (surveys.map((survey, index) => (
-      <ListItem key={survey.id}>
-        <Card>
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              {survey.name}
-            </Typography>
-            <Typography color="textSecondary" gutterBottom>
-              {survey.author}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            {/* <Button size="small">Learn More</Button> */}
-            <IconButton title="Edit questions" aria-label="edit questions">
-              <HelpOutlineIcon />
-            </IconButton>
-            <IconButton title="Edit survey" aria-label="edit survey">
-              <EditIcon />
-            </IconButton>
-            <IconButton title="Delete survey" aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </ListItem>
-    )));
 
     return (
       <div>
         <Header
           pageTitle="Surveys"
         />
+        <Button onClick={this.loadSurveysByButton}>Reload surveys</Button>
         <List>
-          {list}
+          {surveysListOrSpinner}
         </List>
         <Fab color="primary" aria-label="add">
           <AddIcon />
