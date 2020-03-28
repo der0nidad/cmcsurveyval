@@ -50,6 +50,7 @@ class SelfUserView(LoginRequiredMixin, GenericAPIView):
         user_response = {
             'username': user.username,
             'email': user.email,
+            'id': user.id,
         }
         # и зачем нам тогда сериалайзер?!
         return JsonResponse({'user': user_response})

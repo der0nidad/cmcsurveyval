@@ -15,8 +15,11 @@ import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 import { Header } from '../Header';
-import { loadSurveysAction } from '../../store/actions/surveys.actions';
+import { createSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
+import { closeSurveyForm, openSurveyForm } from '../../store/actions/flags.actions';
+import { SurveyForm } from './SurveyForm';
 
 
 class SurveysComponent extends React.Component {
@@ -28,27 +31,33 @@ class SurveysComponent extends React.Component {
       author: PropTypes.string.isRequired,
     })),
     isLoading: PropTypes.bool,
+    formOpened: PropTypes.bool,
+    openForm: PropTypes.func.isRequired,
+    closeForm: PropTypes.func.isRequired,
+    createSurvey: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     surveys: [],
     isLoading: false,
+    formOpened: false,
   };
 
   componentDidMount() {
     const { loadSurveys } = this.props;
     loadSurveys();
-    console.log('success');
   }
 
   loadSurveysByButton = () => {
     const { loadSurveys } = this.props;
     loadSurveys();
-  }
+  };
 
 
   render() {
-    const { isLoading, surveys } = this.props;
+    const {
+      isLoading, surveys, openForm, closeForm, formOpened, createSurvey,
+    } = this.props;
     let surveysListOrSpinner;
     if (isLoading) {
       surveysListOrSpinner = <CircularProgress />;
@@ -57,12 +66,14 @@ class SurveysComponent extends React.Component {
         <ListItem key={survey.id}>
           <Card>
             <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                {survey.name}
-              </Typography>
-              <Typography color="textSecondary" gutterBottom>
-                {survey.author}
-              </Typography>
+              <Link to={`${survey.id}/edit_questions/`}>
+                <Typography color="textSecondary" gutterBottom>
+                  {survey.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  {survey.author}
+                </Typography>
+              </Link>
             </CardContent>
             <CardActions>
               {/* <Button size="small">Learn More</Button> */}
@@ -86,11 +97,20 @@ class SurveysComponent extends React.Component {
         <Header
           pageTitle="Surveys"
         />
+        <SurveyForm
+          open={formOpened}
+          closeForm={closeForm}
+          createSurvey={createSurvey}
+        />
         <Button onClick={this.loadSurveysByButton}>Reload surveys</Button>
         <List>
           {surveysListOrSpinner}
         </List>
-        <Fab color="primary" aria-label="add">
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={openForm}
+        >
           <AddIcon />
         </Fab>
       </div>
@@ -101,11 +121,15 @@ class SurveysComponent extends React.Component {
 const mapStateToProps = (state) => ({
   surveys: state.surveys.surveys,
   isLoading: state.surveys.isLoading,
+  formOpened: state.flags.formOpened,
   // очень хороший вопрос: возможно, стоит держать все подобные флаги во flags?? хз
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loadSurveys: () => dispatch(loadSurveysAction()),
+  openForm: () => dispatch(openSurveyForm()),
+  closeForm: () => dispatch(closeSurveyForm()),
+  createSurvey: () => dispatch(createSurveyAction()),
 });
 
 export const Surveys = connect(mapStateToProps, mapDispatchToProps)(SurveysComponent);
