@@ -10,8 +10,9 @@ export const closeLeftMenu = () => ({
   type: CLOSE_LEFT_MENU,
 });
 
-export const openSurveyForm = () => ({
+export const openSurveyForm = (surveyId) => ({
   type: OPEN_SURVEY_FORM,
+  additionalData: { surveyId },
 });
 
 export const closeSurveyForm = () => ({

@@ -2,40 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import TextField from '@material-ui/core/TextField';
 import { FormikTextField } from 'formik-material-fields';
-import { SurveyCreationSchema } from './surveys.schema';
+import { connect } from 'react-redux';
+import { SurveyCreationSchema, surveyShape } from './surveys.schema';
+import { closeSurveyForm } from '../../store/actions/flags.actions';
+import { createSurveyAction } from '../../store/actions/surveys.actions';
 
 class SurveyFormComponent extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
     closeForm: PropTypes.func.isRequired,
     createSurvey: PropTypes.func.isRequired,
-    currentName: PropTypes.string,
+    editingSurvey: PropTypes.shape(surveyShape),
   };
 
   static defaultProps = {
     open: false,
-    currentName: '',
+    editingSurvey: null,
   };
 
   render() {
-    const { open, closeForm, createSurvey, currentName } = this.props;
+    const {
+      open, closeForm, createSurvey, editingSurvey,
+    } = this.props;
+    const titleText = editingSurvey ? `Edit ${editingSurvey.name}` : 'Create Survey';
     return (
       <div>
         { open
         && (
           <Dialog open={open} onClose={closeForm} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Create Survey</DialogTitle>
+            <DialogTitle id="form-dialog-title">{titleText}</DialogTitle>
             <DialogContent>
               <Formik
-                initialValues={{ name: currentName }}
+                initialValues={{ name: editingSurvey ? editingSurvey.name : '' }}
                 validationSchema={SurveyCreationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                   createSurvey();
@@ -70,10 +73,14 @@ class SurveyFormComponent extends React.Component {
     );
   }
 }
-export const SurveyForm = SurveyFormComponent;
-// const mapStateToProps = (state) => ({
-//   open: state.flags.openForm,
-// });
-// const mapDispatchToProps = (dispatch) => ({
-// });
-// export const SurveyForm = connect(mapStateToProps, mapDispatchToProps)(SurveyFormComponent);
+
+const mapStateToProps = (state) => ({
+  editingSurvey: state.surveys.editingSurvey,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  closeForm: () => dispatch(closeSurveyForm()),
+  createSurvey: () => dispatch(createSurveyAction()),
+});
+
+export const SurveyForm = connect(mapStateToProps, mapDispatchToProps)(SurveyFormComponent);

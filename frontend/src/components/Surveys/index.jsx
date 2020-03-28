@@ -53,6 +53,10 @@ class SurveysComponent extends React.Component {
     loadSurveys();
   };
 
+  handleEditSurvey = (surveyId) => {
+    const { openForm } = this.props;
+    openForm(surveyId);
+  };
 
   render() {
     const {
@@ -80,7 +84,11 @@ class SurveysComponent extends React.Component {
               <IconButton title="Edit questions" aria-label="edit questions">
                 <HelpOutlineIcon />
               </IconButton>
-              <IconButton title="Edit survey" aria-label="edit survey">
+              <IconButton
+                title="Edit survey"
+                aria-label="edit survey"
+                onClick={() => this.handleEditSurvey(survey.id)}
+              >
                 <EditIcon />
               </IconButton>
               <IconButton title="Delete survey" aria-label="delete">
@@ -99,8 +107,6 @@ class SurveysComponent extends React.Component {
         />
         <SurveyForm
           open={formOpened}
-          closeForm={closeForm}
-          createSurvey={createSurvey}
         />
         <Button onClick={this.loadSurveysByButton}>Reload surveys</Button>
         <List>
@@ -127,9 +133,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadSurveys: () => dispatch(loadSurveysAction()),
-  openForm: () => dispatch(openSurveyForm()),
-  closeForm: () => dispatch(closeSurveyForm()),
-  createSurvey: () => dispatch(createSurveyAction()),
+  openForm: (surveyId) => dispatch(openSurveyForm(surveyId)),
+
 });
 
 export const Surveys = connect(mapStateToProps, mapDispatchToProps)(SurveysComponent);

@@ -1,10 +1,13 @@
 import update from 'immutability-helper';
-import { SURVEY_LOAD_FAIL, SURVEY_LOAD_START, SURVEY_LOAD_SUCCESS } from '../actionTypes';
+import {
+  OPEN_SURVEY_FORM, SURVEY_LOAD_FAIL, SURVEY_LOAD_START, SURVEY_LOAD_SUCCESS,
+} from '../actionTypes';
 
 const initialState = {
   surveys: [],
   isLoading: false,
   errors: null,
+  editingSurvey: null,
 };
 const surveySchemaExample = {
   id: '',
@@ -28,6 +31,14 @@ const surveys = (state = initialState, action) => {
     case SURVEY_LOAD_FAIL:
       return update(state, {
 
+      });
+    case OPEN_SURVEY_FORM:
+      return update(state, {
+        editingSurvey: {
+          $set: state.surveys.find(
+            (survey) => survey.id === action.additionalData.surveyId,
+          ),
+        },
       });
     default:
       return state;
