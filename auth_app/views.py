@@ -44,7 +44,6 @@ class SelfUserView(LoginRequiredMixin, GenericAPIView):
     serializer_class = SelfUserSerializer
 
     def get(self, request):
-        print(request)
         User = get_user_model()
         user = User.objects.get(id=request.user.id)
         user_response = {

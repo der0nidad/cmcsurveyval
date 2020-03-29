@@ -4,13 +4,15 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { FormikTextField } from 'formik-material-fields';
 import { connect } from 'react-redux';
 import { SurveyCreationSchema, surveyShape } from './surveys.schema';
 import { closeSurveyForm } from '../../store/actions/flags.actions';
 import { createSurveyAction } from '../../store/actions/surveys.actions';
+import { getCookie } from '../../common/helpers/csrf';
+import { userShape } from '../Auth/auth.schema';
 
 class SurveyFormComponent extends React.Component {
   static propTypes = {
@@ -18,16 +20,18 @@ class SurveyFormComponent extends React.Component {
     closeForm: PropTypes.func.isRequired,
     createSurvey: PropTypes.func.isRequired,
     editingSurvey: PropTypes.shape(surveyShape),
+    user: PropTypes.shape(userShape),
   };
 
   static defaultProps = {
     open: false,
     editingSurvey: null,
+    user: null,
   };
 
   render() {
     const {
-      open, closeForm, createSurvey, editingSurvey,
+      open, closeForm, createSurvey, editingSurvey, user,
     } = this.props;
     const titleText = editingSurvey ? `Edit ${editingSurvey.name}` : 'Create Survey';
     return (
@@ -41,7 +45,12 @@ class SurveyFormComponent extends React.Component {
                 initialValues={{ name: editingSurvey ? editingSurvey.name : '' }}
                 validationSchema={SurveyCreationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                  createSurvey();
+                  const formData = new FormData();
+                  const cookie = getCookie('csrftoken');
+                  formData.append('name', values.name);
+                  formData.append('author', user.id);
+                  formData.append('csrfmiddlewaretoken', cookie);
+                  createSurvey(formData);
                 }}
               >
                 {({ submitForm, isSubmitting }) => (
@@ -52,6 +61,7 @@ class SurveyFormComponent extends React.Component {
                       margin="normal"
                       fullWidth
                     />
+                    <ErrorMessage name="name" />
                     {isSubmitting && <LinearProgress />}
                     <br />
                     <Button
@@ -76,11 +86,12 @@ class SurveyFormComponent extends React.Component {
 
 const mapStateToProps = (state) => ({
   editingSurvey: state.surveys.editingSurvey,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   closeForm: () => dispatch(closeSurveyForm()),
-  createSurvey: () => dispatch(createSurveyAction()),
+  createSurvey: (data) => dispatch(createSurveyAction(data)),
 });
 
 export const SurveyForm = connect(mapStateToProps, mapDispatchToProps)(SurveyFormComponent);

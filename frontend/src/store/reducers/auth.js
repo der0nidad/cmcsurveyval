@@ -1,9 +1,11 @@
 import update from 'immutability-helper';
 import { WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS } from '../actionTypes';
+import { getCookie } from '../../common/helpers/csrf';
 
 const initialState = {
   user: null,
   userPermissions: null,
+  csrf: null,
 };
 const userSchemaExample = {
   username: '',
@@ -20,9 +22,9 @@ const auth = (state = initialState, action) => {
 
       });
     case WHOAMI_SUCCESS:
-      console.log(action.payload)
       return update(state, {
-        user: { $set: action.payload.user}
+        user: { $set: action.payload.user },
+        csrf: { $set: getCookie('csrftoken') },
       });
     case WHOAMI_FAIL:
       return update(state, {

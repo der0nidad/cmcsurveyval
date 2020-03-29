@@ -8,6 +8,7 @@ import {
   SURVEY_LOAD_SUCCESS,
 } from '../actionTypes';
 import { surveysEndpoint } from '../../components/Surveys/surveys.constants';
+import { getCookie } from '../../common/helpers/csrf';
 
 export const loadSurveysAction = () => createAction({
   endpoint: surveysEndpoint,
@@ -20,10 +21,14 @@ export const loadSurveysAction = () => createAction({
   ],
 });
 
-export const createSurveyAction = () => createAction({
+export const createSurveyAction = (data) => createAction({
   endpoint: surveysEndpoint,
   method: 'POST',
-  headers: { 'Content-Type': 'multipart/form-data' },
+  body: data,
+  headers: {
+    // 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+    'X-CSRFTOKEN': getCookie('csrftoken'),
+  },
   types: [
     SURVEY_CREATE_START,
     SURVEY_CREATE_SUCCESS,

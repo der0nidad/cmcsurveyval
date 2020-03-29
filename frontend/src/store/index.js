@@ -1,8 +1,33 @@
 import { applyMiddleware, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger/src';
-import { apiMiddleware } from 'redux-api-middleware';
+import { apiMiddleware, RSAA } from 'redux-api-middleware';
 import rootReducer from './reducers/index';
+
+// https://dev.to/wozzo/customising-redux-api-middleware-calls-4ibm
+const apiAuthorizationMiddleware = (store) => (next) => (action) => {
+  if (!action[RSAA]) {
+    return next(action);
+  }
+  console.log(action[RSAA]);
+  console.log(RSAA);
+  const newVar = {
+    ...action,
+    // [RSAA]: {
+    //   ...action[RSAA],
+    //   headers: {
+    //     ...action[RSAA].headers,
+    //     'X-CSRFTOKEN': store.getState().auth.csrf,
+    //   },
+    // },
+  };
+  newVar.headers = {
+    ...action.headers,
+    'X-CSRFTOKEN': store.getState().auth.csrf,
+  }
+  console.log(newVar);
+  return newVar;
+};
+
 
 let enhancer;
 const logger = createLogger();
