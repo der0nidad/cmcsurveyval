@@ -20,6 +20,7 @@ import { Header } from '../Header';
 import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
 import { openSurveyForm } from '../../store/actions/flags.actions';
 import { SurveyForm } from './SurveyForm';
+import ConfirmDialog from '../common/ConfirmDialog';
 
 
 class SurveysComponent extends React.Component {
@@ -33,7 +34,6 @@ class SurveysComponent extends React.Component {
     isLoading: PropTypes.bool,
     formOpened: PropTypes.bool,
     openForm: PropTypes.func.isRequired,
-    closeForm: PropTypes.func.isRequired,
     deleteSurvey: PropTypes.func.isRequired,
   };
 
@@ -41,6 +41,11 @@ class SurveysComponent extends React.Component {
     surveys: [],
     isLoading: false,
     formOpened: false,
+  };
+
+  state = {
+    deleteDialogOpened: false,
+    currentSurveyId: null,
   };
 
   componentDidMount() {
@@ -58,15 +63,19 @@ class SurveysComponent extends React.Component {
     openForm(surveyId);
   };
 
-  handleDeleteSurvey = (surveyId) => {
-    const { deleteSurvey } = this.props;
-    deleteSurvey(surveyId);
+  handleShowDeletionDialog = (surveyId) => {
+    this.setState({ deleteDialogOpened: true, currentSurveyId: surveyId });
+  };
+
+  toggleDeleteDialogOpeningFlag = (flag) => {
+    this.setState({ deleteDialogOpened: flag });
   };
 
   render() {
     const {
-      isLoading, surveys, openForm, closeForm, formOpened,
+      isLoading, surveys, openForm, formOpened, deleteSurvey,
     } = this.props;
+    const { deleteDialogOpened, currentSurveyId } = this.state;
     let surveysListOrSpinner;
     if (isLoading) {
       surveysListOrSpinner = <CircularProgress />;
@@ -99,7 +108,7 @@ class SurveysComponent extends React.Component {
               <IconButton
                 title="Delete survey"
                 aria-label="delete"
-                onClick={() => this.handleDeleteSurvey(survey.id)}
+                onClick={() => this.handleShowDeletionDialog(survey.id)}
               >
                 <DeleteIcon />
               </IconButton>
@@ -116,6 +125,12 @@ class SurveysComponent extends React.Component {
         />
         <SurveyForm
           open={formOpened}
+        />
+        <ConfirmDialog
+          onConfirm={() => deleteSurvey(currentSurveyId)}
+          open={deleteDialogOpened}
+          setOpen={this.toggleDeleteDialogOpeningFlag}
+          title="Delete survey?"
         />
         <Button onClick={this.loadSurveysByButton}>Reload surveys</Button>
         <List>
@@ -138,8 +153,8 @@ const mapStateToProps = (state) => ({
   isLoading: state.surveys.isLoading,
   formOpened: state.flags.formOpened,
   // очень хороший вопрос: возможно, стоит держать все подобные флаги во flags?? хз
-  // с одной стороны, нам не нужно засорять кучу редюсеров флагами загрузки и открытия форм, с другой стороны
-  // возможны конфликты...
+  // с одной стороны, нам не нужно засорять кучу редюсеров флагами загрузки и открытия форм,
+  // с другой стороны возможны конфликты...
 });
 
 const mapDispatchToProps = (dispatch) => ({
