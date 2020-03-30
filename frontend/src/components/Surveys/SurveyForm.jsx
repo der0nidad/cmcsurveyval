@@ -50,7 +50,9 @@ class SurveyFormComponent extends React.Component {
                   formData.append('name', values.name);
                   formData.append('author', user.id);
                   formData.append('csrfmiddlewaretoken', cookie);
-                  createSurvey(formData);
+                  createSurvey(formData)
+                    // .then((result) => { console.log(1); })
+                    // .catch((error) => { console.log(2); });
                 }}
               >
                 {({ submitForm, isSubmitting }) => (

@@ -3,11 +3,14 @@ import {
   SURVEY_CREATE_FAIL,
   SURVEY_CREATE_START,
   SURVEY_CREATE_SUCCESS,
+  SURVEY_DELETE_FAIL,
+  SURVEY_DELETE_START,
+  SURVEY_DELETE_SUCCESS,
   SURVEY_LOAD_FAIL,
   SURVEY_LOAD_START,
   SURVEY_LOAD_SUCCESS,
 } from '../actionTypes';
-import { surveysEndpoint } from '../../components/Surveys/surveys.constants';
+import { surveysEndpoint, surveysEndpointDetail } from '../../components/Surveys/surveys.constants';
 import { getCookie } from '../../common/helpers/csrf';
 
 export const loadSurveysAction = () => createAction({
@@ -33,5 +36,18 @@ export const createSurveyAction = (data) => createAction({
     SURVEY_CREATE_START,
     SURVEY_CREATE_SUCCESS,
     SURVEY_CREATE_FAIL,
+  ],
+});
+
+export const deleteSurveyAction = (surveyId) => createAction({
+  endpoint: surveysEndpointDetail(surveyId),
+  method: 'DELETE',
+  headers: {
+    'X-CSRFTOKEN': getCookie('csrftoken'),
+  },
+  types: [
+    SURVEY_DELETE_START,
+    SURVEY_DELETE_SUCCESS,
+    SURVEY_DELETE_FAIL,
   ],
 });

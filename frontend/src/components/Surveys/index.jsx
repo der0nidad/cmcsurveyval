@@ -17,8 +17,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { Header } from '../Header';
-import { createSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
-import { closeSurveyForm, openSurveyForm } from '../../store/actions/flags.actions';
+import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
+import { openSurveyForm } from '../../store/actions/flags.actions';
 import { SurveyForm } from './SurveyForm';
 
 
@@ -34,7 +34,7 @@ class SurveysComponent extends React.Component {
     formOpened: PropTypes.bool,
     openForm: PropTypes.func.isRequired,
     closeForm: PropTypes.func.isRequired,
-    createSurvey: PropTypes.func.isRequired,
+    deleteSurvey: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -58,9 +58,14 @@ class SurveysComponent extends React.Component {
     openForm(surveyId);
   };
 
+  handleDeleteSurvey = (surveyId) => {
+    const { deleteSurvey } = this.props;
+    deleteSurvey(surveyId);
+  };
+
   render() {
     const {
-      isLoading, surveys, openForm, closeForm, formOpened, createSurvey,
+      isLoading, surveys, openForm, closeForm, formOpened,
     } = this.props;
     let surveysListOrSpinner;
     if (isLoading) {
@@ -91,7 +96,11 @@ class SurveysComponent extends React.Component {
               >
                 <EditIcon />
               </IconButton>
-              <IconButton title="Delete survey" aria-label="delete">
+              <IconButton
+                title="Delete survey"
+                aria-label="delete"
+                onClick={() => this.handleDeleteSurvey(survey.id)}
+              >
                 <DeleteIcon />
               </IconButton>
             </CardActions>
@@ -129,11 +138,14 @@ const mapStateToProps = (state) => ({
   isLoading: state.surveys.isLoading,
   formOpened: state.flags.formOpened,
   // очень хороший вопрос: возможно, стоит держать все подобные флаги во flags?? хз
+  // с одной стороны, нам не нужно засорять кучу редюсеров флагами загрузки и открытия форм, с другой стороны
+  // возможны конфликты...
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loadSurveys: () => dispatch(loadSurveysAction()),
   openForm: (surveyId) => dispatch(openSurveyForm(surveyId)),
+  deleteSurvey: (surveyId) => dispatch(deleteSurveyAction(surveyId)),
 
 });
 

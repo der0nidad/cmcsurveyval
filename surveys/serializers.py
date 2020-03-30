@@ -42,3 +42,14 @@ class SurveyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = ('id', 'name', 'author', 'is_open', 'multiple_apply', 'questions_list')
+
+
+class SurveyDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Survey
+        fields = ('id', 'name', 'author')
+
+    def validate(self, attrs):
+        print(56)
+        return attrs
