@@ -73,7 +73,7 @@ class SurveysComponent extends React.Component {
 
   render() {
     const {
-      isLoading, surveys, openForm, formOpened, deleteSurvey,
+      isLoading, surveys, openForm, formOpened, deleteSurvey, loadSurveys,
     } = this.props;
     const { deleteDialogOpened, currentSurveyId } = this.state;
     let surveysListOrSpinner;
@@ -127,7 +127,7 @@ class SurveysComponent extends React.Component {
           open={formOpened}
         />
         <ConfirmDialog
-          onConfirm={() => deleteSurvey(currentSurveyId)}
+          onConfirm={() => deleteSurvey(currentSurveyId).then(() => loadSurveys())}
           open={deleteDialogOpened}
           setOpen={this.toggleDeleteDialogOpeningFlag}
           title="Delete survey?"

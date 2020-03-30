@@ -10,7 +10,7 @@ import { FormikTextField } from 'formik-material-fields';
 import { connect } from 'react-redux';
 import { SurveyCreationSchema, surveyShape } from './surveys.schema';
 import { closeSurveyForm } from '../../store/actions/flags.actions';
-import { createSurveyAction } from '../../store/actions/surveys.actions';
+import { createSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
 import { getCookie } from '../../common/helpers/csrf';
 import { userShape } from '../Auth/auth.schema';
 
@@ -19,6 +19,7 @@ class SurveyFormComponent extends React.Component {
     open: PropTypes.bool,
     closeForm: PropTypes.func.isRequired,
     createSurvey: PropTypes.func.isRequired,
+    loadSurveys: PropTypes.func.isRequired,
     editingSurvey: PropTypes.shape(surveyShape),
     user: PropTypes.shape(userShape),
   };
@@ -31,7 +32,7 @@ class SurveyFormComponent extends React.Component {
 
   render() {
     const {
-      open, closeForm, createSurvey, editingSurvey, user,
+      open, closeForm, createSurvey, editingSurvey, user, loadSurveys
     } = this.props;
     const titleText = editingSurvey ? `Edit ${editingSurvey.name}` : 'Create Survey';
     return (
@@ -51,8 +52,8 @@ class SurveyFormComponent extends React.Component {
                   formData.append('author', user.id);
                   formData.append('csrfmiddlewaretoken', cookie);
                   createSurvey(formData)
-                    // .then((result) => { console.log(1); })
-                    // .catch((error) => { console.log(2); });
+                    .then(() => { loadSurveys(); });
+                  // .catch((error) => { console.log(2); });
                 }}
               >
                 {({ submitForm, isSubmitting }) => (
@@ -94,6 +95,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   closeForm: () => dispatch(closeSurveyForm()),
   createSurvey: (data) => dispatch(createSurveyAction(data)),
+  loadSurveys: () => dispatch(loadSurveysAction()),
 });
 
 export const SurveyForm = connect(mapStateToProps, mapDispatchToProps)(SurveyFormComponent);
