@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -31,6 +32,14 @@ class Question(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.question_type, self.text)
+
+    def clean(self):
+        super(Question, self).clean()
+        question_variants = AnswerVariant.objects.filter(question_id=self.id)
+        if self.id and self.question_type == Question.SMALL_TEXT and  question_variants.count() > 0:
+            raise ValidationError({'question_type': 'Text question can''t have answer variants'})
+        # тут надо подумать, как это реализовать. кейс: создали селект вопрос с вариантами ответа, созранили
+#         отредачили его, поменяли на текст. удалять варианты ответа при новом сохранении? видимо, да.
 
 
 class AnswerVariant(models.Model):
