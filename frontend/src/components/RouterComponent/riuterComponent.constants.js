@@ -1,1 +1,1 @@
-export const whoAmI = 'auth/whoami/';
+export const whoAmI = '/auth/whoami/';

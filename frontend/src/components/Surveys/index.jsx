@@ -18,7 +18,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { Header } from '../Header';
 import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
-import { openSurveyForm } from '../../store/actions/flags.actions';
+import { openSurveyFormAction } from '../../store/actions/flags.actions';
 import { SurveyForm } from './SurveyForm';
 import ConfirmDialog from '../common/ConfirmDialog';
 
@@ -33,7 +33,7 @@ class SurveysComponent extends React.Component {
     })),
     isLoading: PropTypes.bool,
     formOpened: PropTypes.bool,
-    openForm: PropTypes.func.isRequired,
+    openSurveyForm: PropTypes.func.isRequired,
     deleteSurvey: PropTypes.func.isRequired,
   };
 
@@ -59,8 +59,8 @@ class SurveysComponent extends React.Component {
   };
 
   handleEditSurvey = (surveyId) => {
-    const { openForm } = this.props;
-    openForm(surveyId);
+    const { openSurveyForm } = this.props;
+    openSurveyForm(surveyId);
   };
 
   handleShowDeletionDialog = (surveyId) => {
@@ -73,7 +73,7 @@ class SurveysComponent extends React.Component {
 
   render() {
     const {
-      isLoading, surveys, openForm, formOpened, deleteSurvey, loadSurveys,
+      isLoading, surveys, openSurveyForm, formOpened, deleteSurvey, loadSurveys,
     } = this.props;
     const { deleteDialogOpened, currentSurveyId } = this.state;
     let surveysListOrSpinner;
@@ -139,7 +139,7 @@ class SurveysComponent extends React.Component {
         <Fab
           color="primary"
           aria-label="add"
-          onClick={openForm}
+          onClick={openSurveyForm}
         >
           <AddIcon />
         </Fab>
@@ -159,7 +159,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadSurveys: () => dispatch(loadSurveysAction()),
-  openForm: (surveyId) => dispatch(openSurveyForm(surveyId)),
+  openSurveyForm: (surveyId) => dispatch(openSurveyFormAction(surveyId)),
   deleteSurvey: (surveyId) => dispatch(deleteSurveyAction(surveyId)),
 
 });

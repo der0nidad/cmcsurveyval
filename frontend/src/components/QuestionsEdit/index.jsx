@@ -1,53 +1,59 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function Topics() {
-  const match = useRouteMatch();
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { closeQuestionForm, openQuestionForm } from '../../store/actions/flags.actions';
+import { Header } from '../Header';
+import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
 
-  return (
-    <div>
-      <h2>Topics</h2>
+class QuestionEditComponent extends React.Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
+    loadCurrentSurvey: PropTypes.func.isRequired,
+    closeQuestionForm: PropTypes.func.isRequired,
+    openQuestionForm: PropTypes.func.isRequired,
+  };
 
-      <ul>
-        <li>
-          <Link to={`${match.url}/components`}>Components</Link>
-        </li>
-        <li>
-          <Link to={`${match.url}/props-v-state`}>
-            Props v. State
-          </Link>
-        </li>
-      </ul>
+  static defaultProps = {
+  };
 
-      {/* The Topics page has its own <Switch> with more routes
-          that build on the /topics URL path. You can think of the
-          2nd <Route> here as an "index" page for all topics, or
-          the page that is shown when no topic is selected */}
-      <Switch>
-        <Route path={`${match.path}/:topicId`}>
-          <Topic />
-        </Route>
-        <Route path={match.path}>
-          <h3>Please select a topic.</h3>
-        </Route>
-      </Switch>
-    </div>
-  );
+  componentDidMount() {
+    const { loadCurrentSurvey, match } = this.props;
+    loadCurrentSurvey(match.params.id);
+  }
+
+  render() {
+    const { match } = this.props;
+    return (
+      <div>
+        <Header
+          pageTitle="Edit questions in survey"
+        />
+        213
+      </div>
+    );
+  }
 }
 
-function Topic() {
-  const { topicId } = useParams();
-  return (
-    <h3>
-      Requested topic ID:
-      {topicId}
-    </h3>
-  );
-}
+const mapStateToProps = (state) => ({
+  editingSurvey: state.surveys.editingSurvey,
+  user: state.auth.user,
+  survey: state.surveys.surveys.filter((survey) => survey.id === this.props.match.params.id),
+  questionFormOpened: state.flags.formOpened,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  closeQuestionForm: () => dispatch(closeQuestionForm()),
+  openQuestionForm: (surveyId) => dispatch(openQuestionForm(surveyId)),
+  loadCurrentSurvey: (surveyId) => dispatch(loadCurrentSurveyAction(surveyId)),
+});
+
+export const QuestionEdit = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(QuestionEditComponent),
+);

@@ -50,6 +50,18 @@ class SurveyDetailSerializer(serializers.ModelSerializer):
         model = Survey
         fields = ('id', 'name', 'author')
 
-    def validate(self, attrs):
-        print(56)
-        return attrs
+
+# вроде как дублирование с другим сериалайзером для вопросов... хз.
+class SurveyQuestionDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = ('id', 'text', 'survey_id', 'order', 'question_type')
+
+
+class SurveyQuestionsSerializer(serializers.ModelSerializer):
+    questions_list = QuestionCreateSerializer(read_only=True, many=True, source='survey_link')
+
+    class Meta:
+        model = Survey
+        fields = ('id', 'name', 'author', 'questions_list')

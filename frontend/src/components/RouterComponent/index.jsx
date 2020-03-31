@@ -19,6 +19,7 @@ import Auth from '../Auth';
 import { UserProfile } from '../UserProfile';
 import { Surveys } from '../Surveys';
 import { Header } from '../Header';
+import { QuestionEdit } from '../QuestionsEdit';
 
 function Home() {
   return (
@@ -104,6 +105,9 @@ class RouterComp extends React.Component {
             </Route>
             <Route path="/signup/">
               <SignUp />
+            </Route>
+            <Route path="/surveys/:id">
+              <QuestionEdit />
             </Route>
             <Route path="/surveys">
               <Surveys />
