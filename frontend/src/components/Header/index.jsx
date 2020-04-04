@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
+import { Link } from '@material-ui/core';
 import { openLeftMenu } from '../../store/actions/flags.actions';
 
 
@@ -56,7 +57,11 @@ class HeaderComponent extends React.Component {
             <Typography variant="title" color="inherit" className={classes.flex}>
               {pageTitle}
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="white">
+              <Link href="/login" style={{ color: 'white' }}>
+                Login
+              </Link>
+            </Button>
           </Toolbar>
         </AppBar>
       </>
