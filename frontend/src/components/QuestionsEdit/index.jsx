@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import { closeQuestionForm, openQuestionForm } from '../../store/actions/flags.actions';
 import { Header } from '../Header';
 import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
+import { Question } from './Question';
+import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 
 class QuestionEditComponent extends React.Component {
   static propTypes = {
@@ -18,6 +21,7 @@ class QuestionEditComponent extends React.Component {
     loadCurrentSurvey: PropTypes.func.isRequired,
     closeQuestionForm: PropTypes.func.isRequired,
     openQuestionForm: PropTypes.func.isRequired,
+    survey: PropTypes.shape(surveyWithQuestionsSchema).isRequired,
   };
 
   static defaultProps = {
@@ -29,13 +33,26 @@ class QuestionEditComponent extends React.Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, survey, openQuestionForm } = this.props;
+    const questions = survey
+      ? survey.questionsList.map((question) => (
+        <Question
+          id={question.id}
+        />
+      ))
+      : <div>There aren&apos;t questions in this survey yet</div>; // add loader
     return (
       <div>
         <Header
           pageTitle="Edit questions in survey"
         />
-        213
+        {questions}
+        <Button
+          onClick={openQuestionForm}
+          color="primary"
+        >
+          Add question
+        </Button>
       </div>
     );
   }
@@ -44,13 +61,14 @@ class QuestionEditComponent extends React.Component {
 const mapStateToProps = (state) => ({
   editingSurvey: state.surveys.editingSurvey,
   user: state.auth.user,
-  survey: state.surveys.surveys.filter((survey) => survey.id === this.props.match.params.id),
+  // survey: state.surveys.surveys.filter((survey) => survey.id === ownProps.match.params.id),
+  survey: state.questionEdit.survey,
   questionFormOpened: state.flags.formOpened,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   closeQuestionForm: () => dispatch(closeQuestionForm()),
-  openQuestionForm: (surveyId) => dispatch(openQuestionForm(surveyId)),
+  openQuestionForm: (questionId) => dispatch(openQuestionForm(questionId)),
   loadCurrentSurvey: (surveyId) => dispatch(loadCurrentSurveyAction(surveyId)),
 });
 

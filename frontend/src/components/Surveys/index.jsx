@@ -84,7 +84,7 @@ class SurveysComponent extends React.Component {
         <ListItem key={survey.id}>
           <Card>
             <CardContent>
-              <Link to={`${survey.id}/edit_questions/`}>
+              <Link to={`/surveys/${survey.id}/`}>
                 <Typography color="textSecondary" gutterBottom>
                   {survey.name}
                 </Typography>

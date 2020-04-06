@@ -1,15 +1,9 @@
 import update from 'immutability-helper';
-import {
-  OPEN_SURVEY_FORM,
-  SURVEY_DATA_LOAD_FAIL,
-  SURVEY_DATA_LOAD_START,
-  SURVEY_DATA_LOAD_SUCCESS,
-} from '../actionTypes';
+import { SURVEY_DATA_LOAD_FAIL, SURVEY_DATA_LOAD_START, SURVEY_DATA_LOAD_SUCCESS } from '../actionTypes';
+import {toCamel} from "../../common/helpers/toCamel";
 
 const initialState = {
-};
-const surveyDataSchemaExample = {
-  questions_list: [],
+  survey: null,
 };
 
 const questionsEdit = (state = initialState, action) => {
@@ -18,7 +12,10 @@ const questionsEdit = (state = initialState, action) => {
       return update(state, {
       });
     case SURVEY_DATA_LOAD_SUCCESS:
+      const sel = toCamel(action.payload);
+      console.log(sel)
       return update(state, {
+        survey: { $set: sel },
       });
     case SURVEY_DATA_LOAD_FAIL:
       return update(state, {

@@ -23,7 +23,7 @@ const apiAuthorizationMiddleware = (store) => (next) => (action) => {
   newVar.headers = {
     ...action.headers,
     'X-CSRFTOKEN': store.getState().auth.csrf,
-  }
+  };
   console.log(newVar);
   return newVar;
 };
