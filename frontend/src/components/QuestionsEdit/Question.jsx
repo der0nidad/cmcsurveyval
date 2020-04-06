@@ -57,7 +57,6 @@ class QuestionComponent extends React.Component {
   componentDidMount() {
     // const { loadCurrentSurvey, match } = this.props;
     // loadCurrentSurvey(match.params.id);
-    console.log(this.props.questionData);
   }
 
   render() {
@@ -65,12 +64,11 @@ class QuestionComponent extends React.Component {
     const {
       text, id, surveyId, questionType, answersList,
     } = questionData;
-    console.log([SELECT_QUESTION, MULTI_SELECT_QUESTION].indexOf(questionType))
     return (
       <div>
         <Card style={{ margin: '15px' }}>
           <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
+            <Typography className={classes.title} gutterBottom>
               {text}
             </Typography>
             <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -82,7 +80,7 @@ class QuestionComponent extends React.Component {
             {/* текст вопроса. варианты ответа. новые вариант ответа */}
           </CardContent>
           <CardActions>
-            <Button size="small">Edit</Button>
+            <Button size="small" color="primary">Edit</Button>
           </CardActions>
         </Card>
       </div>

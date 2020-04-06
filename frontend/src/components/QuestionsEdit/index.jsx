@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import { CircularProgress } from '@material-ui/core';
 import { closeQuestionForm, openQuestionForm } from '../../store/actions/flags.actions';
 import { Header } from '../Header';
 import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
@@ -34,6 +35,7 @@ class QuestionEditComponent extends React.Component {
 
   render() {
     const { match, survey, openQuestionForm } = this.props;
+    if (!survey) return <CircularProgress />;
     const questions = survey
       ? survey.questionsList.map((question) => (
         <Question
@@ -44,7 +46,7 @@ class QuestionEditComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Edit questions in survey"
+          pageTitle={`Edit questions in ${survey.name}`}
         />
         {questions}
         <Button
