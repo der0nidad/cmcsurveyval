@@ -5,11 +5,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { CircularProgress } from '@material-ui/core';
-import { closeQuestionForm, openQuestionForm } from '../../store/actions/flags.actions';
+import { closeQuestionForm, openQuestionFormAction } from '../../store/actions/flags.actions';
 import { Header } from '../Header';
 import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
 import { Question } from './Question';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { QuestionForm } from './QuestionForm';
 
 class QuestionEditComponent extends React.Component {
   static propTypes = {
@@ -22,10 +23,12 @@ class QuestionEditComponent extends React.Component {
     loadCurrentSurvey: PropTypes.func.isRequired,
     closeQuestionForm: PropTypes.func.isRequired,
     openQuestionForm: PropTypes.func.isRequired,
+    questionFormOpened: PropTypes.bool,
     survey: PropTypes.shape(surveyWithQuestionsSchema).isRequired,
   };
 
   static defaultProps = {
+    questionFormOpened: false,
   };
 
   componentDidMount() {
@@ -34,7 +37,9 @@ class QuestionEditComponent extends React.Component {
   }
 
   render() {
-    const { match, survey, openQuestionForm } = this.props;
+    const {
+      match, survey, openQuestionForm, questionFormOpened,
+    } = this.props;
     if (!survey) return <CircularProgress />;
     const questions = survey
       ? survey.questionsList.map((question) => (
@@ -47,6 +52,9 @@ class QuestionEditComponent extends React.Component {
       <div>
         <Header
           pageTitle={`Edit questions in ${survey.name}`}
+        />
+        <QuestionForm
+          open={questionFormOpened}
         />
         {questions}
         <Button
@@ -70,7 +78,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   closeQuestionForm: () => dispatch(closeQuestionForm()),
-  openQuestionForm: (questionId) => dispatch(openQuestionForm(questionId)),
+  openQuestionForm: (questionId) => dispatch(openQuestionFormAction(questionId)),
   loadCurrentSurvey: (surveyId) => dispatch(loadCurrentSurveyAction(surveyId)),
 });
 

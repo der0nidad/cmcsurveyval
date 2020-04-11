@@ -57,11 +57,11 @@ class HeaderComponent extends React.Component {
             <Typography variant="title" color="inherit" className={classes.flex}>
               {pageTitle}
             </Typography>
-            <Button color="white">
-              <Link href="/login" style={{ color: 'white' }}>
+            <Link href="/login" style={{ color: 'white' }}>
+              <Button color="white">
                 Login
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </Toolbar>
         </AppBar>
       </>

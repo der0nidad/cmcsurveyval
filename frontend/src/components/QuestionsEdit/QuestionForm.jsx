@@ -6,35 +6,46 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { ErrorMessage, Form, Formik } from 'formik';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { FormikTextField } from 'formik-material-fields';
+import { FormikSelectField, FormikTextField } from 'formik-material-fields';
 import { connect } from 'react-redux';
-import { SurveyCreationSchema, surveyShape } from './surveys.schema';
 import { closeSurveyForm } from '../../store/actions/flags.actions';
 import { createSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
 import { getCookie } from '../../common/helpers/csrf';
 import { userShape } from '../Auth/auth.schema';
+import { questionShape, SurveyCreationSchema } from '../Surveys/surveys.schema';
+import { QUESTION_TYPES, SELECT_QUESTION } from './questionEdit.constants';
 
-class SurveyFormComponent extends React.Component {
+class QuestionFormComponent extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
     closeForm: PropTypes.func.isRequired,
-    createSurvey: PropTypes.func.isRequired,
-    loadSurveys: PropTypes.func.isRequired,
-    editingSurvey: PropTypes.shape(surveyShape),
     user: PropTypes.shape(userShape),
+    question: PropTypes.shape(questionShape),
   };
 
   static defaultProps = {
     open: false,
-    editingSurvey: null,
     user: null,
+    question: null,
   };
+
+  state = {
+    questionType: '',
+  };
+
+  handleChangeQuestionType(e) {
+    if (e && e.target && e.target.value) {
+      this.setState({ questionType: { value: e.target.value, label: e.target.value} });
+    }
+  }
 
   render() {
     const {
-      open, closeForm, createSurvey, editingSurvey, user, loadSurveys
+      open, closeForm, createQuestion, question, user, loadQuestions,
+
     } = this.props;
-    const titleText = editingSurvey ? `Edit ${editingSurvey.name}` : 'Create Survey';
+    const { questionType } = this.state;
+    const titleText = question ? `Edit ${question.text}` : 'Create Question';
     return (
       <div>
         { open
@@ -43,11 +54,10 @@ class SurveyFormComponent extends React.Component {
             <DialogTitle id="form-dialog-title">{titleText}</DialogTitle>
             <DialogContent>
               <Formik
-                initialValues={{ name: editingSurvey ? editingSurvey.name : '' }}
+                initialValues={{ text: question ? question.text : '' }}
                 validationSchema={SurveyCreationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                   const formData = new FormData();
-                  // TODO use objToFormData helper
                   const cookie = getCookie('csrftoken');
                   formData.append('name', values.name);
                   formData.append('author', user.id);
@@ -60,14 +70,25 @@ class SurveyFormComponent extends React.Component {
                 {({ submitForm, isSubmitting }) => (
                   <Form>
                     <FormikTextField
-                      name="name"
-                      label="Name"
+                      name="text"
+                      label="Text"
                       margin="normal"
                       fullWidth
                     />
                     <ErrorMessage name="name" />
+                    <FormikSelectField
+                      name="type"
+                      label="Type"
+                      margin="normal"
+                      fullWidth
+                      options={QUESTION_TYPES.map((item) => ({ value: item, label: item }))}
+                      value={questionType}
+                      onChange={(e) => this.handleChangeQuestionType(e)}
+                    />
+                    <ErrorMessage name="type" />
                     {isSubmitting && <LinearProgress />}
                     <br />
+                    {questionType.value === SELECT_QUESTION && <div>варианты ответа</div>}
                     <Button
                       variant="contained"
                       color="primary"
@@ -89,8 +110,9 @@ class SurveyFormComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  editingSurvey: state.surveys.editingSurvey,
-  user: state.auth.user,
+  open: state.flags.formOpened,
+  question: state.questionEdit.currentQuestion,
+  // user: state.auth.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -99,4 +121,4 @@ const mapDispatchToProps = (dispatch) => ({
   loadSurveys: () => dispatch(loadSurveysAction()),
 });
 
-export const SurveyForm = connect(mapStateToProps, mapDispatchToProps)(SurveyFormComponent);
+export const QuestionForm = connect(mapStateToProps, mapDispatchToProps)(QuestionFormComponent);

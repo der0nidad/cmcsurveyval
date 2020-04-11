@@ -17,26 +17,30 @@ const initialState = {
 
 const flags = (state = initialState, action) => {
   switch (action.type) {
-    case OPEN_LEFT_MENU:
+    case OPEN_LEFT_MENU: {
       return update(state, {
         menuOpened: { $set: true },
 
       });
-    case CLOSE_LEFT_MENU:
+    }
+    case CLOSE_LEFT_MENU: {
       return update(state, {
         menuOpened: { $set: false },
       });
+    }
     case OPEN_SURVEY_FORM:
-    case OPEN_QUESTION_FORM:
+    case OPEN_QUESTION_FORM: {
       return update(state, {
         formOpened: { $set: true },
       });
+    }
     case CLOSE_SURVEY_FORM:
     case CLOSE_QUESTION_FORM:
-    case SURVEY_LOAD_SUCCESS:
+    case SURVEY_LOAD_SUCCESS: {
       return update(state, {
         formOpened: { $set: false },
       });
+    }
     default:
       return state;
   }

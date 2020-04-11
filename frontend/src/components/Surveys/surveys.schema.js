@@ -6,6 +6,12 @@ export const SurveyCreationSchema = Yup.object().shape({
   name: Yup.string().required('This is required field'),
 });
 
+export const QuestionCreationSchema = Yup.object().shape({
+  text: Yup.string().required('This is required field'),
+  type: Yup.string().oneOf(['ST', 'MS', 'SO']).required('This is required field'),
+  // answersList
+});
+
 export const surveyShape = PropTypes.shape({
   name: PropTypes.string,
   id: PropTypes.number,

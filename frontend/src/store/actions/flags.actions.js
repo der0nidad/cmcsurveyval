@@ -24,9 +24,9 @@ export const closeSurveyForm = () => ({
   type: CLOSE_SURVEY_FORM,
 });
 
-export const openQuestionForm = (surveyId) => ({
+export const openQuestionFormAction = (questionId) => ({
   type: OPEN_QUESTION_FORM,
-  additionalData: { surveyId },
+  additionalData: { questionId },
 });
 
 export const closeQuestionForm = () => ({
