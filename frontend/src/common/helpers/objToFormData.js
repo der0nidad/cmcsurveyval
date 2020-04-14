@@ -1,8 +1,8 @@
 export default (data) => {
   const fd = new FormData();
-  for (key in data) {
+  for (let key of Object.keys(data)) {
     if (data.hasOwnProperty(key)) {
-      fd.append(key, data.key);
+      fd.append(key, data[key]);
     }
   }
   return fd;

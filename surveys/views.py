@@ -1,8 +1,10 @@
 from rest_framework import generics
 
 from surveys.models import Survey, Question, AnswerVariant
-from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, AnswerVariantCreateSerializer, \
-    SurveyDetailSerializer, SurveyQuestionsSerializer, SurveyQuestionDetailSerializer
+from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, \
+    AnswerVariantCreateSerializer, \
+    SurveyDetailSerializer, SurveyQuestionsSerializer, SurveyQuestionDetailSerializer, \
+    AnswerVariantDetailSerializer
 
 
 class SurveyCreate(generics.ListCreateAPIView):
@@ -36,3 +38,9 @@ class QuestionCreate(generics.ListCreateAPIView):
 class AnswerVariantCreate(generics.ListCreateAPIView):
     queryset = AnswerVariant.objects.all()
     serializer_class = AnswerVariantCreateSerializer
+
+
+class AnswerVariantDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AnswerVariant.objects.all()
+    serializer_class = AnswerVariantDetailSerializer
+    lookup_url_kwarg = 'answer_variant_id'

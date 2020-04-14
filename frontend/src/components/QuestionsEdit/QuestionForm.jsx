@@ -4,16 +4,27 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { ErrorMessage, Form, Formik } from 'formik';
+import CloseIcon from '@material-ui/icons/Close';
+import {ErrorMessage, Form, Formik} from 'formik';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { FormikSelectField, FormikTextField } from 'formik-material-fields';
-import { connect } from 'react-redux';
-import { closeSurveyForm } from '../../store/actions/flags.actions';
-import { createSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
-import { getCookie } from '../../common/helpers/csrf';
-import { userShape } from '../Auth/auth.schema';
-import { questionShape, SurveyCreationSchema } from '../Surveys/surveys.schema';
-import { QUESTION_TYPES, SELECT_QUESTION } from './questionEdit.constants';
+import {FormikSelectField, FormikTextField} from 'formik-material-fields';
+import {connect} from 'react-redux';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import {closeSurveyForm} from '../../store/actions/flags.actions';
+import {loadSurveysAction} from '../../store/actions/surveys.actions';
+import {userShape} from '../Auth/auth.schema';
+import {QuestionCreationSchema, questionShape} from '../Surveys/surveys.schema';
+import {QUESTION_TYPES, TEXT_QUESTION} from './questionEdit.constants';
+import {createQuestionAction} from '../../store/actions/questionEdit.actions';
+
+
+const initialState = {
+  questionType: { value: TEXT_QUESTION, name: TEXT_QUESTION },
+  answersVariantsData: [],
+  newAnswerVariant: '',
+};
 
 class QuestionFormComponent extends React.Component {
   static propTypes = {
@@ -29,14 +40,34 @@ class QuestionFormComponent extends React.Component {
     question: null,
   };
 
-  state = {
-    questionType: '',
-  };
+  state = initialState;
+
+  // static getDerivedStateFromProps(props, state) {
+  //   return initialState;
+  // }
 
   handleChangeQuestionType(e) {
+    const { questionType } = this.state;
     if (e && e.target && e.target.value) {
-      this.setState({ questionType: { value: e.target.value, label: e.target.value} });
+      if (e.target.value !== questionType) {
+        this.setState({
+          questionType: { value: e.target.value, label: e.target.value },
+          answersVariantsData: [],
+        });
+      } else {
+        this.setState({ questionType: { value: e.target.value, label: e.target.value } });
+      }
     }
+  }
+
+  handleNewAnswerVariant() {
+    this.setState({
+      answersVariantsData: [...this.state.answersVariantsData, this.state.newAnswerVariant],
+    });
+  }
+
+  handleChangeNewAnswerVariantText(e) {
+    this.setState({ newAnswerVariant: e.target.value });
   }
 
   render() {
@@ -44,27 +75,44 @@ class QuestionFormComponent extends React.Component {
       open, closeForm, createQuestion, question, user, loadQuestions,
 
     } = this.props;
-    const { questionType } = this.state;
+    const { questionType, answersVariantsData, newAnswerVariant } = this.state;
     const titleText = question ? `Edit ${question.text}` : 'Create Question';
+    const answerVariantsLayout = answersVariantsData
+      .map((answer) => (
+        <li key={answer.id}>
+          {answer.name}
+          {' '}
+          <IconButton>
+            <CloseIcon />
+          </IconButton>
+        </li>
+      ));
+    answerVariantsLayout.push(
+      <li>
+        <TextField
+          value={newAnswerVariant}
+          onChange={this.handleChangeNewAnswerVariantText}
+        />
+        <IconButton onClick={this.handleNewAnswerVariant}><AddIcon /></IconButton>
+      </li>,
+    );
     return (
       <div>
         { open
         && (
-          <Dialog open={open} onClose={closeForm} aria-labelledby="form-dialog-title">
+          <Dialog
+            open={open}
+            onClose={closeForm}
+            aria-labelledby="form-dialog-title"
+            fullWidth
+            maxWidth="sm"
+          >
             <DialogTitle id="form-dialog-title">{titleText}</DialogTitle>
             <DialogContent>
               <Formik
                 initialValues={{ text: question ? question.text : '' }}
-                validationSchema={SurveyCreationSchema}
+                validationSchema={QuestionCreationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                  const formData = new FormData();
-                  const cookie = getCookie('csrftoken');
-                  formData.append('name', values.name);
-                  formData.append('author', user.id);
-                  formData.append('csrfmiddlewaretoken', cookie);
-                  createSurvey(formData)
-                    .then(() => { loadSurveys(); });
-                  // .catch((error) => { console.log(2); });
                 }}
               >
                 {({ submitForm, isSubmitting }) => (
@@ -82,13 +130,12 @@ class QuestionFormComponent extends React.Component {
                       margin="normal"
                       fullWidth
                       options={QUESTION_TYPES.map((item) => ({ value: item, label: item }))}
-                      value={questionType}
+                      // value={questionType}
                       onChange={(e) => this.handleChangeQuestionType(e)}
                     />
                     <ErrorMessage name="type" />
                     {isSubmitting && <LinearProgress />}
                     <br />
-                    {questionType.value === SELECT_QUESTION && <div>варианты ответа</div>}
                     <Button
                       variant="contained"
                       color="primary"
@@ -117,7 +164,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   closeForm: () => dispatch(closeSurveyForm()),
-  createSurvey: (data) => dispatch(createSurveyAction(data)),
+  createQuestion: (data) => dispatch(createQuestionAction(data)),
   loadSurveys: () => dispatch(loadSurveysAction()),
 });
 

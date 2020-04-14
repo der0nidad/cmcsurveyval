@@ -95,7 +95,12 @@ class QuestionComponent extends React.Component {
             <Typography className={classes.title} color="textSecondary" gutterBottom>
               {
                 [SELECT_QUESTION, MULTI_SELECT_QUESTION].indexOf(questionType) >= 0
-                && <AnswerVariants answersList={answersList} />
+                && (
+                <AnswerVariants
+                  questionId={id}
+                  answersList={answersList}
+                />
+                )
               }
             </Typography>
             {/* текст вопроса. варианты ответа. новые вариант ответа */}

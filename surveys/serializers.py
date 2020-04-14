@@ -3,7 +3,8 @@ from .models import Survey, Question, AnswerVariant
 
 
 class AnswerVariantCreateSerializer(serializers.ModelSerializer):
-    question_id = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question.id')
+    question_id = serializers.PrimaryKeyRelatedField(
+        queryset=Question.objects.all(), source='question.id')
 
     class Meta:
         model = AnswerVariant
@@ -20,7 +21,8 @@ class AnswerVariantCreateSerializer(serializers.ModelSerializer):
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
     answers_list = AnswerVariantCreateSerializer(read_only=True, many=True, source='question')
-    survey_id = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all(), source='survey.id')
+    survey_id = serializers.PrimaryKeyRelatedField(
+        queryset=Survey.objects.all(), source='survey.id')
 
     class Meta:
         model = Question
@@ -57,6 +59,13 @@ class SurveyQuestionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'text', 'survey_id', 'order', 'question_type')
+
+
+class AnswerVariantDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AnswerVariant
+        fields = ('id', 'text', 'question_id', 'order')
 
 
 class SurveyQuestionsSerializer(serializers.ModelSerializer):
