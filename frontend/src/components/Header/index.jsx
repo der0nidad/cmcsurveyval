@@ -8,10 +8,13 @@ import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import { Link } from '@material-ui/core';
+import { AccountCircle } from '@material-ui/icons';
 import { openLeftMenu } from '../../store/actions/flags.actions';
+import { userShape } from '../Auth/auth.schema';
 
 
 const mapStateToProps = (state) => ({
+  user: state.auth.user,
 });
 const mapDispatchToProps = (dispatch) => ({
   openMenu: () => dispatch(openLeftMenu()),
@@ -34,10 +37,12 @@ class HeaderComponent extends React.Component {
   static propTypes = {
     openMenu: PropTypes.func.isRequired,
     pageTitle: PropTypes.string,
+    user: PropTypes.shape(userShape),
   };
 
   static defaultProps = {
     pageTitle: '',
+    user: null,
   };
 
   handleOpenMenu = () => {
@@ -46,22 +51,44 @@ class HeaderComponent extends React.Component {
   };
 
   render() {
-    const { pageTitle } = this.props;
+    const { pageTitle, user } = this.props;
     return (
       <>
+
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleOpenMenu}>
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              {pageTitle}
-            </Typography>
-            <Link href="/login" style={{ color: 'white' }}>
-              <Button color="white">
-                Login
-              </Button>
-            </Link>
+            <div
+              style={{
+                display: 'flex',
+                flexGrow: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleOpenMenu}>
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="title" color="inherit" className={classes.flex}>
+                {pageTitle}
+              </Typography>
+
+              { user
+                ? (
+                  <span>
+                    { user.username }
+                    <AccountCircle />
+                  </span>
+                )
+                : (
+                  <Link href="/login" style={{ color: 'white' }}>
+                    <Button color="white">
+                      Login
+                    </Button>
+                  </Link>
+                )}
+            </div>
+
           </Toolbar>
         </AppBar>
       </>
