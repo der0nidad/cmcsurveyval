@@ -14,6 +14,9 @@ class Survey(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
 
+    def __str__(self):
+        return self.name
+
 
 class Question(models.Model):
     SELECT_ONE = 'SO'

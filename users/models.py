@@ -17,6 +17,8 @@ class StudyGroup(models.Model):
 class User(AbstractUser):
     pass
 
+
+# TODO: move to separate app
 class Subject(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
 
