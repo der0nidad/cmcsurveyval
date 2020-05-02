@@ -10,11 +10,11 @@ import {
   SURVEY_LOAD_START,
   SURVEY_LOAD_SUCCESS,
 } from '../actionTypes';
-import { surveysEndpoint, surveysEndpointDetail } from '../../components/Surveys/surveys.constants';
+import { surveysApiEndpoint, surveysEndpointDetail } from '../../components/Surveys/surveys.constants';
 import { getCookie } from '../../common/helpers/csrf';
 
 export const loadSurveysAction = () => createAction({
-  endpoint: surveysEndpoint,
+  endpoint: surveysApiEndpoint,
   method: 'GET',
   headers: { 'Content-Type': 'application/json' },
   types: [
@@ -25,7 +25,7 @@ export const loadSurveysAction = () => createAction({
 });
 
 export const createSurveyAction = (data) => createAction({
-  endpoint: surveysEndpoint,
+  endpoint: surveysApiEndpoint,
   method: 'POST',
   body: data,
   headers: {

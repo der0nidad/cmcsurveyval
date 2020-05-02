@@ -20,6 +20,9 @@ class QuestionEditComponent extends React.Component {
         id: PropTypes.number.isRequired,
       }),
     }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     loadCurrentSurvey: PropTypes.func.isRequired,
     closeQuestionForm: PropTypes.func.isRequired,
     openQuestionForm: PropTypes.func.isRequired,
@@ -35,6 +38,10 @@ class QuestionEditComponent extends React.Component {
     const { loadCurrentSurvey, match } = this.props;
     loadCurrentSurvey(match.params.id);
   }
+
+  handleRedirectToSurveys = () => {
+    this.props.history.push('/surveys/');
+  };
 
   render() {
     const {
@@ -56,12 +63,18 @@ class QuestionEditComponent extends React.Component {
         <QuestionForm
           open={questionFormOpened}
         />
+        {/* добавь хлебные крошки "к списку опросов" */}
         {questions}
         <Button
           onClick={openQuestionForm}
           color="primary"
         >
           Add question
+        </Button>
+        <Button
+          onClick={this.handleRedirectToSurveys}
+        >
+          Save
         </Button>
       </div>
     );
