@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { RouterComponent } from './RouterComponent';
 import store from '../store';
 
+
+const THEME = createMuiTheme({
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+});
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +45,9 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <RouterComponent />
+        <ThemeProvider theme={THEME}>
+          <RouterComponent />
+        </ThemeProvider>
       </Provider>
     );
   }

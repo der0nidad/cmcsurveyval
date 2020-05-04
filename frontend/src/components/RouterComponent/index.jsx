@@ -20,6 +20,8 @@ import { UserProfile } from '../UserProfile';
 import { Surveys } from '../Surveys';
 import { Header } from '../Header';
 import { QuestionEdit } from '../QuestionsEdit';
+import { SurveyPassing } from '../SurveyPassing';
+import { MySurveys } from '../MySurveys';
 
 function Home() {
   return (
@@ -81,10 +83,14 @@ class RouterComp extends React.Component {
         <List>
           {pages.map((page, index) => (
             <ListItem button key={page.title}>
-              <Link href={page.url}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={page.title} />
-              </Link>
+              <div
+                style={{ minWidth: '200px' }}
+              >
+                <Link href={page.url}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                  <ListItemText primary={page.title} />
+                </Link>
+              </div>
             </ListItem>
           ))}
         </List>
@@ -114,6 +120,12 @@ class RouterComp extends React.Component {
             </Route>
             <Route path="/profile">
               <UserProfile />
+            </Route>
+            <Route path="/mysurveys/:id">
+              <SurveyPassing />
+            </Route>
+            <Route path="/mysurveys">
+              <MySurveys />
             </Route>
             <Route path="/">
               <Home />
