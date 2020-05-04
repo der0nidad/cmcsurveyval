@@ -22,6 +22,7 @@ import { Header } from '../Header';
 import { QuestionEdit } from '../QuestionsEdit';
 import { SurveyPassing } from '../SurveyPassing';
 import { MySurveys } from '../MySurveys';
+import { SurveyReport } from '../SurveyReport';
 
 function Home() {
   return (
@@ -111,6 +112,9 @@ class RouterComp extends React.Component {
             </Route>
             <Route path="/signup/">
               <SignUp />
+            </Route>
+            <Route path="/surveys/:id/report">
+              <SurveyReport />
             </Route>
             <Route path="/surveys/:id">
               <QuestionEdit />
