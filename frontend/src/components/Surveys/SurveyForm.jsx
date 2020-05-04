@@ -55,11 +55,11 @@ class SurveyFormComponent extends React.Component {
       .map(
         (stream) => (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControlLabel control={<Checkbox name="checkedC" />} label={stream.name} />
+            <FormControlLabel control={<Checkbox color="primary" name="checkedC" />} label={stream.name} />
             {stream.groups
               .map((group) => {
                 const groupNmumber = course + group.toString().padStart(2, '0');
-                return <FormControlLabel control={<Checkbox name="checkedC" />} label={`${groupNmumber} группа`} />;
+                return <FormControlLabel control={<Checkbox color="primary" name="checkedC" />} label={`${groupNmumber} группа`} />;
               })}
           </div>
         ),
@@ -128,7 +128,7 @@ class SurveyFormComponent extends React.Component {
                       disabled={isSubmitting}
                       onClick={submitForm}
                     >
-                      Отправить
+                      Создать опрос
                     </Button>
                   </Form>
                 )}

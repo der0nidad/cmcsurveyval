@@ -76,7 +76,9 @@ class HeaderComponent extends React.Component {
               { user
                 ? (
                   <span>
-                    { user.username }
+                    {/*{ user.username }*/}
+                    Иванов Иван
+                    {/*Кузнецов Сергей*/}
                     <AccountCircle />
                   </span>
                 )

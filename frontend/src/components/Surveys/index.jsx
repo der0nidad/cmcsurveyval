@@ -121,7 +121,7 @@ class SurveysComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Surveys"
+          pageTitle="Создание и редактирование опросов"
         />
         <SurveyForm
           open={formOpened}
@@ -132,7 +132,7 @@ class SurveysComponent extends React.Component {
           setOpen={this.toggleDeleteDialogOpeningFlag}
           title="Delete survey?"
         />
-        <Button onClick={this.loadSurveysByButton}>Reload surveys</Button>
+        {/*<Button onClick={this.loadSurveysByButton}>Reload surveys</Button>*/}
         <List>
           {surveysListOrSpinner}
         </List>
