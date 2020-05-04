@@ -58,7 +58,7 @@ class QuestionEditComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle={`Edit questions in ${survey.name}`}
+          pageTitle={`Редактирование вопросов в опросе "${survey.name}"`}
         />
         <QuestionForm
           open={questionFormOpened}

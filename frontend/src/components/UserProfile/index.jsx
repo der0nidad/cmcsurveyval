@@ -22,7 +22,7 @@ class UserProfileComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Профиль пользователя admin"
+          pageTitle="Профиль пользователя ivanov"
         />
         <Container maxWidth="sm">
           <Paper
@@ -31,14 +31,14 @@ class UserProfileComponent extends React.Component {
             <Typography
               variant="h6"
             >
-              Данные пользователя
+              Данные пользователя.
             </Typography>
             <Typography>
-              ФИО: Администратор Системы
+              ФИО: Иванов Иван Иванович
               <br />
-              {/*Академическая группа: 214 гр. 2019/2020 учебного года*/}
+              Академическая группа: 214 гр. 2019/2020 учебного года
               <br />
-              Роль: Администратор
+              Роль: Студент
             </Typography>
           </Paper>
         </Container>

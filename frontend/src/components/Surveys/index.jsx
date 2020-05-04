@@ -14,14 +14,14 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 import { Header } from '../Header';
 import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
 import { openSurveyFormAction } from '../../store/actions/flags.actions';
 import { SurveyForm } from './SurveyForm';
 import ConfirmDialog from '../common/ConfirmDialog';
-
 
 class SurveysComponent extends React.Component {
   static propTypes = {
@@ -82,38 +82,62 @@ class SurveysComponent extends React.Component {
     } else {
       surveysListOrSpinner = (surveys.map((survey, index) => (
         <ListItem key={survey.id}>
-          <Card>
-            <CardContent>
-              <Link to={`/surveys/${survey.id}/`}>
-                <Typography color="textSecondary" gutterBottom>
-                  {survey.name}
-                </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                  {survey.author}
-                </Typography>
-              </Link>
-            </CardContent>
-            <CardActions>
-              {/* <Button size="small">Learn More</Button> */}
-              <IconButton title="Edit questions" aria-label="edit questions">
-                <HelpOutlineIcon />
-              </IconButton>
-              <IconButton
-                title="Edit survey"
-                aria-label="edit survey"
-                onClick={() => this.handleEditSurvey(survey.id)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                title="Delete survey"
-                aria-label="delete"
-                onClick={() => this.handleShowDeletionDialog(survey.id)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          </Card>
+          <Box
+            width="100%"
+          >
+            <Card>
+              <CardContent>
+                <Link
+                  to={`/surveys/${survey.id}/`}
+                  style={{ textDecoration: 'none' }}
+                  color="primary"
+                >
+                  <Typography color="textPrimary" gutterBottom>
+                    {survey.name}
+                  </Typography>
+                  <Typography
+                    // style={{ display: 'inline-block' }}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {/* {survey.author} */}
+                    Автор: Кузнецов Сергей
+                  </Typography>
+                  <Typography
+                    // style={{ display: 'inline-block', marginLeft: '30px' }}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {/* {survey.author} */}
+                    {index === 1
+                      ? '323 группа'
+                      : 'Аудитория: 1 поток, 2 поток, 3 поток'}
+
+                  </Typography>
+                </Link>
+              </CardContent>
+              <CardActions>
+                {/* <Button size="small">Learn More</Button> */}
+                <IconButton title="Edit questions" aria-label="edit questions">
+                  <HelpOutlineIcon />
+                </IconButton>
+                <IconButton
+                  title="Edit survey"
+                  aria-label="edit survey"
+                  onClick={() => this.handleEditSurvey(survey.id)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  title="Delete survey"
+                  aria-label="delete"
+                  onClick={() => this.handleShowDeletionDialog(survey.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </Box>
         </ListItem>
       )));
     }
@@ -132,17 +156,26 @@ class SurveysComponent extends React.Component {
           setOpen={this.toggleDeleteDialogOpeningFlag}
           title="Delete survey?"
         />
-        {/*<Button onClick={this.loadSurveysByButton}>Reload surveys</Button>*/}
-        <List>
-          {surveysListOrSpinner}
-        </List>
-        <Fab
-          color="primary"
-          aria-label="add"
-          onClick={openSurveyForm}
+        {/* <Button onClick={this.loadSurveysByButton}>Reload surveys</Button> */}
+        <Container
+          maxWidth="sm"
         >
-          <AddIcon />
-        </Fab>
+          <List>
+            {surveysListOrSpinner}
+          </List>
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={openSurveyForm}
+            style={{
+              position: 'fixed',
+              bottom: '1em',
+              right: '1em',
+            }}
+          >
+            <AddIcon />
+          </Fab>
+        </Container>
       </div>
     );
   }
