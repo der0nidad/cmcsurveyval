@@ -1,0 +1,18 @@
+.filter-fields {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    align-items: baseline;
+}
+.admin-actions-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-button {
+    max-height: 30px;
+}
+
+.admin-button {
+    margin: 0 5px;
+}

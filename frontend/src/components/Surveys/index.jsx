@@ -17,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import { Header } from '../Header';
 import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surveys.actions';
 import { openSurveyFormAction } from '../../store/actions/flags.actions';
@@ -117,10 +118,10 @@ class SurveysComponent extends React.Component {
                 </Link>
               </CardContent>
               <CardActions>
-                {/* <Button size="small">Learn More</Button> */}
-                <IconButton title="Edit questions" aria-label="edit questions">
-                  <HelpOutlineIcon />
-                </IconButton>
+                {/* <IconButton title="Edit questions" aria-label="edit questions"> */}
+                {/*  <HelpOutlineIcon /> */}
+                {/* </IconButton> */}
+                {index !== 1 && (
                 <IconButton
                   title="Edit survey"
                   aria-label="edit survey"
@@ -128,6 +129,7 @@ class SurveysComponent extends React.Component {
                 >
                   <EditIcon />
                 </IconButton>
+                )}
                 <IconButton
                   title="Delete survey"
                   aria-label="delete"
@@ -135,6 +137,41 @@ class SurveysComponent extends React.Component {
                 >
                   <DeleteIcon />
                 </IconButton>
+                {index !== 1 && <Button style={{ fontSize: '12px' }} size="small">Редактировать вопросы</Button>}
+                {/* <Button color="primary" variant="contained">Редактировать вопросы</Button> */}
+                {/* <Button color="primary" variant="contained">Редактировать опрос</Button> */}
+                {/* <Button color="primary" variant="contained">Удалить опрос</Button> */}
+                {index !== 1
+                  ? (
+                    <Button
+                      style={{ fontSize: '12px' }}
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                    >
+                      Опубликовать
+                    </Button>
+                  )
+
+                  : (
+                    <Button
+                      style={{ fontSize: '12px' }}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                      disabled
+                    >
+                      Опубликован
+                    </Button>
+                  )}
+                {index === 1 && (
+                <Typography
+                  variant="subtitle2"
+                  style={{ fontSize: '12px' }}
+                >
+                  Опубликованные опросы нельзя редактировать
+                </Typography>
+                )}
               </CardActions>
             </Card>
           </Box>
