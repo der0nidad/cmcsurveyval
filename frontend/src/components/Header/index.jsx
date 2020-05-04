@@ -69,22 +69,23 @@ class HeaderComponent extends React.Component {
               <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleOpenMenu}>
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" className={classes.flex}>
+              <Typography variant="h6" color="inherit" className={classes.flex}>
                 {pageTitle}
               </Typography>
 
               { user
                 ? (
-                  <span>
+                  <Typography variant="subtitle1">
                     {/*{ user.username }*/}
                     {/*Иванов Иван*/}
-                    Кузнецов Сергей (Преподаватель)
+                    Администратор Системы (Администратор)
+                    {/*Кузнецов Сергей (Преподаватель)*/}
                     <AccountCircle />
-                  </span>
+                  </Typography>
                 )
                 : (
                   <Link href="/login" style={{ color: 'white' }}>
-                    <Button color="white">
+                    <Button color="white" variant="outlined">
                       Login
                     </Button>
                   </Link>

@@ -86,7 +86,7 @@ class MySurveysComponent extends React.Component {
               name="radio-button-demo"
               inputProps={{ 'aria-label': 'A' }}
             />
-            <span>{variant.name}</span>
+            <Typography>{variant.name}</Typography>
           </ListItem>
         ))
         : null;

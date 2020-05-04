@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleIncrementClick: () => dispatch({ type: 'INCREMENT' }),
 });
-class UserProfileComponent extends React.Component {
+class UsersSearchComponent extends React.Component {
   static propTypes = {
   };
 
@@ -22,7 +22,7 @@ class UserProfileComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Профиль пользователя admin"
+          pageTitle="Профиль пользователя ivanov"
         />
         <Container maxWidth="sm">
           <Paper
@@ -34,11 +34,11 @@ class UserProfileComponent extends React.Component {
               Данные пользователя
             </Typography>
             <Typography>
-              ФИО: Администратор Системы
+              ФИО: Иванов Иван Иванович
               <br />
-              {/*Академическая группа: 214 гр. 2019/2020 учебного года*/}
+              Академическая группа: 214 гр. 2019/2020 учебного года
               <br />
-              Роль: Администратор
+              Роль: Студент
             </Typography>
           </Paper>
         </Container>
@@ -47,4 +47,4 @@ class UserProfileComponent extends React.Component {
     );
   }
 }
-export const UserProfile = connect(mapStateToProps, mapDispatchToProps)(UserProfileComponent);
+export const UsersSearch = connect(mapStateToProps, mapDispatchToProps)(UsersSearchComponent);
