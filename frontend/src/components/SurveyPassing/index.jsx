@@ -53,8 +53,6 @@ const surveyData = {
 };
 class SurveyPassingComponent extends React.Component {
   static propTypes = {
-    loadSurveyData: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool,
     survey: PropTypes.shape(surveyWithQuestionsSchema),
   };
 
@@ -68,15 +66,7 @@ class SurveyPassingComponent extends React.Component {
   };
 
   componentDidMount() {
-    console.log(213);
-    // const { loadSurveyData } = this.props;
-    // loadSurveyData();
   }
-
-  loadSurveysByButton = () => {
-    const { loadSurveyData } = this.props;
-    loadSurveyData();
-  };
 
   // назначенные на меня опросы
   // какие данные нам нужны: название опроса, автор(имя), список вопросов(у каждого вопроса текст, тип и варианты
@@ -85,10 +75,8 @@ class SurveyPassingComponent extends React.Component {
   // действия - отправить, отмена
   render() {
     const {
-      isLoading, loadSurveyData, survey,
+      survey,
     } = this.props;
-    const { deleteDialogOpened, currentSurveyId } = this.state;
-    let surveysListOrSpinner;
     const questionsData = survey.questionsList.map((question, index) => {
       const answerVariantList = question.type === 'SO'
         ? question.answerVariants.map((variant) => (
@@ -131,58 +119,12 @@ class SurveyPassingComponent extends React.Component {
         </Card>
       );
     });
-    // if (isLoading) {
-    //   surveysListOrSpinner = <CircularProgress />;
-    // } else {
-    //   surveysListOrSpinner = (surveys.map((survey, index) => (
-    //     <ListItem key={survey.id}>
-    //       <Card>
-    //         <CardContent>
-    //           <Link to={`/surveys/${survey.id}/`}>
-    //             <Typography color="textSecondary" gutterBottom>
-    //               {survey.name}
-    //             </Typography>
-    //             <Typography color="textSecondary" gutterBottom>
-    //               {survey.author}
-    //             </Typography>
-    //           </Link>
-    //         </CardContent>
-    //         <CardActions>
-    //           {/* <Button size="small">Learn More</Button> */}
-    //           <IconButton title="Edit questions" aria-label="edit questions">
-    //             <HelpOutlineIcon />
-    //           </IconButton>
-    //           <IconButton
-    //             title="Edit survey"
-    //             aria-label="edit survey"
-    //             onClick={() => this.handleEditSurvey(survey.id)}
-    //           >
-    //             <EditIcon />
-    //           </IconButton>
-    //           <IconButton
-    //             title="Delete survey"
-    //             aria-label="delete"
-    //             onClick={() => this.handleShowDeletionDialog(survey.id)}
-    //           >
-    //             <DeleteIcon />
-    //           </IconButton>
-    //         </CardActions>
-    //       </Card>
-    //     </ListItem>
-    //   )));
-    // }
 
     return (
       <div>
         <Header
           pageTitle="Линейная алгебра - опрос по курсу"
         />
-        {/* <ConfirmDialog */}
-        {/*  onConfirm={() => deleteSurvey(currentSurveyId).then(() => loadSurveys())} */}
-        {/*  open={deleteDialogOpened} */}
-        {/*  setOpen={this.toggleDeleteDialogOpeningFlag} */}
-        {/*  title="Delete survey?" */}
-        {/* /> */}
         <Container maxWidth="sm">
           <List>
             {questionsData}
@@ -211,11 +153,6 @@ class SurveyPassingComponent extends React.Component {
 
 const mapStateToProps = (state) => ({
   survey: surveyData,
-  // isLoading: state.surveys.isLoading,
-  // formOpened: state.flags.formOpened,
-  // очень хороший вопрос: возможно, стоит держать все подобные флаги во flags?? хз
-  // с одной стороны, нам не нужно засорять кучу редюсеров флагами загрузки и открытия форм,
-  // с другой стороны возможны конфликты...
 });
 
 const mapDispatchToProps = (dispatch) => ({
