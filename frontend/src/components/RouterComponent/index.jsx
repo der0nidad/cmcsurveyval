@@ -156,6 +156,9 @@ class RouterComp extends React.Component {
             <Route path="/mysurveys/:id">
               <SurveyPassing />
             </Route>
+            {/*<Route path="/mysurveys">*/}
+            {/*  <CurrentSurvey />*/}
+            {/*</Route>*/}
             <Route path="/mysurveys">
               <MySurveys />
             </Route>

@@ -6,51 +6,36 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
-import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { CardActions } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 
-const fiveVariants = [
+const surveysList = [
   {
-    name: 'Нет',
-    id: 1,
+    name: 'Первый опрос',
+    author: 'Кузнецов Сергей',
   },
   {
-    name: 'Скорее нет',
-    id: 2,
+    name: 'Второй опрос',
+    author: 'Кузнецов Сергей',
   },
   {
-    name: 'Трудно сказать, да или нет',
-    id: 3,
-  },
-  {
-    name: 'Скорее да',
-    id: 4,
-  },
-  {
-    name: 'Да',
-    id: 5,
+    name: 'Третий опрос',
+    author: 'Кузнецов Сергей',
   },
 ];
-const questions = [
-  {
-    name: 'Вы удовлетворены преподаванием данного курса?',
-    type: 'SO',
-    answerVariants: fiveVariants,
-  },
-  {
-    name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
-    type: 'ST',
-  },
-];
-const surveyData = {
-  questionsList: questions,
-  name: 'Первый опрос',
-  author: 'Кузнецов Сергей',
-};
+
+// const surveyData = {
+//   questionsList: questions,
+//   name: 'Первый опрос',
+//   author: 'Кузнецов Сергей',
+// };
 class MySurveysComponent extends React.Component {
   static propTypes = {
     survey: PropTypes.shape(surveyWithQuestionsSchema),
@@ -69,81 +54,83 @@ class MySurveysComponent extends React.Component {
   }
 
   // назначенные на меня опросы
-  // какие данные нам нужны: название опроса, автор(имя), список вопросов(у каждого вопроса текст, тип и варианты
-  // ответа). мы рендерим по карточке на каждый вопрос, в зависимости от типа вопроса рендерим либо варианты ответа,
-  // либо текстовое поле для ответа
-  // действия - отправить, отмена
+  // какие данные нам нужны: название опроса, автор(имя),
+  // действия - начать
   render() {
     const {
       survey,
     } = this.props;
-    const questionsData = survey.questionsList.map((question, index) => {
-      const answerVariantList = question.type === 'SO'
-        ? question.answerVariants.map((variant) => (
-          <ListItem key={variant.id}>
-            <Radio
-              value="a"
-              name="radio-button-demo"
-              inputProps={{ 'aria-label': 'A' }}
-            />
-            <Typography>{variant.name}</Typography>
-          </ListItem>
-        ))
-        : null;
-      return (
-        <Card
-          style={{ margin: '20px' }}
-        >
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Вопрос
-              {' '}
-              {index + 1}
-              {' '}
-              из
-              {' '}
-              {survey.questionsList.length}
-            </Typography>
-            <Typography color="textSecondary" gutterBottom>
-              {question.name}
-            </Typography>
-            {question.type === 'ST'
-              ? (
-                <TextField
-                  placeholder="Введите текст ответа"
-                />
-              )
-              : answerVariantList}
+    const surveysData = surveysList.map((surveyItem) => (
+      <Card
+        style={{ margin: '20px' }}
+      >
+        <CardContent>
+          <Typography color="textPrimary" gutterBottom>
+            {surveyItem.name}
+          </Typography>
+          <Typography color="textSecondary">
+            {surveyItem.author}
+          </Typography>
 
-          </CardContent>
-        </Card>
-      );
-    });
+        </CardContent>
+        <CardActions>
+          <Button
+            color="primary"
+            variant="contained"
+          >
+            Начать
+          </Button>
+        </CardActions>
+      </Card>
+    ));
 
     return (
       <div>
         <Header
-          pageTitle="Линейная алгебра - опрос по курсу"
+          pageTitle="Мои опросы"
         />
         <Container maxWidth="sm">
-          <List>
-            {questionsData}
-          </List>
-          <div
-            style={{ marginLeft: '50px', display: 'flex', maxWidth: '500px' }}
+          <Tabs
+            value={1}
+            // onChange={(e) => this.handleChangeTab(e)}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
           >
-            <Button
-              color="primary"
-              variant="contained"
-            >
-              Сохранить
-            </Button>
-            <Button
+            <Tab value={1} label="Назначенные на меня" />
+            <Tab value={2} label="Пройденные опросы" />
+          </Tabs>
+          <div
+            style={{ minHeight: '10vh', marginTop: '2vh' }}
+          >
+            <Typography
               style={{ marginLeft: '20px' }}
             >
-              Отменить
-            </Button>
+              Количество назначенных на меня опросов:
+              {' '}
+              {surveysData.length}
+            </Typography>
+
+            <List>
+              {surveysData}
+            </List>
           </div>
+
+          {/* <div */}
+          {/*  style={{ marginLeft: '50px', display: 'flex', maxWidth: '500px' }} */}
+          {/* > */}
+          {/*  <Button */}
+          {/*    color="primary" */}
+          {/*    variant="contained" */}
+          {/*  > */}
+          {/*    Сохранить */}
+          {/*  </Button> */}
+          {/*  <Button */}
+          {/*    style={{ marginLeft: '20px' }} */}
+          {/*  > */}
+          {/*    Отменить */}
+          {/*  </Button> */}
+          {/* </div> */}
 
         </Container>
       </div>
@@ -152,7 +139,6 @@ class MySurveysComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  survey: surveyData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
