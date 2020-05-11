@@ -25,28 +25,28 @@ const rows = [
 class StatusTable extends React.Component {
   render() {
     return (
-        <TableContainer component={Paper}>
-          <Table size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>ФИО студента</TableCell>
-                <TableCell align="right">Академическая группа</TableCell>
-                <TableCell align="right">Опрос пройден</TableCell>
+      <TableContainer component={Paper}>
+        <Table size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>ФИО студента</TableCell>
+              <TableCell align="right">Академическая группа</TableCell>
+              <TableCell align="right">Опрос пройден</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.studyGroup}</TableCell>
+                <TableCell align="right">{row.passing}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.studyGroup}</TableCell>
-                  <TableCell align="right">{row.passing}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 }

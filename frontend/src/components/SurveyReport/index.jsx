@@ -7,38 +7,45 @@ import Tabs from '@material-ui/core/Tabs';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { Header } from '../Header';
 import StatusTable from './StatusTable';
+import SurveyResults from './SurveyResults';
+import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
 
-const fiveVariants = [
+export const fiveVariants = [
   {
     name: 'Нет',
     id: 1,
+    part: '20%',
   },
   {
     name: 'Скорее нет',
     id: 2,
+    part: '0%',
   },
   {
     name: 'Трудно сказать, да или нет',
     id: 3,
+    part: '20%',
   },
   {
     name: 'Скорее да',
     id: 4,
+    part: '40%',
   },
   {
     name: 'Да',
     id: 5,
+    part: '20%',
   },
 ];
 const questions = [
   {
     name: 'Вы удовлетворены преподаванием данного курса?',
-    type: 'SO',
+    type: SELECT_QUESTION,
     answerVariants: fiveVariants,
   },
   {
     name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
-    type: 'ST',
+    type: TEXT_QUESTION,
   },
 ];
 const surveyData = {
@@ -57,7 +64,7 @@ class SurveyReportComponent extends React.Component {
   };
 
   state = {
-    activeTab: 1,
+    activeTab: 2,
   };
 
   componentDidMount() {
@@ -95,7 +102,7 @@ class SurveyReportComponent extends React.Component {
           <div
             style={{ minHeight: '10vh', marginTop: '2vh' }}
           >
-            <StatusTable />
+            { activeTab === 1 ? <StatusTable /> : <SurveyResults />}
           </div>
         </Container>
       </div>

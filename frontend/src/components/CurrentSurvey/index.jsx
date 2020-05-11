@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
 
 const fiveVariants = [
   {
@@ -38,12 +39,12 @@ const fiveVariants = [
 const questions = [
   {
     name: 'Вы удовлетворены преподаванием данного курса?',
-    type: 'SO',
+    type: SELECT_QUESTION,
     answerVariants: fiveVariants,
   },
   {
     name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
-    type: 'ST',
+    type: TEXT_QUESTION,
   },
 ];
 const surveyData = {
@@ -78,7 +79,7 @@ class CurrentSurveyComponent extends React.Component {
       survey,
     } = this.props;
     const questionsData = survey.questionsList.map((question, index) => {
-      const answerVariantList = question.type === 'SO'
+      const answerVariantList = question.type === SELECT_QUESTION
         ? question.answerVariants.map((variant) => (
           <ListItem key={variant.id}>
             <Radio
@@ -107,7 +108,7 @@ class CurrentSurveyComponent extends React.Component {
             <Typography color="textSecondary" gutterBottom>
               {question.name}
             </Typography>
-            {question.type === 'ST'
+            {question.type === TEXT_QUESTION
               ? (
                 <TextField
                   placeholder="Введите текст ответа"
