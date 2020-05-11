@@ -5,19 +5,19 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
-import {ErrorMessage, Form, Formik} from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import {FormikSelectField, FormikTextField} from 'formik-material-fields';
-import {connect} from 'react-redux';
+import { FormikSelectField, FormikTextField } from 'formik-material-fields';
+import { connect } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import {closeSurveyForm} from '../../store/actions/flags.actions';
-import {loadSurveysAction} from '../../store/actions/surveys.actions';
-import {userShape} from '../Auth/auth.schema';
-import {QuestionCreationSchema, questionShape} from '../Surveys/surveys.schema';
-import {QUESTION_TYPES, TEXT_QUESTION} from './questionEdit.constants';
-import {createQuestionAction} from '../../store/actions/questionEdit.actions';
+import { closeSurveyForm } from '../../store/actions/flags.actions';
+import { loadSurveysAction } from '../../store/actions/surveys.actions';
+import { userShape } from '../Auth/auth.schema';
+import { QuestionCreationSchema, questionShape } from '../Surveys/surveys.schema';
+import { QUESTION_TYPES_TEXT, TEXT_QUESTION } from './questionEdit.constants';
+import { createQuestionAction } from '../../store/actions/questionEdit.actions';
 
 
 const initialState = {
@@ -76,7 +76,7 @@ class QuestionFormComponent extends React.Component {
 
     } = this.props;
     const { questionType, answersVariantsData, newAnswerVariant } = this.state;
-    const titleText = question ? `Edit ${question.text}` : 'Create Question';
+    const titleText = question ? `Редактирование вопроса: ${question.text}` : 'Создание вопроса';
     const answerVariantsLayout = answersVariantsData
       .map((answer) => (
         <li key={answer.id}>
@@ -119,21 +119,21 @@ class QuestionFormComponent extends React.Component {
                   <Form>
                     <FormikTextField
                       name="text"
-                      label="Text"
+                      label="Текст вопроса"
                       margin="normal"
                       fullWidth
                     />
                     <ErrorMessage name="name" />
                     <FormikSelectField
                       name="type"
-                      label="Type"
+                      label="Тип вопроса"
                       margin="normal"
                       fullWidth
-                      options={QUESTION_TYPES.map((item) => ({ value: item, label: item }))}
+                      options={QUESTION_TYPES_TEXT.map((item) => ({ value: item, label: item }))}
                       // value={questionType}
                       onChange={(e) => this.handleChangeQuestionType(e)}
                     />
-                    <ErrorMessage name="type" />
+                    {/*<ErrorMessage name="type" />*/}
                     {isSubmitting && <LinearProgress />}
                     <br />
                     <Button

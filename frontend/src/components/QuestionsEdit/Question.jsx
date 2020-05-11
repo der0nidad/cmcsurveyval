@@ -13,7 +13,7 @@ import {
   loadCurrentSurveyAction,
 } from '../../store/actions/questionEdit.actions';
 import { closeQuestionForm, openQuestionFormAction } from '../../store/actions/flags.actions';
-import { MULTI_SELECT_QUESTION, SELECT_QUESTION } from './questionEdit.constants';
+import { MULTI_SELECT_QUESTION, SELECT_QUESTION, TEXT_QUESTION } from './questionEdit.constants';
 import { questionShape } from '../Surveys/surveys.schema';
 import { AnswerVariants } from './AnswerVariants';
 import ConfirmDialog from '../common/ConfirmDialog';
@@ -92,14 +92,23 @@ class QuestionComponent extends React.Component {
             <Typography className={classes.title} gutterBottom>
               {text}
             </Typography>
+            <Typography
+              variant="subtitle2"
+              color="textSecondary"
+            >
+              {questionType === TEXT_QUESTION ? 'Вопрос со свободным ответом' : 'Вопрос с выбором варианта ответа'}
+            </Typography>
             <Typography className={classes.title} color="textSecondary" gutterBottom>
               {
                 [SELECT_QUESTION, MULTI_SELECT_QUESTION].indexOf(questionType) >= 0
                 && (
+                  <div>
+                    <Typography variant="subtitle1" color="textPrimary">Варианты ответа:</Typography>
                 <AnswerVariants
                   questionId={id}
                   answersList={answersList}
                 />
+                </div>
                 )
               }
             </Typography>

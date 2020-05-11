@@ -4,13 +4,18 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Container from '@material-ui/core/Container';
 import { closeQuestionForm, openQuestionFormAction } from '../../store/actions/flags.actions';
 import { Header } from '../Header';
 import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
 import { Question } from './Question';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { QuestionForm } from './QuestionForm';
+import './questionEditStyles.css';
 
 class QuestionEditComponent extends React.Component {
   static propTypes = {
@@ -63,19 +68,41 @@ class QuestionEditComponent extends React.Component {
         <QuestionForm
           open={questionFormOpened}
         />
-        {/* добавь хлебные крошки "к списку опросов" */}
-        {questions}
-        <Button
-          onClick={openQuestionForm}
-          color="primary"
-        >
-          Add question
-        </Button>
-        <Button
-          onClick={this.handleRedirectToSurveys}
-        >
-          Save
-        </Button>
+        <div className="surveys-breadcrumbs">
+          <Container maxWidth="md">
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link color="inherit" href="/">
+                Главная страница
+              </Link>
+              <Link color="inherit" href="/surveys">
+                Создание и редактирование опросов
+              </Link>
+              <Typography color="textPrimary">
+                Редактирование опроса:
+                {' '}
+                {survey.name}
+              </Typography>
+            </Breadcrumbs>
+          </Container>
+        </div>
+        <Container maxWidth="sm">
+          {questions}
+          <Button
+            onClick={openQuestionForm}
+            color="primary"
+            variant="contained"
+          >
+            Add question
+          </Button>
+          <Button
+            onClick={this.handleRedirectToSurveys}
+            variant="outlined"
+            style={{ marginLeft: '20px' }}
+          >
+            Save
+          </Button>
+        </Container>
+
       </div>
     );
   }

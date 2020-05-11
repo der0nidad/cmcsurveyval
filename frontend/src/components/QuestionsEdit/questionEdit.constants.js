@@ -8,3 +8,4 @@ export const SELECT_QUESTION = 'SO';
 export const TEXT_QUESTION = 'ST'; // small text
 export const MULTI_SELECT_QUESTION = 'MS';
 export const QUESTION_TYPES = [SELECT_QUESTION, TEXT_QUESTION, MULTI_SELECT_QUESTION];
+export const QUESTION_TYPES_TEXT = ['Текстовый вопрос', 'Вопрос с выбором варианта ответа'];

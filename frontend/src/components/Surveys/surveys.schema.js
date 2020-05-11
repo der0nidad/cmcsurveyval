@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { userShape } from '../Auth/auth.schema';
+import { QUESTION_TYPES_TEXT } from '../QuestionsEdit/questionEdit.constants';
 
 export const SurveyCreationSchema = Yup.object().shape({
   name: Yup.string().required('This is required field'),
@@ -8,7 +9,7 @@ export const SurveyCreationSchema = Yup.object().shape({
 
 export const QuestionCreationSchema = Yup.object().shape({
   text: Yup.string().required('This is required field'),
-  type: Yup.string().oneOf(['ST', 'MS', 'SO']).required('This is required field'),
+  type: Yup.string().oneOf([QUESTION_TYPES_TEXT]).required('This is required field'),
   // answersList
 });
 
