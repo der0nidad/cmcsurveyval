@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext as _
 
+from users.models import StudyGroup
+
 DEFAULT_TEXT_FIELD_LENGTH = 200
 
 
@@ -11,8 +13,10 @@ class Survey(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_open = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
+    # multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
+    audience = models.ManyToManyField(StudyGroup)
 
     def __str__(self):
         return self.name
@@ -20,15 +24,15 @@ class Survey(models.Model):
 
 class Question(models.Model):
     SELECT_ONE = 'SO'
-    MULTISELECT = 'MS'
+    # MULTISELECT = 'MS'
     SMALL_TEXT = 'ST'
 
     QUESTION_TYPE_CHOICES = (
         (SELECT_ONE, _('Select question')),
-        (MULTISELECT, _('Multiselect qestion')),
+        # (MULTISELECT, _('Multiselect qestion')),
         (SMALL_TEXT, _('Text question')),
     )
-    text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
+    name = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='survey_link')
     order = models.IntegerField()
     question_type = models.CharField(max_length=2, choices=QUESTION_TYPE_CHOICES)
@@ -46,10 +50,10 @@ class Question(models.Model):
 
 
 class AnswerVariant(models.Model):
-    text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
+    name = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     order = models.IntegerField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question')
-    next_question = models.ForeignKey(Question, null=True, on_delete=models.CASCADE, related_name='next_question')
+    # next_question = models.ForeignKey(Question, null=True, on_delete=models.CASCADE, related_name='next_question')
     # id следующего вопроса. по идее - это должен быть nullable FK.
     # как сохранять в базе id next_question - с фронта приходит дикт вида
     # { question_number_in_survey: next_question_number_in_survey}
