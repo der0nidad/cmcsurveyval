@@ -12,6 +12,7 @@ import {
   deleteAnswerVariantAction, loadCurrentSurveyAction,
 } from '../../store/actions/questionEdit.actions';
 import objToFormData from '../../common/helpers/objToFormData';
+import Typography from "@material-ui/core/Typography";
 
 class QuestionAnswerVariantsComponent extends React.Component {
   static propTypes = {
@@ -60,15 +61,15 @@ class QuestionAnswerVariantsComponent extends React.Component {
     const { answersList } = this.props;
     const { newAnswerVariantText } = this.state;
     const answers = answersList ? answersList.map((answer, index) => (
-      <li key={answer.id}>
-        {' '}
-        {index + 1}
-        {' '}
-        {answer.id}
-        {' '}
-        -
-        {answer.text}
-        {' '}
+      <li key={answer.id} style={{ maxHeight: '24px' }}>
+        {/*{' '}*/}
+        {/*{index + 1}*/}
+        {/*{' '}*/}
+        {/*{answer.id}*/}
+        {/*{' '}*/}
+        {/*-*/}
+        {answer.name}
+        {/*{' '}*/}
         <IconButton>
           <CloseIcon
             onClick={() => this.handleDeleteAnswerVariant(answer.id)}
@@ -78,9 +79,10 @@ class QuestionAnswerVariantsComponent extends React.Component {
     )) : null;
     return (
       <>
-        <ul>
+        <ul style={{ marginTop: '0px', }}>
           {answers}
         </ul>
+        <Typography>Добавить вариант ответа</Typography>
         <TextField value={newAnswerVariantText} onChange={this.handleChangeNewAVText} />
         <IconButton onClick={this.handleNewAnswerVariant}><AddIcon /></IconButton>
 

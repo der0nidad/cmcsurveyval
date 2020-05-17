@@ -8,12 +8,12 @@ class AnswerVariantCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnswerVariant
-        fields = ('id', 'text', 'order', 'question_id')
+        fields = ('id', 'name', 'order', 'question_id')
 
     def create(self, validated_data):
         answer_variant = AnswerVariant.objects.create(
             question=validated_data['question']['id'],
-            text=validated_data['text'],
+            name=validated_data['name'],
             order=validated_data['order']
         )
         return answer_variant
@@ -26,12 +26,12 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'survey_id', 'order', 'question_type', 'answers_list')
+        fields = ('id', 'name', 'survey_id', 'order', 'question_type', 'answers_list')
 
     def create(self, validated_data):
         question = Question.objects.create(
             survey=validated_data['survey']['id'],
-            text=validated_data['text'],
+            name=validated_data['name'],
             order=validated_data['order'],
             type=validated_data['question_type']
         )
@@ -58,14 +58,14 @@ class SurveyQuestionDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'survey_id', 'order', 'question_type')
+        fields = ('id', 'name', 'survey_id', 'order', 'question_type')
 
 
 class AnswerVariantDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnswerVariant
-        fields = ('id', 'text', 'question_id', 'order')
+        fields = ('id', 'name', 'question_id', 'order')
 
 
 class SurveyQuestionsSerializer(serializers.ModelSerializer):

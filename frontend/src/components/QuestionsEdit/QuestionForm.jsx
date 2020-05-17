@@ -76,7 +76,7 @@ class QuestionFormComponent extends React.Component {
 
     } = this.props;
     const { questionType, answersVariantsData, newAnswerVariant } = this.state;
-    const titleText = question ? `Редактирование вопроса: ${question.text}` : 'Создание вопроса';
+    const titleText = question ? `Редактирование вопроса: ${question.name}` : 'Создание вопроса';
     const answerVariantsLayout = answersVariantsData
       .map((answer) => (
         <li key={answer.id}>
@@ -110,7 +110,7 @@ class QuestionFormComponent extends React.Component {
             <DialogTitle id="form-dialog-title">{titleText}</DialogTitle>
             <DialogContent>
               <Formik
-                initialValues={{ text: question ? question.text : '' }}
+                initialValues={{ text: question ? question.name : '' }}
                 validationSchema={QuestionCreationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                 }}
@@ -133,7 +133,7 @@ class QuestionFormComponent extends React.Component {
                       // value={questionType}
                       onChange={(e) => this.handleChangeQuestionType(e)}
                     />
-                    {/*<ErrorMessage name="type" />*/}
+                    {/* <ErrorMessage name="type" /> */}
                     {isSubmitting && <LinearProgress />}
                     <br />
                     <Button
@@ -142,7 +142,7 @@ class QuestionFormComponent extends React.Component {
                       disabled={isSubmitting}
                       onClick={submitForm}
                     >
-                      Submit
+                      Сохранить вопрос
                     </Button>
                   </Form>
                 )}

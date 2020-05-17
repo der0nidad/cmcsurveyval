@@ -14,7 +14,7 @@ import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
 
-const fiveVariants = [
+export const fiveVariants = [
   {
     name: 'Нет',
     id: 1,

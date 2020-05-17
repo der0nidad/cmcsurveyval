@@ -18,6 +18,7 @@ import { questionShape } from '../Surveys/surveys.schema';
 import { AnswerVariants } from './AnswerVariants';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { QuestionForm } from './QuestionForm';
+import { currSurvey } from './index';
 
 const classes = {
   root: {
@@ -77,7 +78,7 @@ class QuestionComponent extends React.Component {
     } = this.props;
     const { questionDeleteDialogOpened } = this.state;
     const {
-      text, id, surveyId, questionType, answersList,
+      name, id, surveyId, questionType, answersList,
     } = questionData;
     return (
       <div>
@@ -90,7 +91,7 @@ class QuestionComponent extends React.Component {
         <Card style={{ margin: '15px' }}>
           <CardContent>
             <Typography className={classes.title} gutterBottom>
-              {text}
+              {name}
             </Typography>
             <Typography
               variant="subtitle2"
@@ -104,11 +105,11 @@ class QuestionComponent extends React.Component {
                 && (
                   <div>
                     <Typography variant="subtitle1" color="textPrimary">Варианты ответа:</Typography>
-                <AnswerVariants
-                  questionId={id}
-                  answersList={answersList}
-                />
-                </div>
+                    <AnswerVariants
+                      questionId={id}
+                      answersList={answersList}
+                    />
+                  </div>
                 )
               }
             </Typography>
@@ -120,14 +121,14 @@ class QuestionComponent extends React.Component {
               color="primary"
               onClick={() => openQuestionForm(id)}
             >
-              Edit
+              Редактировать
             </Button>
             <Button
               size="small"
               color="primary"
               onClick={() => this.handleShowDeletionDialog(id)}
             >
-              Delete
+              Удалить
             </Button>
           </CardActions>
         </Card>
@@ -137,7 +138,10 @@ class QuestionComponent extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  questionData: state.questionEdit.survey.questionsList.find(
+  // questionData: state.questionEdit.survey.questionsList.find(
+  //   (question) => question.id === ownProps.id,
+  // ),
+  questionData: currSurvey.questionsList.find(
     (question) => question.id === ownProps.id,
   ),
   user: state.auth.user,

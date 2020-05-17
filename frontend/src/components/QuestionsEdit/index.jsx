@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { Box, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -16,6 +16,30 @@ import { Question } from './Question';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { QuestionForm } from './QuestionForm';
 import './questionEditStyles.css';
+import { SELECT_QUESTION, TEXT_QUESTION } from './questionEdit.constants';
+import { fiveVariants } from '../SurveyReport';
+
+const questionsListData = [
+  {
+    id: 1,
+    name: 'Вы удовлетворены преподаванием данного курса?',
+    questionType: SELECT_QUESTION,
+    answersList: fiveVariants,
+  },
+  {
+    id: 2,
+    name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
+    questionType: TEXT_QUESTION,
+  },
+];
+
+export const currSurvey = {
+  id: 1,
+  name: 'Линейная алгебра. Опрос по курсу',
+  author: 'Кузнецов Сергей',
+  questionsList: questionsListData,
+
+};
 
 class QuestionEditComponent extends React.Component {
   static propTypes = {
@@ -69,21 +93,19 @@ class QuestionEditComponent extends React.Component {
           open={questionFormOpened}
         />
         <div className="surveys-breadcrumbs">
-          <Container maxWidth="md">
-            <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" href="/">
-                Главная страница
-              </Link>
-              <Link color="inherit" href="/surveys">
-                Создание и редактирование опросов
-              </Link>
-              <Typography color="textPrimary">
-                Редактирование опроса:
-                {' '}
-                {survey.name}
-              </Typography>
-            </Breadcrumbs>
-          </Container>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" href="/">
+              Главная страница
+            </Link>
+            <Link color="inherit" href="/surveys">
+              Создание и редактирование опросов
+            </Link>
+            <Typography color="textPrimary">
+              Редактирование опроса:
+              {' '}
+              {survey.name}
+            </Typography>
+          </Breadcrumbs>
         </div>
         <Container maxWidth="sm">
           {questions}
@@ -92,14 +114,14 @@ class QuestionEditComponent extends React.Component {
             color="primary"
             variant="contained"
           >
-            Add question
+            Добавить вопрос
           </Button>
           <Button
             onClick={this.handleRedirectToSurveys}
             variant="outlined"
             style={{ marginLeft: '20px' }}
           >
-            Save
+            Сохранить черновик опроса
           </Button>
         </Container>
 
@@ -109,10 +131,11 @@ class QuestionEditComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  editingSurvey: state.surveys.editingSurvey,
+  // editingSurvey: state.surveys.editingSurvey,
   user: state.auth.user,
   // survey: state.surveys.surveys.filter((survey) => survey.id === ownProps.match.params.id),
-  survey: state.questionEdit.survey,
+  // survey: state.questionEdit.survey,
+  survey: currSurvey,
   questionFormOpened: state.flags.formOpened,
 });
 
