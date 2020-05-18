@@ -8,7 +8,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Card from '@material-ui/core/Card';
-import { CardActions } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,6 +22,7 @@ import { deleteSurveyAction, loadSurveysAction } from '../../store/actions/surve
 import { openSurveyFormAction } from '../../store/actions/flags.actions';
 import { SurveyForm } from './SurveyForm';
 import ConfirmDialog from '../common/ConfirmDialog';
+import CardActions from "@material-ui/core/CardActions";
 
 class SurveysComponent extends React.Component {
   static propTypes = {
@@ -165,12 +165,24 @@ class SurveysComponent extends React.Component {
                     </Button>
                   )}
                 {index === 1 && (
-                <Typography
-                  variant="subtitle2"
-                  style={{ fontSize: '12px' }}
-                >
-                  Опубликованные опросы нельзя редактировать
-                </Typography>
+                  <div
+                    style={{ display: 'flex', justifyContent: 'space-around', minWidth: '300px' }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      style={{ fontSize: '12px', maxWidth: '150px' }}
+                    >
+                      Опубликованные опросы нельзя редактировать
+                    </Typography>
+                    <Button
+                      style={{ fontSize: '12px', maxHeight: '30px', marginLeft: '30px' }}
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                    >
+                      Закрыть опрос
+                    </Button>
+                  </div>
                 )}
               </CardActions>
             </Card>

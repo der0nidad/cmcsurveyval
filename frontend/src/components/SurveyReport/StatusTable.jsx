@@ -13,17 +13,19 @@ function createData(name, studyGroup, passing) {
 const yes = 'Да';
 const no = 'Нет';
 const rows = [
-  createData('Иванов Иван Иванович', 301, yes),
-  createData('Иванов Иван Иванович', 301, yes),
-  createData('Иванов Иван Иванович', 301, no),
-  createData('Иванов Иван Иванович', 301, yes),
-  createData('Иванов Иван Иванович', 303, yes),
-  createData('Иванов Иван Иванович', 303, no),
+  createData('Иванов Иван Иванович', 102, yes),
+  createData('Петров Виктор Сергеевич', 102, yes),
+  createData('Кораблев Вячеслав Павлович', 102, yes),
+  createData('Степаненко Анастасия Геннадьевна', 106, yes),
+  createData('Иванова Мария Сергеевна', 106, yes),
+  createData('Поляков Сергей Петрович', 106, no),
 ];
 
 
 class StatusTable extends React.Component {
   render() {
+    // throw 'Hahahah, my first error';
+    // console.log('azazazazazazazazaz')
     return (
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">

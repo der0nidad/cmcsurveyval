@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { CardActions } from '@material-ui/core';
+import CardActions from "@material-ui/core/CardActions";
 import Button from '@material-ui/core/Button';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';

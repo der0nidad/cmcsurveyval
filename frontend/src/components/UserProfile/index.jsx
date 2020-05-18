@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Paper } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { Header } from '../Header';
+import Paper from "@material-ui/core/Paper";
 
 const mapStateToProps = (state) => ({
 });

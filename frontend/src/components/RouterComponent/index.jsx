@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Drawer} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,6 +24,7 @@ import {MySurveys} from '../MySurveys';
 import {SurveyReport} from '../SurveyReport';
 import {UsersSearch} from '../UsersSearch';
 import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
 
 function Home() {
   return (

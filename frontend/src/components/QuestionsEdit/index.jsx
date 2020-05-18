@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -18,6 +17,7 @@ import { QuestionForm } from './QuestionForm';
 import './questionEditStyles.css';
 import { SELECT_QUESTION, TEXT_QUESTION } from './questionEdit.constants';
 import { fiveVariants } from '../SurveyReport';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const questionsListData = [
   {

@@ -43,7 +43,7 @@ class SurveyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Survey
-        fields = ('id', 'name', 'author', 'is_open', 'multiple_apply', 'questions_list')
+        fields = ('id', 'name', 'author', 'is_open', 'questions_list')
 
 
 class SurveyDetailSerializer(serializers.ModelSerializer):

@@ -7,10 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
-import { Link } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { openLeftMenu } from '../../store/actions/flags.actions';
 import { userShape } from '../Auth/auth.schema';
+import Link from "@material-ui/core/Link";
 
 
 const mapStateToProps = (state) => ({
@@ -77,10 +77,11 @@ class HeaderComponent extends React.Component {
                 ? (
                   <Typography variant="subtitle1">
                     {/*{ user.username }*/}
-                    {/*Иванов Иван*/}
+                    Иванов Иван
                     {/*Администратор Системы (Администратор)*/}
-                    Кузнецов Сергей (Преподаватель)
-                    <AccountCircle />
+                    {/*Кузнецов Сергей (Преподаватель)*/}
+                    {/*Кузнецов Сеƒргей*/}
+                    <AccountCircleIcon />
                   </Typography>
                 )
                 : (
