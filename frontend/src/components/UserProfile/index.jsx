@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import { Header } from '../Header';
+import Paper from "@material-ui/core/Paper";
 import { userShape } from '../Auth/auth.schema';
 
 const mapStateToProps = (state) => ({
@@ -24,9 +27,27 @@ class UserProfileComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Profile"
+          pageTitle="Профиль пользователя ivanov"
         />
-        {user && user.username}
+        <Container maxWidth="sm">
+          <Paper
+            style={{ padding: '20px' }}
+          >
+            <Typography
+              variant="h6"
+            >
+              Данные пользователя.
+            </Typography>
+            <Typography>
+              ФИО: Иванов Иван Иванович
+              <br />
+              Академическая группа: 214 гр. 2019/2020 учебного года
+              <br />
+              Роль: Студент
+            </Typography>
+          </Paper>
+        </Container>
+
       </div>
     );
   }

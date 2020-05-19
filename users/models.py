@@ -17,15 +17,21 @@ class StudyGroup(models.Model):
 class User(AbstractUser):
     pass
 
+    def __str__(self):
+        return self.get_full_name()
+
+
+# TODO: move to separate app
 class Subject(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Teacher(User):
-    pass
+    subjects = models.ManyToManyField(Subject)
+    study_groups = models.ManyToManyField(StudyGroup)
 
 
 class Student(User):
     student_id = models.CharField(max_length=10, unique=True, blank=False, null=False)
-    group = models.ForeignKey(StudyGroup, on_delete=models.CASCADE)
+    study_group = models.ForeignKey(StudyGroup, on_delete=models.CASCADE)
 

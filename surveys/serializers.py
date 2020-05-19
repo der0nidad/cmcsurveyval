@@ -3,16 +3,17 @@ from .models import Survey, Question, AnswerVariant
 
 
 class AnswerVariantCreateSerializer(serializers.ModelSerializer):
-    question_id = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question.id')
+    question_id = serializers.PrimaryKeyRelatedField(
+        queryset=Question.objects.all(), source='question.id')
 
     class Meta:
         model = AnswerVariant
-        fields = ('id', 'text', 'order', 'question_id')
+        fields = ('id', 'name', 'order', 'question_id')
 
     def create(self, validated_data):
         answer_variant = AnswerVariant.objects.create(
             question=validated_data['question']['id'],
-            text=validated_data['text'],
+            name=validated_data['name'],
             order=validated_data['order']
         )
         return answer_variant
@@ -20,16 +21,17 @@ class AnswerVariantCreateSerializer(serializers.ModelSerializer):
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
     answers_list = AnswerVariantCreateSerializer(read_only=True, many=True, source='question')
-    survey_id = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all(), source='survey.id')
+    survey_id = serializers.PrimaryKeyRelatedField(
+        queryset=Survey.objects.all(), source='survey.id')
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'survey_id', 'order', 'question_type', 'answers_list')
+        fields = ('id', 'name', 'survey_id', 'order', 'question_type', 'answers_list')
 
     def create(self, validated_data):
         question = Question.objects.create(
             survey=validated_data['survey']['id'],
-            text=validated_data['text'],
+            name=validated_data['name'],
             order=validated_data['order'],
             type=validated_data['question_type']
         )
@@ -41,7 +43,7 @@ class SurveyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Survey
-        fields = ('id', 'name', 'author', 'is_open', 'multiple_apply', 'questions_list')
+        fields = ('id', 'name', 'author', 'is_open', 'questions_list')
 
 
 class SurveyDetailSerializer(serializers.ModelSerializer):
@@ -50,6 +52,25 @@ class SurveyDetailSerializer(serializers.ModelSerializer):
         model = Survey
         fields = ('id', 'name', 'author')
 
-    def validate(self, attrs):
-        print(56)
-        return attrs
+
+# вроде как дублирование с другим сериалайзером для вопросов... хз.
+class SurveyQuestionDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = ('id', 'name', 'survey_id', 'order', 'question_type')
+
+
+class AnswerVariantDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AnswerVariant
+        fields = ('id', 'name', 'question_id', 'order')
+
+
+class SurveyQuestionsSerializer(serializers.ModelSerializer):
+    questions_list = QuestionCreateSerializer(read_only=True, many=True, source='survey_link')
+
+    class Meta:
+        model = Survey
+        fields = ('id', 'name', 'author', 'questions_list')

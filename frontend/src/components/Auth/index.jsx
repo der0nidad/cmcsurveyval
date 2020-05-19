@@ -90,6 +90,12 @@ export default class Auth extends React.Component {
       this.setState({ password: e.target.value });
     };
 
+    handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        this.logUserIn();
+      }
+    };
+
     render() {
       const { email, password } = this.state;
       return (
@@ -128,6 +134,7 @@ export default class Auth extends React.Component {
               autoComplete="current-password"
               value={password}
               onChange={this.handlePasswordChange}
+              onKeyDown={this.handleKeyDown}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -140,6 +147,7 @@ export default class Auth extends React.Component {
               color="primary"
               className={classes.submit}
               onClick={this.logUserIn}
+              onKeyDown={this.handleKeyDown}
             >
               Sign In
             </Button>

@@ -21,15 +21,15 @@ const auth = (state = initialState, action) => {
       return update(state, {
 
       });
-    case WHOAMI_SUCCESS:
+    case WHOAMI_SUCCESS: {
       return update(state, {
         user: { $set: action.payload.user },
         csrf: { $set: getCookie('csrftoken') },
       });
-    case WHOAMI_FAIL:
-      return update(state, {
-
-      });
+    }
+    case WHOAMI_FAIL: {
+      return update(state, {});
+    }
     default:
       return state;
   }

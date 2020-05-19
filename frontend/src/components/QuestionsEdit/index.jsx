@@ -1,53 +1,150 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function Topics() {
-  const match = useRouteMatch();
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Container from '@material-ui/core/Container';
+import { closeQuestionForm, openQuestionFormAction } from '../../store/actions/flags.actions';
+import { Header } from '../Header';
+import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
+import { Question } from './Question';
+import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { QuestionForm } from './QuestionForm';
+import './questionEditStyles.css';
+import { SELECT_QUESTION, TEXT_QUESTION } from './questionEdit.constants';
+import { fiveVariants } from '../SurveyReport';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-  return (
-    <div>
-      <h2>Topics</h2>
+const questionsListData = [
+  {
+    id: 1,
+    name: 'Вы удовлетворены преподаванием данного курса?',
+    questionType: SELECT_QUESTION,
+    answersList: fiveVariants,
+  },
+  {
+    id: 2,
+    name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
+    questionType: TEXT_QUESTION,
+  },
+];
 
-      <ul>
-        <li>
-          <Link to={`${match.url}/components`}>Components</Link>
-        </li>
-        <li>
-          <Link to={`${match.url}/props-v-state`}>
-            Props v. State
-          </Link>
-        </li>
-      </ul>
+export const currSurvey = {
+  id: 1,
+  name: 'Линейная алгебра. Опрос по курсу',
+  author: 'Кузнецов Сергей',
+  questionsList: questionsListData,
 
-      {/* The Topics page has its own <Switch> with more routes
-          that build on the /topics URL path. You can think of the
-          2nd <Route> here as an "index" page for all topics, or
-          the page that is shown when no topic is selected */}
-      <Switch>
-        <Route path={`${match.path}/:topicId`}>
-          <Topic />
-        </Route>
-        <Route path={match.path}>
-          <h3>Please select a topic.</h3>
-        </Route>
-      </Switch>
-    </div>
-  );
+};
+
+class QuestionEditComponent extends React.Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    loadCurrentSurvey: PropTypes.func.isRequired,
+    closeQuestionForm: PropTypes.func.isRequired,
+    openQuestionForm: PropTypes.func.isRequired,
+    questionFormOpened: PropTypes.bool,
+    survey: PropTypes.shape(surveyWithQuestionsSchema).isRequired,
+  };
+
+  static defaultProps = {
+    questionFormOpened: false,
+  };
+
+  componentDidMount() {
+    const { loadCurrentSurvey, match } = this.props;
+    loadCurrentSurvey(match.params.id);
+  }
+
+  handleRedirectToSurveys = () => {
+    this.props.history.push('/surveys/');
+  };
+
+  render() {
+    const {
+      match, survey, openQuestionForm, questionFormOpened,
+    } = this.props;
+    if (!survey) return <CircularProgress />;
+    const questions = survey
+      ? survey.questionsList.map((question) => (
+        <Question
+          id={question.id}
+        />
+      ))
+      : <div>There aren&apos;t questions in this survey yet</div>; // add loader
+    return (
+      <div>
+        <Header
+          pageTitle={`Редактирование вопросов в опросе "${survey.name}"`}
+        />
+        <QuestionForm
+          open={questionFormOpened}
+        />
+        <div className="surveys-breadcrumbs">
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" href="/">
+              Главная страница
+            </Link>
+            <Link color="inherit" href="/surveys">
+              Создание и редактирование опросов
+            </Link>
+            <Typography color="textPrimary">
+              Редактирование опроса:
+              {' '}
+              {survey.name}
+            </Typography>
+          </Breadcrumbs>
+        </div>
+        <Container maxWidth="sm">
+          {questions}
+          <Button
+            onClick={openQuestionForm}
+            color="primary"
+            variant="contained"
+          >
+            Добавить вопрос
+          </Button>
+          <Button
+            onClick={this.handleRedirectToSurveys}
+            variant="outlined"
+            style={{ marginLeft: '20px' }}
+          >
+            Сохранить черновик опроса
+          </Button>
+        </Container>
+
+      </div>
+    );
+  }
 }
 
-function Topic() {
-  const { topicId } = useParams();
-  return (
-    <h3>
-      Requested topic ID:
-      {topicId}
-    </h3>
-  );
-}
+const mapStateToProps = (state) => ({
+  // editingSurvey: state.surveys.editingSurvey,
+  user: state.auth.user,
+  // survey: state.surveys.surveys.filter((survey) => survey.id === ownProps.match.params.id),
+  // survey: state.questionEdit.survey,
+  survey: currSurvey,
+  questionFormOpened: state.flags.formOpened,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  closeQuestionForm: () => dispatch(closeQuestionForm()),
+  openQuestionForm: (questionId) => dispatch(openQuestionFormAction(questionId)),
+  loadCurrentSurvey: (surveyId) => dispatch(loadCurrentSurveyAction(surveyId)),
+});
+
+export const QuestionEdit = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(QuestionEditComponent),
+);

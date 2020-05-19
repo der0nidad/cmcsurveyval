@@ -1,3 +1,5 @@
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 module.exports = {
   // entry: './index.jsx',
   watch: true,
@@ -18,8 +20,15 @@ module.exports = {
         //         }]
         // }
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
+  plugins: [
+    new BundleAnalyzerPlugin(),
+  ],
   devtool: 'eval-source-map',
   output: {
     publicPath: '/',

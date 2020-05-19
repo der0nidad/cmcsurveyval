@@ -7,10 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { openLeftMenu } from '../../store/actions/flags.actions';
+import { userShape } from '../Auth/auth.schema';
+import Link from "@material-ui/core/Link";
 
 
 const mapStateToProps = (state) => ({
+  user: state.auth.user,
 });
 const mapDispatchToProps = (dispatch) => ({
   openMenu: () => dispatch(openLeftMenu()),
@@ -33,10 +37,12 @@ class HeaderComponent extends React.Component {
   static propTypes = {
     openMenu: PropTypes.func.isRequired,
     pageTitle: PropTypes.string,
+    user: PropTypes.shape(userShape),
   };
 
   static defaultProps = {
     pageTitle: '',
+    user: null,
   };
 
   handleOpenMenu = () => {
@@ -45,18 +51,48 @@ class HeaderComponent extends React.Component {
   };
 
   render() {
-    const { pageTitle } = this.props;
+    const { pageTitle, user } = this.props;
     return (
       <>
+
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleOpenMenu}>
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              {pageTitle}
-            </Typography>
-            <Button color="inherit">Login</Button>
+            <div
+              style={{
+                display: 'flex',
+                flexGrow: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.handleOpenMenu}>
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" color="inherit" className={classes.flex}>
+                {pageTitle}
+              </Typography>
+
+              { user
+                ? (
+                  <Typography variant="subtitle1">
+                    {/*{ user.username }*/}
+                    Иванов Иван
+                    {/*Администратор Системы (Администратор)*/}
+                    {/*Кузнецов Сергей (Преподаватель)*/}
+                    {/*Кузнецов Сеƒргей*/}
+                    <AccountCircleIcon />
+                  </Typography>
+                )
+                : (
+                  <Link href="/login" style={{ color: 'white' }}>
+                    <Button color="white" variant="outlined">
+                      Login
+                    </Button>
+                  </Link>
+                )}
+            </div>
+
           </Toolbar>
         </AppBar>
       </>

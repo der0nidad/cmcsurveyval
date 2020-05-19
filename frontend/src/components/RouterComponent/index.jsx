@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Drawer } from '@material-ui/core';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {connect} from 'react-redux';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,13 +11,20 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
 import Link from '@material-ui/core/Link';
-import { closeLeftMenu, openLeftMenu } from '../../store/actions/flags.actions';
-import { whoAmIAction } from '../../store/actions/routerComponent.actions';
+import {closeLeftMenu, openLeftMenu} from '../../store/actions/flags.actions';
+import {whoAmIAction} from '../../store/actions/routerComponent.actions';
 import SignUp from '../SignUp';
 import Auth from '../Auth';
-import { UserProfile } from '../UserProfile';
-import { Surveys } from '../Surveys';
-import { Header } from '../Header';
+import {UserProfile} from '../UserProfile';
+import {Surveys} from '../Surveys';
+import {Header} from '../Header';
+import {QuestionEdit} from '../QuestionsEdit';
+import {SurveyPassing} from '../SurveyPassing';
+import {MySurveys} from '../MySurveys';
+import {SurveyReport} from '../SurveyReport';
+import {UsersSearch} from '../UsersSearch';
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
 
 function Home() {
   return (
@@ -30,6 +36,7 @@ function Home() {
     </div>
   );
 }
+const divider = 'divider';
 
 class RouterComp extends React.Component {
   static propTypes = {
@@ -63,13 +70,31 @@ class RouterComp extends React.Component {
     const pages = [
       {
         // TODO вынеси урлы отсюда и из роутера в одно место
-        title: 'Profile',
+        title: 'Мой профиль',
         url: '/profile',
       },
       {
-        title: 'Surveys',
+        title: 'Назначенные мне опросы',
+        url: '/mysurveys',
+      },
+      {
+        title: divider,
+      },
+      {
+        title: 'Управление опросами',
         url: '/surveys',
       },
+      {
+        title: divider,
+      },
+      {
+        title: 'Управление пользователями',
+        url: '/user-search',
+      },
+      // {
+      //   title: 'Управление опросами',
+      //   url: '/surveys',
+      // },
     ];
     const list = () => (
       <div
@@ -79,12 +104,20 @@ class RouterComp extends React.Component {
       >
         <List>
           {pages.map((page, index) => (
-            <ListItem button key={page.title}>
-              <Link href={page.url}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={page.title} />
-              </Link>
-            </ListItem>
+            page.title === divider
+              ? <Divider />
+              : (
+                <ListItem button key={page.title}>
+                  <div
+                    style={{ minWidth: '200px' }}
+                  >
+                    <Link href={page.url}>
+                      {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+                      <ListItemText primary={page.title} />
+                    </Link>
+                  </div>
+                </ListItem>
+              )
           ))}
         </List>
       </div>
@@ -105,11 +138,29 @@ class RouterComp extends React.Component {
             <Route path="/signup/">
               <SignUp />
             </Route>
+            <Route path="/surveys/:id/report">
+              <SurveyReport />
+            </Route>
+            <Route path="/surveys/:id">
+              <QuestionEdit />
+            </Route>
             <Route path="/surveys">
               <Surveys />
             </Route>
             <Route path="/profile">
               <UserProfile />
+            </Route>
+            <Route path="/user-search">
+              <UsersSearch />
+            </Route>
+            <Route path="/mysurveys/:id">
+              <SurveyPassing />
+            </Route>
+            {/*<Route path="/mysurveys">*/}
+            {/*  <CurrentSurvey />*/}
+            {/*</Route>*/}
+            <Route path="/mysurveys">
+              <MySurveys />
             </Route>
             <Route path="/">
               <Home />

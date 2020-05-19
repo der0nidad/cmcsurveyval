@@ -18,21 +18,21 @@ const surveySchemaExample = {
 
 const surveys = (state = initialState, action) => {
   switch (action.type) {
-    case SURVEY_LOAD_START:
+    case SURVEY_LOAD_START: {
       return update(state, {
         isLoading: { $set: true },
       });
-    case SURVEY_LOAD_SUCCESS:
-      console.log(action.payload);
+    }
+    case SURVEY_LOAD_SUCCESS: {
       return update(state, {
         isLoading: { $set: false },
         surveys: { $set: action.payload },
       });
-    case SURVEY_LOAD_FAIL:
-      return update(state, {
-
-      });
-    case OPEN_SURVEY_FORM:
+    }
+    case SURVEY_LOAD_FAIL: {
+      return update(state, {});
+    }
+    case OPEN_SURVEY_FORM: {
       return update(state, {
         editingSurvey: {
           $set: state.surveys.find(
@@ -40,6 +40,7 @@ const surveys = (state = initialState, action) => {
           ),
         },
       });
+    }
     default:
       return state;
   }
