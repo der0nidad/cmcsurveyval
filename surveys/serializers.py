@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Survey, Question, AnswerVariant
 
@@ -36,6 +37,17 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
             type=validated_data['question_type']
         )
         return question
+
+
+class SurveyTitleSerializer(serializers.ModelSerializer):
+    author_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Survey
+        fields = ('id', 'name', 'author', 'author_name', 'is_open')
+
+    def get_author_name(self, obj):
+        return obj.author.get_full_name()
 
 
 class SurveyCreateSerializer(serializers.ModelSerializer):

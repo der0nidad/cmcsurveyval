@@ -4,7 +4,12 @@ from surveys.models import Survey, Question, AnswerVariant
 from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, \
     AnswerVariantCreateSerializer, \
     SurveyDetailSerializer, SurveyQuestionsSerializer, SurveyQuestionDetailSerializer, \
-    AnswerVariantDetailSerializer
+    AnswerVariantDetailSerializer, SurveyTitleSerializer
+
+
+class SurveyTitle(generics.ListAPIView):
+    queryset = Survey.objects.all()
+    serializer_class = SurveyTitleSerializer
 
 
 class SurveyCreate(generics.ListCreateAPIView):

@@ -41,3 +41,9 @@ export const surveyWithQuestionsSchema = PropTypes.shape({
   author: PropTypes.shape(userShape),
   questionList: PropTypes.shape(questionShape),
 });
+
+export const mySurveysMinSchema = PropTypes.shape({
+  name: PropTypes.string,
+  id: PropTypes.number,
+  author: PropTypes.shape(userShape),
+});

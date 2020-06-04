@@ -16,7 +16,7 @@ class Survey(models.Model):
     is_published = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
-    audience = models.ManyToManyField(StudyGroup)
+    # audience = models.ManyToManyField(StudyGroup)
 
     def __str__(self):
         return self.name

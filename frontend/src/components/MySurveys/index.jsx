@@ -5,31 +5,18 @@ import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import Radio from '@material-ui/core/Radio';
-import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CardActions from "@material-ui/core/CardActions";
+import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import { CircularProgress } from '@material-ui/core';
 import { Header } from '../Header';
-import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { mySurveysMinSchema, surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { loadSurveysMinInfoAction } from '../../store/actions/mySurveys.actions';
+import historyRouter from '../../common/helpers/historyRouter';
+import { mySurveysRoute } from '../RouterComponent/routerComponent.constants';
 
-const surveysList = [
-  {
-    name: 'Первый опрос',
-    author: 'Кузнецов Сергей',
-  },
-  {
-    name: 'Второй опрос',
-    author: 'Кузнецов Сергей',
-  },
-  {
-    name: 'Третий опрос',
-    author: 'Кузнецов Сергей',
-  },
-];
 
 // const surveyData = {
 //   questionsList: questions,
@@ -39,27 +26,35 @@ const surveysList = [
 class MySurveysComponent extends React.Component {
   static propTypes = {
     survey: PropTypes.shape(surveyWithQuestionsSchema),
+    surveysList: PropTypes.arrayOf(mySurveysMinSchema),
+    loadSurveysMinInfo: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
   };
 
   static defaultProps = {
     survey: null,
     isLoading: false,
+    surveysList: null,
   };
 
   state = {
-    currentSurveyId: null,
   };
 
   componentDidMount() {
+    this.props.loadSurveysMinInfo();
   }
 
-  // назначенные на меня опросы
-  // какие данные нам нужны: название опроса, автор(имя),
-  // действия - начать
+  startSurvey = (id) => {
+    historyRouter.push(`${mySurveysRoute}/${id}`);
+  };
+
   render() {
     const {
-      survey,
+      survey, surveysList, isLoading,
     } = this.props;
+    if (isLoading) {
+      return <CircularProgress />;
+    }
     const surveysData = surveysList.map((surveyItem) => (
       <Card
         style={{ margin: '20px' }}
@@ -69,7 +64,7 @@ class MySurveysComponent extends React.Component {
             {surveyItem.name}
           </Typography>
           <Typography color="textSecondary">
-            {surveyItem.author}
+            {surveyItem.authorName}
           </Typography>
 
         </CardContent>
@@ -77,6 +72,7 @@ class MySurveysComponent extends React.Component {
           <Button
             color="primary"
             variant="contained"
+            onClick={() => this.startSurvey(surveyItem.id)}
           >
             Начать
           </Button>
@@ -139,9 +135,12 @@ class MySurveysComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  surveysList: state.mySurveys.surveysList,
+  isLoading: state.mySurveys.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  loadSurveysMinInfo: () => dispatch(loadSurveysMinInfoAction()),
 
 });
 

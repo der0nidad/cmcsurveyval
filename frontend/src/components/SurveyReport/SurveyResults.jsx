@@ -53,7 +53,7 @@ const firstQuestionData = {
   name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
   answerData: textQuestionAnswersList,
 };
-const questionsData = [firstQuestionData, secondQuestionData];
+const questionsData = [secondQuestionData, firstQuestionData];
 class SurveyResults extends React.Component {
   render() {
     const data = questionsData.map((question) => {

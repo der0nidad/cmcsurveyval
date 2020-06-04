@@ -64,7 +64,7 @@ class SurveyReportComponent extends React.Component {
   };
 
   state = {
-    activeTab: 1,
+    activeTab: 2,
   };
 
   componentDidMount() {

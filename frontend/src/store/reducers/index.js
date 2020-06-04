@@ -4,6 +4,7 @@ import flags from './flags';
 import auth from './auth';
 import surveys from './surveys';
 import questionEdit from './questionEdit';
+import mySurveys from './mySurveys';
 
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   auth,
   surveys,
   questionEdit,
+  mySurveys,
 });
 
 export default rootReducer;
