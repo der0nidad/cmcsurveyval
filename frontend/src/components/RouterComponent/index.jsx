@@ -68,7 +68,7 @@ class RouterComp extends React.Component {
     const { menuOpened, closeMenu } = this.props;
     const pages = [
       {
-        // TODO вынеси урлы отсюда и из роутера в одно место
+        // TODO вынеси урлы отсюда и из роутера в константы
         title: 'Мой профиль',
         url: '/profile',
       },

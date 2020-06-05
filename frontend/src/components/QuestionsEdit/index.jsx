@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { closeQuestionForm, openQuestionFormAction } from '../../store/actions/flags.actions';
 import { Header } from '../Header';
 import { loadCurrentSurveyAction } from '../../store/actions/questionEdit.actions';
@@ -17,7 +18,7 @@ import { QuestionForm } from './QuestionForm';
 import './questionEditStyles.css';
 import { SELECT_QUESTION, TEXT_QUESTION } from './questionEdit.constants';
 import { fiveVariants } from '../SurveyReport';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { surveysRoute } from '../RouterComponent/routerComponent.constants';
 
 const questionsListData = [
   {
@@ -97,7 +98,7 @@ class QuestionEditComponent extends React.Component {
             <Link color="inherit" href="/">
               Главная страница
             </Link>
-            <Link color="inherit" href="/surveys">
+            <Link color="inherit" href={surveysRoute}>
               Создание и редактирование опросов
             </Link>
             <Typography color="textPrimary">

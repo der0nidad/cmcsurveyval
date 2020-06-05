@@ -51,7 +51,7 @@ const questions = [
 const surveyData = {
   questionsList: questions,
   name: 'Первый опрос',
-  author: 'Кузнецов Сергей',
+  author: 'Петров Виктор',
 };
 class SurveyReportComponent extends React.Component {
   static propTypes = {
@@ -64,7 +64,7 @@ class SurveyReportComponent extends React.Component {
   };
 
   state = {
-    activeTab: 2,
+    activeTab: 1,
   };
 
   componentDidMount() {

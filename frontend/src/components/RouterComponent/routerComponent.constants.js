@@ -1,3 +1,4 @@
 export const whoAmI = '/auth/whoami/';
 
-export const mySurveysRoute = '/mySurveys';
+export const mySurveysRoute = '/mysurveys';
+export const surveysRoute = '/surveys';

@@ -27,6 +27,7 @@
         "no-self-assign": "off",
         "react/static-property-placement": "off",
         "import/prefer-default-export": "off",
-        "react/state-in-constructor": "off"
+        "react/state-in-constructor": "off",
+        "max-len": ["error", { "code": 120 }]
     }
 }

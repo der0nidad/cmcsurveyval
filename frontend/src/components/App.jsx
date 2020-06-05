@@ -55,7 +55,7 @@ class App extends Component {
 }
 
 export default App;
-Sentry.init({ dsn: 'https://2113fb3057a84052bb68d9eb64fd4fa6@o394381.ingest.sentry.io/5244400' });
+// Sentry.init({ dsn: 'https://2113fb3057a84052bb68d9eb64fd4fa6@o394381.ingest.sentry.io/5244400' });
 
 const container = document.getElementById('app');
 render(<App />, container);

@@ -10,9 +10,15 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import { CircularProgress } from '@material-ui/core';
+import { withRouter } from 'react-router';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
+import { mySurveysRoute } from '../RouterComponent/routerComponent.constants';
+import { loadSurveyQuestionsAction, saveSurveyAnswersAction } from '../../store/actions/surveyPassing.actions';
 
 const fiveVariants = [
   {
@@ -54,19 +60,24 @@ const surveyData = {
 };
 class SurveyPassingComponent extends React.Component {
   static propTypes = {
-    survey: PropTypes.shape(surveyWithQuestionsSchema),
+    surveyQuestions: PropTypes.shape(surveyWithQuestionsSchema),
+    loadSurveyQuestions: PropTypes.func.isRequired,
+    saveSurveyAnswers: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
+
   };
 
   static defaultProps = {
-    survey: null,
+    surveyQuestions: [],
     isLoading: false,
   };
 
   state = {
-    currentSurveyId: null,
   };
 
   componentDidMount() {
+    console.log(this.props);
+    this.props.loadSurveyQuestions();
   }
 
   // назначенные на меня опросы
@@ -76,9 +87,12 @@ class SurveyPassingComponent extends React.Component {
   // действия - отправить, отмена
   render() {
     const {
-      survey,
+      surveyQuestions, isLoading,
     } = this.props;
-    const questionsData = survey.questionsList.map((question, index) => {
+    if (isLoading) {
+      return <CircularProgress />;
+    }
+    const questionsData = surveyQuestions.questionsList && surveyQuestions.questionsList.map((question, index) => {
       const answerVariantList = question.type === SELECT_QUESTION
         ? question.answerVariants.map((variant) => (
           <ListItem key={variant.id}>
@@ -103,7 +117,7 @@ class SurveyPassingComponent extends React.Component {
               {' '}
               из
               {' '}
-              {survey.questionsList.length}
+              {surveyQuestions.questionsList.length}
             </Typography>
             <Typography color="textSecondary" gutterBottom>
               {question.name}
@@ -127,6 +141,21 @@ class SurveyPassingComponent extends React.Component {
           pageTitle="Линейная алгебра - опрос по курсу"
         />
         <Container maxWidth="sm">
+          <Breadcrumbs aria-label="breadcrumb">
+            {/* TODO добавь предупреждение-модалку при уходе со страницы, что ваши данные не будут сохранены.
+            либо сохранение в локалсторадж(неа)) */}
+            <Link color="inherit" href="/">
+              Главная страница
+            </Link>
+            <Link color="inherit" href={mySurveysRoute}>
+              Мои опросы
+            </Link>
+            <Typography color="textPrimary">
+              Прохождение опроса:
+              {' '}
+              {123}
+            </Typography>
+          </Breadcrumbs>
           <List>
             {questionsData}
           </List>
@@ -153,11 +182,15 @@ class SurveyPassingComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  survey: surveyData,
+  surveyQuestions: state.surveyPassing.surveyQuestions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  loadSurveyQuestions: () => dispatch(loadSurveyQuestionsAction()),
+  saveSurveyAnswers: () => dispatch(saveSurveyAnswersAction()),
 
 });
 
-export const SurveyPassing = connect(mapStateToProps, mapDispatchToProps)(SurveyPassingComponent);
+export const SurveyPassing = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(SurveyPassingComponent)
+);

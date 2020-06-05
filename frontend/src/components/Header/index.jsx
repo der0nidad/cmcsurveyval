@@ -78,10 +78,8 @@ class HeaderComponent extends React.Component {
                   <Typography variant="subtitle1">
                     {/*{ user.username }*/}
                     {/*Иванов Иван*/}
-                    {/*Администратор Системы (Администратор)*/}
-                    {/*Кузнецов Сергей (Преподаватель)*/}
+                    {/*Администратор Системы*/}
                     Петров Виктор Сергеевич
-                    {/*Кузнецов Сеƒргей*/}
                     <AccountCircleIcon />
                   </Typography>
                 )

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Paper from "@material-ui/core/Paper";
+import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,28 +19,44 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Header } from '../Header';
 import './user_search.css';
 
-const student1 = {
+
+export const student1 = {
   name: 'Иванов Иван Иванович',
-  studyGroup: 303,
+  studyGroup: 102,
   role: 'Студент',
 };
-const student2 = {
-  name: 'Петров Виктор Сергеевич',
-  studyGroup: 424,
+export const student2 = {
+  name: 'Сидоров Валентин Павлович',
+  studyGroup: 102,
   role: 'Студент',
 };
-const student3 = {
-  name: 'Клементьева София Геннадьевна',
-  studyGroup: 206,
+export const student3 = {
+  name: 'Кораблев Вячеслав Павлович',
+  studyGroup: 102,
   role: 'Студент',
 };
-const student4 = {
+export const student4 = {
+  name: 'Степаненко Анастасия Геннадьевна',
+  studyGroup: 106,
+  role: 'Студент',
+};
+export const student5 = {
+  name: 'Иванова Мария Сергеевна',
+  studyGroup: 106,
+  role: 'Студент',
+};
+export const student6 = {
+  name: 'Поляков Сергей Петрович',
+  studyGroup: 106,
+  role: 'Студент',
+};
+export const student7 = {
   name: 'Ещё Один ТестовыйСтудент',
-  studyGroup: 113,
+  studyGroup: 106,
   role: 'Студент',
 };
 const teacher = {
-  name: 'Кузнецов Сергей Дмитриевич',
+  name: 'Петров Виктор Сергеевич',
   studyGroup: '',
   role: 'Преподаватель',
 };
@@ -49,10 +66,15 @@ const admin = {
   role: 'Администратор',
 };
 
-const studentData = [
-  student1, student2, student3, student4, teacher, admin
-];
+// const studyGroupComparator = (s1, s2) => (s1.studyGroup > s2.studyGroup ? 1 : -1);
+const nameComparator = (s1, s2) => (s1.name > s2.name ? 1 : -1);
 
+const group102 = [student1, student2, student3].sort(nameComparator);
+const group106 = [student4, student7].sort(nameComparator);
+const studentData = [...group102, ...group106];
+studentData.push(teacher);
+studentData.push(admin);
+console.log(studentData);
 
 function createData(studentDataDict) {
   return { ...studentDataDict };
@@ -142,6 +164,8 @@ class UsersSearchComponent extends React.Component {
               className="filter-fields"
             >
               <TextField
+                // TODO why css doesn't work here?
+                className="study-group-input-field"
                 style={{ minWidth: '250px' }}
                 value={studyGroup}
                 label="Академическая группа"
@@ -151,9 +175,20 @@ class UsersSearchComponent extends React.Component {
                 label="Роль"
                 placeholder="Выберите роль"
                 id="demo-simple-select"
-                value={1}
-                // onChange={handleChange}
+                value={0}
+                className="role-select-field"
+                  // onChange={handleChange}
               >
+                <MenuItem
+                  value={0}
+                  disabled
+                >
+                  <span
+                    style={{ color: 'gray' }}
+                  >
+                    Выберите роль
+                  </span>
+                </MenuItem>
                 <MenuItem value={1}>Студент</MenuItem>
                 <MenuItem value={2}>Преподаватель</MenuItem>
                 <MenuItem value={3}>Администратор</MenuItem>
@@ -187,11 +222,18 @@ class UsersSearchComponent extends React.Component {
                       <TableCell align="right">{row.role}</TableCell>
                       <TableCell align="center">
                         <IconButton
-                          title="Edit survey"
-                          aria-label="edit survey"
+                          title="Edit user"
+                          aria-label="edit user"
                           style={{ padding: '0' }}
                         >
                           <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          title="Delete user"
+                          aria-label="edit user"
+                          style={{ padding: '0' }}
+                        >
+                          <DeleteIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>

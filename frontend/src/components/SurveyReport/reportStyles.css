@@ -1,3 +1,6 @@
 .question-report-card {
     margin: 20px;
 }
+.status-table__name-row {
+    min-width: 400px;
+}
