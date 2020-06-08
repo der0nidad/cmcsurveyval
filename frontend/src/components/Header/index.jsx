@@ -17,6 +17,7 @@ import { openLeftMenu } from '../../store/actions/flags.actions';
 import { userShape } from '../Auth/auth.schema';
 import { logOutAction } from '../../store/actions/routerComponent.actions';
 import historyRouter from '../../common/helpers/historyRouter';
+import {userProfileRoute} from '../RouterComponent/routerComponent.constants';
 
 
 const mapStateToProps = (state) => ({
@@ -68,6 +69,10 @@ class HeaderComponent extends React.Component {
 
   handleCloseUserPopover = () => {
     this.setState({ anchorEl: null });
+  };
+
+  handleGoToUserProfile = () => {
+    historyRouter.push(userProfileRoute);
   };
 
   handleLogout = () => {

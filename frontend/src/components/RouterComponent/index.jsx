@@ -23,7 +23,7 @@ import { MySurveys } from '../MySurveys';
 import { SurveyReport } from '../SurveyReport';
 import { UsersSearch } from '../UsersSearch';
 import historyRouter from '../../common/helpers/historyRouter';
-import {mySurveysRoute} from './routerComponent.constants';
+import {mySurveysRoute, userProfileRoute} from './routerComponent.constants';
 
 function Home() {
   return (
@@ -70,7 +70,7 @@ class RouterComp extends React.Component {
       {
         // TODO вынеси урлы отсюда и из роутера в константы
         title: 'Мой профиль',
-        url: '/profile',
+        url: userProfileRoute,
       },
       {
         title: 'Назначенные мне опросы',
@@ -146,7 +146,7 @@ class RouterComp extends React.Component {
             <Route path="/surveys">
               <Surveys />
             </Route>
-            <Route path="/profile">
+            <Route path={userProfileRoute}>
               <UserProfile />
             </Route>
             <Route path="/user-search">
