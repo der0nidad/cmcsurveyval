@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
+from django.db.models import Count
 from django.http import JsonResponse
 from rest_framework import generics
 
@@ -115,14 +116,26 @@ def survey_data(request, survey_id):
         if question.question_type == Question.SMALL_TEXT:
             answers = AnswerText.objects.filter(question_id=question.id)
             res[question.id] = {
-                type: Question.SMALL_TEXT,
-                answers: list(answers)
+                'type': Question.SMALL_TEXT,
+                'answers': list(answers.values())
             }
         elif question.question_type == Question.SELECT_ONE:
             # вот тут уже посложнее, тут нужна какая-то аналитика. что надо сделать:
             # мы выбираем все ответыСелекты на данный Вопрос.
-            answers = AnswerSelect.objects.filter(question_id=question.id)
+            answers = AnswerSelect.objects.select_related('answer_variant').filter(question_id=question.id)
             answers_count = answers.count()
+            ans = answers.annotate(
+                num_answer_variants=Count('answer_variant'), answer_percentage=Count('answer_variant')/answers_count
+            )
+            print(ans)
+            res[question.id] = {
+                'type': Question.SELECT_ONE,
+                'answers':  [{
+                    'var_count': answer.num_answer_variants,
+                    'var_percentage': answer.answer_percentage,
+                    'text': answer.answer_variant.name} for answer in ans]
+
+            }
             # потом нам надо их сгруппировать по варианту ответа.
             # посчитать количество разных групп. и поделить размер этих групп на общее количество вопросов.
             # записать в результат для каждого ответа доли ответов респондентов и количество голосов респондентов

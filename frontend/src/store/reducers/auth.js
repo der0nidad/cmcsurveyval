@@ -1,5 +1,7 @@
 import update from 'immutability-helper';
-import { WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS } from '../actionTypes';
+import {
+  LOGOUT_SUCCESS, WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS,
+} from '../actionTypes';
 import { getCookie } from '../../common/helpers/csrf';
 
 const initialState = {

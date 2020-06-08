@@ -35,7 +35,7 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect(LOGIN_URL)
+    return JsonResponse({'next': LOGIN_URL}, status=302)
 
 
 # TODO: проверь, почему не работает редирект на страницу логина, если пользователь не залогинен
