@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -17,14 +18,14 @@ import { withRouter } from 'react-router';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
-import {mySurveysRoute, surveysRoute} from '../RouterComponent/routerComponent.constants';
+import { mySurveysRoute } from '../RouterComponent/routerComponent.constants';
 import {
   addSurveyAnswerAction,
   loadSurveyQuestionsAction,
   saveSurveyAnswersAction,
 } from '../../store/actions/surveyPassing.actions';
 import './survey_passing.css';
-import { isEmpty } from '../../common/helpers/common';
+
 
 const fiveVariants = [
   {
@@ -90,6 +91,7 @@ class SurveyPassingComponent extends React.Component {
 
   state = {
     form: {}, // {'id вопроса': {type: [SO|ST], answerId: number -or- answerText: str}
+    error: false,
   };
 
 
@@ -110,24 +112,35 @@ class SurveyPassingComponent extends React.Component {
   };
 
   makeSelectAnswer = (event, id, answerId) => {
-    const answerText = event.target.value;
     const { form } = this.state;
     this.setState({ form: { ...form, [id]: { answerId, type: SELECT_QUESTION } } });
   };
 
+  handleCloseSnackBar = () => {
+    this.setState({ error: false });
+  };
+
   saveAnswers = () => {
-    const { match, saveSurveyAnswers } = this.props;
-    const { form } = this.state;
-    console.log(form);
-    saveSurveyAnswers(match.params.id, form)
-      .then(() => {
+    if (this.validateAnswers()) {
+      const { match, saveSurveyAnswers } = this.props;
+      const { form } = this.state;
+      saveSurveyAnswers(match.params.id, form)
+        .then(() => {
         // this.props.history.push(mySurveysRoute);
-      });
+        });
+    } else {
+      this.setState({ error: true });
+    }
   };
 
-  validateAnswers = (event) => {
-
+  validateAnswers = () => {
+    const { form } = this.state;
+    const { surveyQuestions } = this.props;
+    const unansweredQuestions = surveyQuestions.questionsList
+      .filter((question) => (form[question.id].answerText === ''));
+    return unansweredQuestions.length === 0;
   };
+
 
   // назначенные на меня опросы
   // какие данные нам нужны: название опроса, автор(имя), список вопросов(у каждого вопроса текст, тип и варианты
@@ -138,8 +151,7 @@ class SurveyPassingComponent extends React.Component {
     const {
       surveyQuestions, isLoading, answers, history,
     } = this.props;
-    const { form } = this.state;
-    console.log(form);
+    const { form, error } = this.state;
     if (isLoading) {
       return <CircularProgress />;
     }
@@ -199,7 +211,18 @@ class SurveyPassingComponent extends React.Component {
         <Header
           pageTitle="Линейная алгебра - опрос по курсу"
         />
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={error}
+          autoHideDuration={4000}
+          onClose={this.handleCloseSnackBar}
+          message="Все вопросы опроса должны быть заполнены"
+        />
         <Container maxWidth="sm">
+
           <Breadcrumbs aria-label="breadcrumb">
             {/* TODO добавь предупреждение-модалку при уходе со страницы, что ваши данные не будут сохранены.
             либо сохранение в локалсторадж(неа)) */}

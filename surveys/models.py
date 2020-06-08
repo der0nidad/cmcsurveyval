@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import Truncator
 from django.utils.translation import gettext as _
 
 from users.models import StudyGroup
@@ -70,12 +71,22 @@ class AnswerText(models.Model):
     text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    def __str__(self):
+        text = Truncator(self.text).chars(75)
+        return text
 
 
 class AnswerSelect(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answer_variant = models.ForeignKey(AnswerVariant, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    def __str__(self):
+        text = Truncator(self.answer_variant.name).chars(75)
+        return text
 
 # class TextQuestion(Question):
 #     pass
