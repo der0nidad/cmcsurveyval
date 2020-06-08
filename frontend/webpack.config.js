@@ -26,9 +26,9 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new BundleAnalyzerPlugin(),
-  ],
+  // plugins: [
+  //   new BundleAnalyzerPlugin(),
+  // ],
   devtool: 'eval-source-map',
   output: {
     publicPath: '/',

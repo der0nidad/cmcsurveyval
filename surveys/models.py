@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import Truncator
 from django.utils.translation import gettext as _
 
 from users.models import StudyGroup
@@ -16,7 +17,7 @@ class Survey(models.Model):
     is_published = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
-    audience = models.ManyToManyField(StudyGroup)
+    # audience = models.ManyToManyField(StudyGroup)
 
     def __str__(self):
         return self.name
@@ -38,7 +39,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=2, choices=QUESTION_TYPE_CHOICES)
 
     def __str__(self):
-        return '{0} - {1}'.format(self.question_type, self.text)
+        return '{0} - {1}'.format(self.question_type, self.name)
 
     def clean(self):
         super(Question, self).clean()
@@ -61,17 +62,37 @@ class AnswerVariant(models.Model):
     # в примерно такой же дикт, только с idшниками из базы. и когда все вопросы будут сохранены, то отдельной функцией
     # пробегаемся по базе и проставляем соответствия. по дефолту - NULL.
 
+    def __str__(self):
+        # по идее self.question.name создает доп запрос в базу на каждый вызов str. TODO перепиши на cached_property
+        return '{0} - {1}'.format(self.name, self.question.name)
+
 
 class AnswerText(models.Model):
     text = models.CharField(max_length=DEFAULT_TEXT_FIELD_LENGTH, null=False, blank=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'question')
+
+    def __str__(self):
+        text = Truncator(self.text).chars(75)
+        return text
 
 
 class AnswerSelect(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answer_variant = models.ForeignKey(AnswerVariant, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'question')
+
+    def __str__(self):
+        text = Truncator(self.answer_variant.name).chars(75)
+        return text
 
 # class TextQuestion(Question):
 #     pass

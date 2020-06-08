@@ -1,30 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {connect} from 'react-redux';
+import { Router, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
 import Link from '@material-ui/core/Link';
-import {closeLeftMenu, openLeftMenu} from '../../store/actions/flags.actions';
-import {whoAmIAction} from '../../store/actions/routerComponent.actions';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import { closeLeftMenu, openLeftMenu } from '../../store/actions/flags.actions';
+import { whoAmIAction } from '../../store/actions/routerComponent.actions';
 import SignUp from '../SignUp';
 import Auth from '../Auth';
-import {UserProfile} from '../UserProfile';
-import {Surveys} from '../Surveys';
-import {Header} from '../Header';
-import {QuestionEdit} from '../QuestionsEdit';
-import {SurveyPassing} from '../SurveyPassing';
-import {MySurveys} from '../MySurveys';
-import {SurveyReport} from '../SurveyReport';
-import {UsersSearch} from '../UsersSearch';
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
+import { UserProfile } from '../UserProfile';
+import { Surveys } from '../Surveys';
+import { Header } from '../Header';
+import { QuestionEdit } from '../QuestionsEdit';
+import { SurveyPassing } from '../SurveyPassing';
+import { MySurveys } from '../MySurveys';
+import { SurveyReport } from '../SurveyReport';
+import { UsersSearch } from '../UsersSearch';
+import historyRouter from '../../common/helpers/historyRouter';
+import {mySurveysRoute} from './routerComponent.constants';
 
 function Home() {
   return (
@@ -69,7 +68,7 @@ class RouterComp extends React.Component {
     const { menuOpened, closeMenu } = this.props;
     const pages = [
       {
-        // TODO вынеси урлы отсюда и из роутера в одно место
+        // TODO вынеси урлы отсюда и из роутера в константы
         title: 'Мой профиль',
         url: '/profile',
       },
@@ -112,7 +111,7 @@ class RouterComp extends React.Component {
                     style={{ minWidth: '200px' }}
                   >
                     <Link href={page.url}>
-                      {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+                      {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                       <ListItemText primary={page.title} />
                     </Link>
                   </div>
@@ -123,7 +122,7 @@ class RouterComp extends React.Component {
       </div>
     );
     return (
-      <Router>
+      <Router history={historyRouter}>
         <Drawer
           open={menuOpened}
           onClose={closeMenu}
@@ -153,13 +152,13 @@ class RouterComp extends React.Component {
             <Route path="/user-search">
               <UsersSearch />
             </Route>
-            <Route path="/mysurveys/:id">
+            <Route path={`${mySurveysRoute}/:id`}>
               <SurveyPassing />
             </Route>
-            {/*<Route path="/mysurveys">*/}
-            {/*  <CurrentSurvey />*/}
-            {/*</Route>*/}
-            <Route path="/mysurveys">
+            {/* <Route path="/mysurveys"> */}
+            {/*  <CurrentSurvey /> */}
+            {/* </Route> */}
+            <Route path={mySurveysRoute}>
               <MySurveys />
             </Route>
             <Route path="/">

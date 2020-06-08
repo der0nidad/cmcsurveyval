@@ -4,11 +4,15 @@ import { connect } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { Header } from '../Header';
 import StatusTable from './StatusTable';
 import SurveyResults from './SurveyResults';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
+import { surveysRoute } from '../RouterComponent/routerComponent.constants';
 
 export const fiveVariants = [
   {
@@ -51,7 +55,7 @@ const questions = [
 const surveyData = {
   questionsList: questions,
   name: 'Первый опрос',
-  author: 'Кузнецов Сергей',
+  author: 'Петров Виктор',
 };
 class SurveyReportComponent extends React.Component {
   static propTypes = {
@@ -64,7 +68,7 @@ class SurveyReportComponent extends React.Component {
   };
 
   state = {
-    activeTab: 1,
+    activeTab: 2,
   };
 
   componentDidMount() {
@@ -89,6 +93,21 @@ class SurveyReportComponent extends React.Component {
           pageTitle={'Отчёт по опросу "Линейная алгебра - опрос по курсу"'}
         />
         <Container maxWidth="sm">
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            className="surveys-breadcrumbs"
+          >
+            <Link color="inherit" href="/">
+              Главная страница
+            </Link>
+            <Link color="inherit" href={surveysRoute}>
+              Созданные мной опросы
+            </Link>
+            <Typography color="textPrimary">
+              Отчёт по опросу "Линейная алгебра - опрос по курсу"
+
+            </Typography>
+          </Breadcrumbs>
           <Tabs
             value={activeTab}
             // onChange={(e) => this.handleChangeTab(e)}
