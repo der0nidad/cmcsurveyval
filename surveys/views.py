@@ -107,10 +107,28 @@ class SurveyStatus(generics.ListAPIView):
         # return Survey.objects.get(id=survey_id).audience.all()
 
 
-class SurveyDataReportView(generics.GenericAPIView):
-    model = get_user_model()
-    # serializer_class = SurveyStatusSerializer
-
-
+def survey_data(request, survey_id):
+    questions = Question.objects.filter(survey_id=survey_id)
+    res = {}
+    for question in questions:
+        # для каждого текстового ответа вытащить совокупность всех ответов. и записать в список
+        if question.question_type == Question.SMALL_TEXT:
+            answers = AnswerText.objects.filter(question_id=question.id)
+            res[question.id] = {
+                type: Question.SMALL_TEXT,
+                answers: list(answers)
+            }
+        elif question.question_type == Question.SELECT_ONE:
+            # вот тут уже посложнее, тут нужна какая-то аналитика. что надо сделать:
+            # мы выбираем все ответыСелекты на данный Вопрос.
+            answers = AnswerSelect.objects.filter(question_id=question.id)
+            answers_count = answers.count()
+            # потом нам надо их сгруппировать по варианту ответа.
+            # посчитать количество разных групп. и поделить размер этих групп на общее количество вопросов.
+            # записать в результат для каждого ответа доли ответов респондентов и количество голосов респондентов
+            # и так же общее количество голосов
+            pass
+    # надо ли кодировать res в json?
+    return JsonResponse(res, status=200)
 
 
