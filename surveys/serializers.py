@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Survey, Question, AnswerVariant
+from .models import Survey, Question, AnswerVariant, AnswerSelect, AnswerText
 
 
 class AnswerVariantCreateSerializer(serializers.ModelSerializer):
@@ -86,3 +86,36 @@ class SurveyQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = ('id', 'name', 'author', 'questions_list')
+
+
+# class SelectAnswerCreateSerializer(serializers.ModelSerializer):
+#     question_id = serializers.PrimaryKeyRelatedField(
+#         queryset=Question.objects.all(), source='question.id')
+#
+#     class Meta:
+#         model = AnswerSelect
+#         fields = ('id', 'user_id', 'answer_variant_id', 'question_id')
+#
+#     def create(self, validated_data):
+#         select_answer = AnswerSelect.objects.create(
+#             question=validated_data['question']['id'],
+#             name=validated_data['name'],
+#             order=validated_data['order']
+#         )
+#         return select_answer
+#
+# class TextAnswerCreateSerializer(serializers.ModelSerializer):
+#     question_id = serializers.PrimaryKeyRelatedField(
+#         queryset=Question.objects.all(), source='question.id')
+#
+#     class Meta:
+#         model = AnswerText
+#         fields = ('id', 'name', 'order', 'question_id')
+#
+#     def create(self, validated_data):
+#         answer_variant = AnswerVariant.objects.create(
+#             question=validated_data['question']['id'],
+#             name=validated_data['name'],
+#             order=validated_data['order']
+#         )
+#         return answer_variant

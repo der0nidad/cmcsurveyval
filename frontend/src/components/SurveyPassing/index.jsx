@@ -17,8 +17,14 @@ import { withRouter } from 'react-router';
 import { Header } from '../Header';
 import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
-import { mySurveysRoute } from '../RouterComponent/routerComponent.constants';
-import { loadSurveyQuestionsAction, saveSurveyAnswersAction } from '../../store/actions/surveyPassing.actions';
+import {mySurveysRoute, surveysRoute} from '../RouterComponent/routerComponent.constants';
+import {
+  addSurveyAnswerAction,
+  loadSurveyQuestionsAction,
+  saveSurveyAnswersAction,
+} from '../../store/actions/surveyPassing.actions';
+import './survey_passing.css';
+import { isEmpty } from '../../common/helpers/common';
 
 const fiveVariants = [
   {
@@ -46,7 +52,7 @@ const questions = [
   {
     name: 'Вы удовлетворены преподаванием данного курса?',
     type: SELECT_QUESTION,
-    answerVariants: fiveVariants,
+    answersList: fiveVariants,
   },
   {
     name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
@@ -64,21 +70,64 @@ class SurveyPassingComponent extends React.Component {
     loadSurveyQuestions: PropTypes.func.isRequired,
     saveSurveyAnswers: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
-
+    answers: PropTypes.array.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
     surveyQuestions: [],
     isLoading: false,
+    answers: null,
   };
 
   state = {
+    form: {}, // {'id вопроса': {type: [SO|ST], answerId: number -or- answerText: str}
   };
 
+
   componentDidMount() {
-    console.log(this.props);
-    this.props.loadSurveyQuestions();
+    const { match, loadSurveyQuestions } = this.props;
+    const newStateQuestions = {};
+    loadSurveyQuestions(match.params.id).then(() => {
+      const { surveyQuestions } = this.props;
+      surveyQuestions.questionsList.map((question) => { newStateQuestions[question.id] = { answerText: '' }; });
+      this.setState(() => ({ form: newStateQuestions }));
+    });
   }
+
+  makeTextAnswer = (event, id) => {
+    const answerText = event.target.value;
+    const { form } = this.state;
+    this.setState({ form: { ...form, [id]: { answerText, type: TEXT_QUESTION } } });
+  };
+
+  makeSelectAnswer = (event, id, answerId) => {
+    const answerText = event.target.value;
+    const { form } = this.state;
+    this.setState({ form: { ...form, [id]: { answerId, type: SELECT_QUESTION } } });
+  };
+
+  saveAnswers = () => {
+    const { match, saveSurveyAnswers } = this.props;
+    const { form } = this.state;
+    console.log(form);
+    saveSurveyAnswers(match.params.id, form)
+      .then(() => {
+        // this.props.history.push(mySurveysRoute);
+      });
+  };
+
+  validateAnswers = (event) => {
+
+  };
 
   // назначенные на меня опросы
   // какие данные нам нужны: название опроса, автор(имя), список вопросов(у каждого вопроса текст, тип и варианты
@@ -87,27 +136,35 @@ class SurveyPassingComponent extends React.Component {
   // действия - отправить, отмена
   render() {
     const {
-      surveyQuestions, isLoading,
+      surveyQuestions, isLoading, answers, history,
     } = this.props;
+    const { form } = this.state;
+    console.log(form);
     if (isLoading) {
       return <CircularProgress />;
     }
-    const questionsData = surveyQuestions.questionsList && surveyQuestions.questionsList.map((question, index) => {
-      const answerVariantList = question.type === SELECT_QUESTION
-        ? question.answerVariants.map((variant) => (
-          <ListItem key={variant.id}>
-            <Radio
-              value="a"
-              name="radio-button-demo"
-              inputProps={{ 'aria-label': 'A' }}
-            />
-            <span>{variant.name}</span>
-          </ListItem>
-        ))
+    const questionsData = surveyQuestions.questionsList ? surveyQuestions.questionsList.map((question, index) => {
+      const answerVariantList = question.questionType === SELECT_QUESTION
+        ? question.answersList.map((variant) =>
+          // console.log(question)
+          (
+            <ListItem
+              key={variant.id}
+              onClick={(event) => this.makeSelectAnswer(event, question.id, variant.id)}
+            >
+              <Radio
+                value="a"
+                name="radio-button-demo"
+                inputProps={{ 'aria-label': 'A' }}
+              />
+              <span>{variant.name}</span>
+            </ListItem>
+          ))
         : null;
       return (
         <Card
           style={{ margin: '20px' }}
+          key={question.id}
         >
           <CardContent>
             <Typography color="textSecondary" gutterBottom>
@@ -122,9 +179,11 @@ class SurveyPassingComponent extends React.Component {
             <Typography color="textSecondary" gutterBottom>
               {question.name}
             </Typography>
-            {question.type === TEXT_QUESTION
+            {question.questionType === TEXT_QUESTION
               ? (
                 <TextField
+                  onChange={(e) => this.makeTextAnswer(e, question.id)}
+                  value={form[question.id]?.answerText}
                   placeholder="Введите текст ответа"
                 />
               )
@@ -133,7 +192,7 @@ class SurveyPassingComponent extends React.Component {
           </CardContent>
         </Card>
       );
-    });
+    }) : null;
 
     return (
       <div>
@@ -156,20 +215,34 @@ class SurveyPassingComponent extends React.Component {
               {123}
             </Typography>
           </Breadcrumbs>
-          <List>
-            {questionsData}
-          </List>
+          { questionsData && questionsData.length
+            ? <List>{questionsData}</List>
+            : <Typography className="survey-questions__no-questions-text">В этом опросе пока нет вопросов</Typography>}
+
           <div
             style={{ marginLeft: '50px', display: 'flex', maxWidth: '500px' }}
           >
+            {/* {questionsData && questionsData.length && !answers && ( */}
+            {/* <Typography */}
+            {/*  color="error" */}
+            {/*  variant="subtitle2" */}
+            {/* > */}
+            {/*  Нужно ответить на все вопросы */}
+            {/* </Typography> */}
+            {/* )} */}
             <Button
               color="primary"
               variant="contained"
+              // TODO добавь функцию, которая будет чекать, что на все вопросы ответили и добавь подсветку неотв. вопр.
+              // TODO надо блочить кнопку до api success и показывать нотификашку, если api error(M-UI <SnackBar />)
+              // disabled={this.validateAnswers}
+              onClick={this.saveAnswers}
             >
               Сохранить
             </Button>
             <Button
               style={{ marginLeft: '20px' }}
+              onClick={() => history.push(mySurveysRoute)}
             >
               Отменить
             </Button>
@@ -183,14 +256,15 @@ class SurveyPassingComponent extends React.Component {
 
 const mapStateToProps = (state) => ({
   surveyQuestions: state.surveyPassing.surveyQuestions,
+  answers: state.surveyPassing.answers, // а оно надо? не думаю
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadSurveyQuestions: () => dispatch(loadSurveyQuestionsAction()),
-  saveSurveyAnswers: () => dispatch(saveSurveyAnswersAction()),
-
+  loadSurveyQuestions: (id) => dispatch(loadSurveyQuestionsAction(id)),
+  saveSurveyAnswers: (surveyId, answerData) => dispatch(saveSurveyAnswersAction(surveyId, answerData)),
+  addSurveyAnswer: (data) => dispatch(addSurveyAnswerAction(data)),
 });
 
 export const SurveyPassing = withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(SurveyPassingComponent)
+  connect(mapStateToProps, mapDispatchToProps)(SurveyPassingComponent),
 );

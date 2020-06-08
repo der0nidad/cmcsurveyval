@@ -1,10 +1,9 @@
-const strToCamel = (s) => {
-  return s.replace(/([-_][a-z])/ig, ($1) => {
-    return $1.toUpperCase()
-      .replace('-', '')
-      .replace('_', '');
-  });
-};
+const strToCamel = (s) => s.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase()
+  .replace('-', '')
+  .replace('_', ''));
+
+const strToSnake = (string) => string.replace(/[\w]([A-Z])/g, (m) => `${m[0]}_${m[1]}`).toLowerCase();
+
 export function toCamel(o) {
   let newO;
   let origKey;
@@ -21,7 +20,7 @@ export function toCamel(o) {
   newO = {};
   for (origKey in o) {
     if (o.hasOwnProperty(origKey)) {
-      newKey = strToCamel(origKey)
+      newKey = strToCamel(origKey);
       value = o[origKey];
       if (value instanceof Array || (value !== null && value.constructor === Object)) {
         value = toCamel(value);

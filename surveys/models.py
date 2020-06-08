@@ -38,7 +38,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=2, choices=QUESTION_TYPE_CHOICES)
 
     def __str__(self):
-        return '{0} - {1}'.format(self.question_type, self.text)
+        return '{0} - {1}'.format(self.question_type, self.name)
 
     def clean(self):
         super(Question, self).clean()
@@ -60,6 +60,10 @@ class AnswerVariant(models.Model):
     # переопределяем метод save у survey и по порядку сохраняем вопросы. если номер есть в этом дикте, то заносим его
     # в примерно такой же дикт, только с idшниками из базы. и когда все вопросы будут сохранены, то отдельной функцией
     # пробегаемся по базе и проставляем соответствия. по дефолту - NULL.
+
+    def __str__(self):
+        # по идее self.question.name создает доп запрос в базу на каждый вызов str. TODO перепиши на cached_property
+        return '{0} - {1}'.format(self.name, self.question.name)
 
 
 class AnswerText(models.Model):

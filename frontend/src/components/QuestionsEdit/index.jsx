@@ -70,7 +70,7 @@ class QuestionEditComponent extends React.Component {
   }
 
   handleRedirectToSurveys = () => {
-    this.props.history.push('/surveys/');
+    this.props.history.push(surveysRoute);
   };
 
   render() {

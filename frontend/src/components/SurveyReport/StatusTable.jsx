@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import {
   student1, student2, student3, student4, student5, student6, student7,
 } from '../UsersSearch';
@@ -18,23 +19,21 @@ function createDataFromObj(student, passing) {
 }
 const yes = 'Да';
 const no = 'Нет';
-const rows2 = [
-  createData('Иванов Иван Иванович', 102, yes),
-  createData('Сидоров Валентин Павлович', 102, yes),
-  createData('Кораблев Вячеслав Павлович', 102, yes),
-  createData('Степаненко Анастасия Геннадьевна', 106, yes),
-  createData('Иванова Мария Сергеевна', 106, yes),
-  createData('Поляков Сергей Петрович', 106, no),
-];
+// const rows2 = [
+//   createData('Иванов Иван Иванович', 102, yes),
+//   createData('Сидоров Валентин Павлович', 102, yes),
+//   createData('Кораблев Вячеслав Павлович', 102, yes),
+//   createData('Степаненко Анастасия Геннадьевна', 106, yes),
+//   createData('Иванова Мария Сергеевна', 106, yes),
+//   createData('Поляков Сергей Петрович', 106, no),
+// ];
 
 const rows = [
   createDataFromObj(student1, yes),
-  createDataFromObj(student2, yes),
   createDataFromObj(student3, yes),
-  createDataFromObj(student4, yes),
-  createDataFromObj(student5, no),
-  createDataFromObj(student6, no),
+  createDataFromObj(student2, yes),
   createDataFromObj(student7, yes),
+  createDataFromObj(student4, yes),
 ];
 
 class StatusTable extends React.Component {
@@ -43,6 +42,13 @@ class StatusTable extends React.Component {
     // console.log('azazazazazazazazaz')
     return (
       <TableContainer component={Paper}>
+        <div
+          className="status-table__header"
+        >
+          {/* <Typography>Размер аудитории опроса, человек: 7</Typography> */}
+          {/* <Typography>Опрос прошли, человек: 5</Typography> */}
+          <Typography>Опрос прошли 5 из 5 респондентов</Typography>
+        </div>
         <Table
           size="small"
           aria-label="a dense table"

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from surveys.forms import AnswerVariantAdminForm
 from surveys.models import Survey, Question, AnswerVariant, AnswerText
 
 
@@ -12,7 +13,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class AnswerVariantAdmin(admin.ModelAdmin):
-    pass
+    form = AnswerVariantAdminForm
 
 
 class AnswerTextAdmin(admin.ModelAdmin):

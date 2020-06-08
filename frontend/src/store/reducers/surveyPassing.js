@@ -1,5 +1,6 @@
 import update from 'immutability-helper';
 import {
+  ADD_QUESTION_ANSWER,
   SURVEY_QUESTIONS_LOAD_FAIL,
   SURVEY_QUESTIONS_LOAD_START, SURVEY_QUESTIONS_LOAD_SUCCESS,
   SURVEYS_INFO_LOAD_FAIL,
@@ -9,16 +10,14 @@ import {
 import { toCamel } from '../../common/helpers/toCamel';
 
 const initialState = {
-  surveysList: [],
+  surveyQuestions: [],
   isLoading: false,
   errors: null,
   editingSurvey: null,
+  answers: null,
 };
 const surveySchemaExample = {
-  id: '',
-  name: '',
-  author: '',
-  questions: [],
+
 };
 
 const surveyPassing = (state = initialState, action) => {
@@ -40,7 +39,10 @@ const surveyPassing = (state = initialState, action) => {
         isLoading: { $set: false },
       });
     }
-
+    case ADD_QUESTION_ANSWER:
+      return update(state, {
+        answers: { $merge: action.payload}, // прочекай ещё payload, наверняка менять придётся
+      });
     default:
       return state;
   }
