@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -10,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {
   student1, student2, student3, student4, student5, student6, student7,
 } from '../UsersSearch';
+import { respondentsStatusDataSchema } from '../Surveys/surveys.schema';
 
 function createData(name, studyGroup, passing) {
   return { name, studyGroup, passing };
@@ -37,9 +39,18 @@ const rows = [
 ];
 
 class StatusTable extends React.Component {
+  static propTypes = {
+    respondentsData: PropTypes.arrayOf(respondentsStatusDataSchema),
+  };
+
+  static defaultProps = {
+    respondentsData: null,
+  };
+
   render() {
-    // throw 'Hahahah, my first error';
-    // console.log('azazazazazazazazaz')
+    const { respondentsData } = this.props;
+    const passed = respondentsData.filter((user) => user.status)
+    if (!respondentsData) return null;
     return (
       <TableContainer component={Paper}>
         <div
@@ -47,7 +58,7 @@ class StatusTable extends React.Component {
         >
           {/* <Typography>Размер аудитории опроса, человек: 7</Typography> */}
           {/* <Typography>Опрос прошли, человек: 5</Typography> */}
-          <Typography>Опрос прошли 5 из 5 респондентов</Typography>
+          <Typography>{`Опрос прошли ${passed.length} из ${respondentsData.length} респондентов`}</Typography>
         </div>
         <Table
           size="small"
@@ -61,13 +72,13 @@ class StatusTable extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
+            {respondentsData.map((row) => (
+              <TableRow key={row.fullName}>
                 <TableCell component="th" scope="row" className="status-table__name-row">
-                  {row.name}
+                  {row.fullName}
                 </TableCell>
                 <TableCell align="right">{row.studyGroup}</TableCell>
-                <TableCell align="right">{row.passing}</TableCell>
+                <TableCell align="right">{row.status ? 'Да' : 'Нет'}</TableCell>
               </TableRow>
             ))}
           </TableBody>

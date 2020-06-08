@@ -64,6 +64,7 @@ class AnswerVariantDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 def add_answers(request, survey_id):
+    # TODO добавь проверку, что пользователь принадлежит к аудитории данного опроса
     passed = request.user.survey_set.filter(id=survey_id)
     if passed:
         return JsonResponse({'error': 'Пользователь уже проходил данный опрос'}, status=400)

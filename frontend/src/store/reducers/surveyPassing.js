@@ -2,10 +2,8 @@ import update from 'immutability-helper';
 import {
   ADD_QUESTION_ANSWER,
   SURVEY_QUESTIONS_LOAD_FAIL,
-  SURVEY_QUESTIONS_LOAD_START, SURVEY_QUESTIONS_LOAD_SUCCESS,
-  SURVEYS_INFO_LOAD_FAIL,
-  SURVEYS_INFO_LOAD_START,
-  SURVEYS_INFO_LOAD_SUCCESS
+  SURVEY_QUESTIONS_LOAD_START,
+  SURVEY_QUESTIONS_LOAD_SUCCESS,
 } from '../actionTypes';
 import { toCamel } from '../../common/helpers/toCamel';
 
@@ -28,7 +26,6 @@ const surveyPassing = (state = initialState, action) => {
       });
     }
     case SURVEY_QUESTIONS_LOAD_SUCCESS: {
-      console.log(toCamel(action.payload));
       return update(state, {
         isLoading: { $set: false },
         surveyQuestions: { $set: toCamel(action.payload) },
@@ -41,7 +38,7 @@ const surveyPassing = (state = initialState, action) => {
     }
     case ADD_QUESTION_ANSWER:
       return update(state, {
-        answers: { $merge: action.payload}, // прочекай ещё payload, наверняка менять придётся
+        answers: { $merge: action.payload }, // прочекай ещё payload, наверняка менять придётся
       });
     default:
       return state;

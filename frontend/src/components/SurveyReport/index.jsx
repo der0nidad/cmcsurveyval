@@ -7,12 +7,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
+import { withRouter } from 'react-router';
+import { CircularProgress } from '@material-ui/core';
+import { respondentsStatusDataSchema, surveyWithQuestionsSchema } from '../Surveys/surveys.schema';
 import { Header } from '../Header';
 import StatusTable from './StatusTable';
 import SurveyResults from './SurveyResults';
 import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.constants';
 import { surveysRoute } from '../RouterComponent/routerComponent.constants';
+import { loadRespondentsStatusesAction } from '../../store/actions/surveyReport.actions';
 
 export const fiveVariants = [
   {
@@ -60,21 +63,39 @@ const surveyData = {
 class SurveyReportComponent extends React.Component {
   static propTypes = {
     survey: PropTypes.shape(surveyWithQuestionsSchema),
+    loadRespondentsStatuses: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    respondentsData: PropTypes.arrayOf(respondentsStatusDataSchema),
+    isLoading: PropTypes.bool,
   };
 
   static defaultProps = {
     survey: null,
     isLoading: false,
+    respondentsData: null,
   };
 
   state = {
-    activeTab: 2,
+    // TODO научись переключать вкладки
+    activeTab: 1,
   };
 
   componentDidMount() {
+    const { loadRespondentsStatuses, match } = this.props;
+    const surveyId = match.params.id;
+    loadRespondentsStatuses(surveyId);
   }
 
   handleChangeTab = (e) => {
+    e.persist();
     console.log(e);
     this.setState({ activeTab: e.target.value });
   };
@@ -87,6 +108,9 @@ class SurveyReportComponent extends React.Component {
   // и таб с результатами опроса. его пока не рендерим. всего 3 компонента: основной, таблица и результатыЫ
   render() {
     const { activeTab } = this.state;
+    const { respondentsData, isLoading } = this.props;
+    console.log(respondentsData);
+    if (isLoading && !respondentsData) return <div className="status-screen__spinner"><CircularProgress /></div>;
     return (
       <div>
         <Header
@@ -108,21 +132,26 @@ class SurveyReportComponent extends React.Component {
 
             </Typography>
           </Breadcrumbs>
-          <Tabs
-            value={activeTab}
-            // onChange={(e) => this.handleChangeTab(e)}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <Tab value={1} label="Отчёт о прохождении опроса" />
-            <Tab value={2} label="Результаты опроса" />
-          </Tabs>
-          <div
-            style={{ minHeight: '10vh', marginTop: '2vh' }}
-          >
-            { activeTab === 1 ? <StatusTable /> : <SurveyResults />}
-          </div>
+          { isLoading ? <div className="status-screen__spinner"><CircularProgress /></div>
+            : (
+              <div>
+                <Tabs
+                  value={activeTab}
+                  onChange={(e) => this.handleChangeTab(e)}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  centered
+                >
+                  <Tab value={1} label="Отчёт о прохождении опроса" />
+                  <Tab value={2} label="Результаты опроса" />
+                </Tabs>
+                <div
+                  style={{ minHeight: '10vh', marginTop: '2vh' }}
+                >
+                  { activeTab === 1 ? <StatusTable respondentsData={respondentsData} /> : <SurveyResults />}
+                </div>
+              </div>
+            )}
         </Container>
       </div>
     );
@@ -131,10 +160,13 @@ class SurveyReportComponent extends React.Component {
 
 const mapStateToProps = (state) => ({
   survey: surveyData,
+  respondentsData: state.surveyReport.respondents,
+  isLoading: state.surveyReport.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  loadRespondentsStatuses: (surveyId) => dispatch(loadRespondentsStatusesAction(surveyId)),
 
 });
 
-export const SurveyReport = connect(mapStateToProps, mapDispatchToProps)(SurveyReportComponent);
+export const SurveyReport = withRouter(connect(mapStateToProps, mapDispatchToProps)(SurveyReportComponent));
