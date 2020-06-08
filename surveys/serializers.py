@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Survey, Question, AnswerVariant, AnswerSelect, AnswerText
+from .models import Survey, Question, AnswerVariant, AnswerSelect, AnswerText, Audience
 
 
 class AnswerVariantCreateSerializer(serializers.ModelSerializer):
@@ -89,11 +89,15 @@ class SurveyQuestionsSerializer(serializers.ModelSerializer):
 
 
 class SurveyStatusSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
         lookup_url_kwarg = 'survey_id'
-        fields = ('id', 'username', 'first_name', 'last_name')
+        fields = ('id', 'username', 'first_name', 'last_name', 'status')
+
+    def get_status(self, obj):
+        return Audience.objects.get(user_id=obj.id).status
 
 # class SelectAnswerCreateSerializer(serializers.ModelSerializer):
 #     question_id = serializers.PrimaryKeyRelatedField(

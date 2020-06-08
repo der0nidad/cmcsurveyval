@@ -17,16 +17,17 @@ class Survey(models.Model):
     is_published = models.BooleanField(default=False)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
     # multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
-    audience = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    survey_audience = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Audience')
 
     def __str__(self):
         return self.name
 
 
-# class Audience(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-#     status = models.BooleanField(default=False)  # Прошёл пользователь опрос или нет
+class Audience(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)  # Прошёл пользователь опрос или нет
+    # По-хорошему, статус бы сделать choices 0,1, потому что вдруг в будущем будет нужно больше одного статуса
 
 
 class Question(models.Model):

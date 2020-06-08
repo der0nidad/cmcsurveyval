@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from rest_framework import generics
 
-from surveys.models import Survey, Question, AnswerVariant, AnswerText, AnswerSelect
+from surveys.models import Survey, Question, AnswerVariant, AnswerText, AnswerSelect, Audience
 from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, \
     AnswerVariantCreateSerializer, \
     SurveyDetailSerializer, SurveyQuestionsSerializer, SurveyQuestionDetailSerializer, \
@@ -86,8 +86,11 @@ def add_answers(request, survey_id):
                     survey_id=survey_id
                 )
                 select_answer.save()
-        survey = Survey.objects.get(id=survey_id)
-        survey.audience.add(request.user)
+        Audience.objects.update_or_create(
+            user=request.user,
+            survey_id=survey_id,
+            status=True
+        )  # TODO create должен происходить в момент назначения опросу аудитории, здесь только апдейт.
     except IntegrityError as e:
         return JsonResponse({'error': 'Пользователь уже проходил данный опрос'}, status=400)
     return JsonResponse({}, status=200)
@@ -99,7 +102,8 @@ class SurveyStatus(generics.ListAPIView):
 
     def get_queryset(self):
         survey_id = self.kwargs['survey_id']
-        return Survey.objects.get(id=survey_id).audience.all()
+        return Survey.objects.get(id=survey_id).survey_audience.all()
+        # return Survey.objects.get(id=survey_id).audience.all()
 
 
 class SurveyDataReportView(generics.GenericAPIView):
