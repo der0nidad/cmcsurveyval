@@ -84,7 +84,6 @@ class SurveyReportComponent extends React.Component {
   };
 
   state = {
-    // TODO научись переключать вкладки
     activeTab: 1,
   };
 
@@ -96,8 +95,8 @@ class SurveyReportComponent extends React.Component {
 
   handleChangeTab = (e) => {
     e.persist();
-    console.log(e);
-    this.setState({ activeTab: e.target.value });
+    const value = e.currentTarget.getAttribute('data-value');
+    this.setState({ activeTab: Number(value) });
   };
 
   // отчет о прохождении опроса
@@ -109,8 +108,9 @@ class SurveyReportComponent extends React.Component {
   render() {
     const { activeTab } = this.state;
     const { respondentsData, isLoading } = this.props;
-    console.log(respondentsData);
     if (isLoading && !respondentsData) return <div className="status-screen__spinner"><CircularProgress /></div>;
+    // TODO в этом же компоненте(но наверное  вотдельном экшне, хз, хотя зачем в отдельном) подгружай нужные данные для
+    // таблицы с резами
     return (
       <div>
         <Header
@@ -142,8 +142,8 @@ class SurveyReportComponent extends React.Component {
                   textColor="primary"
                   centered
                 >
-                  <Tab value={1} label="Отчёт о прохождении опроса" />
-                  <Tab value={2} label="Результаты опроса" />
+                  <Tab data-value={1} value={1} label="Отчёт о прохождении опроса" />
+                  <Tab data-value={2} value={2} label="Результаты опроса" />
                 </Tabs>
                 <div
                   style={{ minHeight: '10vh', marginTop: '2vh' }}
