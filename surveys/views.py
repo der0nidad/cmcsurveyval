@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.http import JsonResponse
 from rest_framework import generics
@@ -8,7 +9,7 @@ from surveys.models import Survey, Question, AnswerVariant, AnswerText, AnswerSe
 from surveys.serializers import SurveyCreateSerializer, QuestionCreateSerializer, \
     AnswerVariantCreateSerializer, \
     SurveyDetailSerializer, SurveyQuestionsSerializer, SurveyQuestionDetailSerializer, \
-    AnswerVariantDetailSerializer, SurveyTitleSerializer
+    AnswerVariantDetailSerializer, SurveyTitleSerializer, SurveyStatusSerializer
 
 
 class SurveyTitle(generics.ListAPIView):
@@ -63,9 +64,12 @@ class AnswerVariantDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 def add_answers(request, survey_id):
-    for question in request.POST:
-        data = json.loads(request.POST[question])
-        try:
+    passed = request.user.survey_set.filter(id=survey_id)
+    if passed:
+        return JsonResponse({'error': 'Пользователь уже проходил данный опрос'}, status=400)
+    try:
+        for question in request.POST:
+            data = json.loads(request.POST[question])
             if data.get('type') == Question.SMALL_TEXT:
                 answer_text = AnswerText.objects.create(
                     user=request.user,
@@ -82,7 +86,26 @@ def add_answers(request, survey_id):
                     survey_id=survey_id
                 )
                 select_answer.save()
-        except IntegrityError as e:
-            return JsonResponse({'error': 'Пользователь уже проходил данный опрос'}, status=400)
-    # TODO добавь отметку о прохождении опроса пользователем
+        survey = Survey.objects.get(id=survey_id)
+        survey.audience.add(request.user)
+    except IntegrityError as e:
+        return JsonResponse({'error': 'Пользователь уже проходил данный опрос'}, status=400)
     return JsonResponse({}, status=200)
+
+
+class SurveyStatus(generics.ListAPIView):
+    model = get_user_model()
+    serializer_class = SurveyStatusSerializer
+
+    def get_queryset(self):
+        survey_id = self.kwargs['survey_id']
+        return Survey.objects.get(id=survey_id).audience.all()
+
+
+class SurveyDataReportView(generics.GenericAPIView):
+    model = get_user_model()
+    # serializer_class = SurveyStatusSerializer
+
+
+
+

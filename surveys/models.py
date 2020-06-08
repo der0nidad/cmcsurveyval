@@ -15,12 +15,18 @@ class Survey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_open = models.BooleanField(default=False)
     is_published = models.BooleanField(default=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
     # multiple_apply = models.BooleanField(default=True)  # разрешено ли проходить опрос более 1 раза
-    # audience = models.ManyToManyField(StudyGroup)
+    audience = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self):
         return self.name
+
+
+# class Audience(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+#     status = models.BooleanField(default=False)  # Прошёл пользователь опрос или нет
 
 
 class Question(models.Model):

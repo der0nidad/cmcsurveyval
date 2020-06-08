@@ -88,6 +88,13 @@ class SurveyQuestionsSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'author', 'questions_list')
 
 
+class SurveyStatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        lookup_url_kwarg = 'survey_id'
+        fields = ('id', 'username', 'first_name', 'last_name')
+
 # class SelectAnswerCreateSerializer(serializers.ModelSerializer):
 #     question_id = serializers.PrimaryKeyRelatedField(
 #         queryset=Question.objects.all(), source='question.id')
