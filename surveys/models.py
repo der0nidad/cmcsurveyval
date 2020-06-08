@@ -73,6 +73,9 @@ class AnswerText(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('user', 'question')
+
     def __str__(self):
         text = Truncator(self.text).chars(75)
         return text
@@ -83,6 +86,9 @@ class AnswerSelect(models.Model):
     answer_variant = models.ForeignKey(AnswerVariant, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'question')
 
     def __str__(self):
         text = Truncator(self.answer_variant.name).chars(75)

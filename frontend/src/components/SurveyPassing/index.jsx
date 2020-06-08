@@ -256,8 +256,8 @@ class SurveyPassingComponent extends React.Component {
             <Button
               color="primary"
               variant="contained"
-              // TODO добавь функцию, которая будет чекать, что на все вопросы ответили и добавь подсветку неотв. вопр.
               // TODO надо блочить кнопку до api success и показывать нотификашку, если api error(M-UI <SnackBar />)
+              // TODO добавь реакцию на 400 и 200 код апи(они уже есть)
               // disabled={this.validateAnswers}
               onClick={this.saveAnswers}
             >
