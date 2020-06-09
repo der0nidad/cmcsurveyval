@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import { CircularProgress } from '@material-ui/core';
 import { Header } from '../Header';
-import Paper from "@material-ui/core/Paper";
 import { userShape } from '../Auth/auth.schema';
 
+const STUDENT = 1;
 const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
@@ -19,31 +21,52 @@ class UserProfileComponent extends React.Component {
   };
 
   static defaultProps = {
-
+    user: null,
   };
+
 
   render() {
     const { user } = this.props;
+    if (!user) return <CircularProgress />;
+    console.log(user);
     return (
       <div>
         <Header
-          pageTitle="Профиль пользователя ivanov"
+          pageTitle={`Профиль пользователя ${user?.username}`}
         />
-        <Container maxWidth="sm">
+        <Container
+          style={{ padding: '20px' }}
+          maxWidth="sm"
+        >
           <Paper
             style={{ padding: '20px' }}
           >
             <Typography
               variant="h6"
             >
-              Данные пользователя.
+              Данные пользователя
             </Typography>
             <Typography>
-              ФИО: Иванов Иван Иванович
+              ФИО:
+              {' '}
+              {user.fullName}
+
               <br />
-              Академическая группа: 214 гр. 2019/2020 учебного года
+              Email:
+              {' '}
+              {user.email}
               <br />
-              Роль: Студент
+              Роль:
+              {' '}
+              {user.role}
+              { user.role === STUDENT
+              && (
+              <div>
+                Академическая группа:
+                {' '}
+                {user.studyGroup}
+              </div>
+              )}
             </Typography>
           </Paper>
         </Container>
