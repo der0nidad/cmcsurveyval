@@ -13,14 +13,14 @@ import {
 } from '../UsersSearch';
 import { respondentsStatusDataSchema } from '../Surveys/surveys.schema';
 
-function createData(name, studyGroup, passing) {
-  return { name, studyGroup, passing };
-}
-function createDataFromObj(student, passing) {
-  return { name: student.name, studyGroup: student.studyGroup, passing };
-}
-const yes = 'Да';
-const no = 'Нет';
+// function createData(name, studyGroup, passing) {
+//   return { name, studyGroup, passing };
+// }
+// function createDataFromObj(student, passing) {
+//   return { name: student.name, studyGroup: student.studyGroup, passing };
+// }
+// const yes = 'Да';
+// const no = 'Нет';
 // const rows2 = [
 //   createData('Иванов Иван Иванович', 102, yes),
 //   createData('Сидоров Валентин Павлович', 102, yes),
@@ -30,13 +30,13 @@ const no = 'Нет';
 //   createData('Поляков Сергей Петрович', 106, no),
 // ];
 
-const rows = [
-  createDataFromObj(student1, yes),
-  createDataFromObj(student3, yes),
-  createDataFromObj(student2, yes),
-  createDataFromObj(student7, yes),
-  createDataFromObj(student4, yes),
-];
+// const rows = [
+//   createDataFromObj(student1, yes),
+//   createDataFromObj(student3, yes),
+//   createDataFromObj(student2, yes),
+//   createDataFromObj(student7, yes),
+//   createDataFromObj(student4, yes),
+// ];
 
 class StatusTable extends React.Component {
   static propTypes = {

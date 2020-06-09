@@ -110,38 +110,49 @@ class SurveyStatus(generics.ListAPIView):
 
 def get_survey_data(survey_id):
     questions = Question.objects.filter(survey_id=survey_id)
-    res = {}
+    # res = {}
+    res_list = []
     for question in questions:
         # для каждого текстового ответа вытащить совокупность всех ответов. и записать в список
         if question.question_type == Question.SMALL_TEXT:
             answers = AnswerText.objects.filter(question_id=question.id)
-            res[question.id] = {
+            question_data = {
+                'id': question.id,
                 'type': Question.SMALL_TEXT,
-                'answers': list(answers.values())
+                'answers': list(answers.values()),
+                'name': question.name,
             }
+            # res[question.id] = question_data
+            res_list.append(question_data)
         elif question.question_type == Question.SELECT_ONE:
             # вот тут уже посложнее, тут нужна какая-то аналитика. что надо сделать:
             # мы выбираем все ответыСелекты на данный Вопрос.
             answers = AnswerSelect.objects.select_related('answer_variant').filter(question_id=question.id)
+            ids = [answer.answer_variant.id for answer in answers]
+            answers_no_answers = AnswerVariant.objects.filter(question_id=question.id).exclude(id__in=ids)
+            # надо добавить эти ответы к предыдущим - это варианты ответов, кот. не выбрал ни один респондент
             answers_count = answers.count()
             ans = answers.annotate(
                 num_answer_variants=Count('answer_variant'),
                 answer_percentage=Count('answer_variant') / answers_count * 100
             )
-            print(ans)
-            res[question.id] = {
+            question_data = {
                 'type': Question.SELECT_ONE,
+                'id': question.id,
+                'name': question.name,
                 'answers': [{
                     'var_count': answer.num_answer_variants,
                     'var_percentage': answer.answer_percentage,
                     'text': answer.answer_variant.name} for answer in ans]
 
             }
+            # res[question.id] = question_data
+            res_list.append(question_data)
             # потом нам надо их сгруппировать по варианту ответа.
             # посчитать количество разных групп. и поделить размер этих групп на общее количество вопросов.
             # записать в результат для каждого ответа доли ответов респондентов и количество голосов респондентов
             # и так же общее количество голосов
-    return res
+    return res_list
 
 
 def survey_data(request, survey_id):
@@ -167,12 +178,11 @@ def survey_full_report(request, survey_id):
         user['full_name'] = user_obj.get_full_name()
         user['status'] = user['audience__status']
         del user['audience__status']
-        print(user)
         survey_status.append(user)
     res = {
         'answers_data': answers_data,
         'survey_status': survey_status,
         'surveyData': survey_data,
+        'respondents_count': len(survey_status),
     }
-    print(res)
     return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json")

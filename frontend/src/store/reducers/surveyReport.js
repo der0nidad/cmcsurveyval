@@ -9,6 +9,7 @@ const initialState = {
   surveyMinData: null,
   isLoading: false,
   errors: null,
+  respondentsCount: null,
 };
 const respondentsSchemaExample = {
 
@@ -28,6 +29,7 @@ const surveyReport = (state = initialState, action) => {
         respondents: { $set: data.surveyStatus },
         answers: { $set: data.answersData },
         surveyMinData: { $set: data.surveyData },
+        respondentsCount: { $set: data.respondentsCount},
       });
     }
     case STATUS_DATA_LOAD_FAIL: {

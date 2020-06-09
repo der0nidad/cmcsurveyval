@@ -17,49 +17,49 @@ import { SELECT_QUESTION, TEXT_QUESTION } from '../QuestionsEdit/questionEdit.co
 import { surveysRoute } from '../RouterComponent/routerComponent.constants';
 import { loadRespondentsStatusesAction } from '../../store/actions/surveyReport.actions';
 
-export const fiveVariants = [
-  {
-    name: 'Нет',
-    id: 1,
-    part: '20%',
-  },
-  {
-    name: 'Скорее нет',
-    id: 2,
-    part: '0%',
-  },
-  {
-    name: 'Трудно сказать, да или нет',
-    id: 3,
-    part: '20%',
-  },
-  {
-    name: 'Скорее да',
-    id: 4,
-    part: '40%',
-  },
-  {
-    name: 'Да',
-    id: 5,
-    part: '20%',
-  },
-];
-const questions = [
-  {
-    name: 'Вы удовлетворены преподаванием данного курса?',
-    type: SELECT_QUESTION,
-    answerVariants: fiveVariants,
-  },
-  {
-    name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
-    type: TEXT_QUESTION,
-  },
-];
-const surveyData = {
-  questionsList: questions,
-  name: 'Первый опрос',
-  author: 'Петров Виктор',
-};
+  // export const fiveVariants = [
+  //   {
+  //     name: 'Нет',
+  //     id: 1,
+  //     part: '20%',
+  //   },
+  //   {
+  //     name: 'Скорее нет',
+  //     id: 2,
+  //     part: '0%',
+  //   },
+  //   {
+  //     name: 'Трудно сказать, да или нет',
+  //     id: 3,
+  //     part: '20%',
+  //   },
+  //   {
+  //     name: 'Скорее да',
+  //     id: 4,
+  //     part: '40%',
+  //   },
+  //   {
+  //     name: 'Да',
+  //     id: 5,
+  //     part: '20%',
+  //   },
+  // ];
+  // const questions = [
+  //   {
+  //     name: 'Вы удовлетворены преподаванием данного курса?',
+  //     type: SELECT_QUESTION,
+  //     answerVariants: fiveVariants,
+  //   },
+  //   {
+  //     name: 'Место, где можно более подробно рассказать о впечатлениях от курса',
+  //     type: TEXT_QUESTION,
+  //   },
+  // ];
+  // const surveyData = {
+  //   questionsList: questions,
+  //   name: 'Первый опрос',
+  //   author: 'Петров Виктор',
+  // };
 class SurveyReportComponent extends React.Component {
   static propTypes = {
     survey: PropTypes.shape(surveyWithQuestionsSchema),
@@ -77,6 +77,7 @@ class SurveyReportComponent extends React.Component {
     answersData: PropTypes.object, // TODO добавь шейп для ответов(там могут быть 2 типа для SO и ST)
     isLoading: PropTypes.bool,
     surveyMinData: PropTypes.object,
+    respondentsCount: PropTypes.number,
   };
 
   static defaultProps = {
@@ -85,6 +86,7 @@ class SurveyReportComponent extends React.Component {
     respondentsData: null,
     answersData: null,
     surveyMinData: null,
+    respondentsCount: null,
   };
 
   state = {
@@ -111,14 +113,14 @@ class SurveyReportComponent extends React.Component {
   // и таб с результатами опроса. его пока не рендерим. всего 3 компонента: основной, таблица и результатыЫ
   render() {
     const { activeTab } = this.state;
-    const { respondentsData, answersData, surveyMinData, isLoading } = this.props;
+    const { respondentsData, answersData, surveyMinData, isLoading, respondentsCount } = this.props;
     if (isLoading && !respondentsData) return <div className="status-screen__spinner"><CircularProgress /></div>;
     // TODO в этом же компоненте(но наверное  вотдельном экшне, хз, хотя зачем в отдельном) подгружай нужные данные для
     // таблицы с резами
     return (
       <div>
         <Header
-          pageTitle={`Отчёт по опросу ${surveyData?.name}`}
+          pageTitle={`Отчёт по опросу ${surveyMinData?.name}`}
         />
         <Container maxWidth="sm">
           <Breadcrumbs
@@ -132,7 +134,7 @@ class SurveyReportComponent extends React.Component {
               Созданные мной опросы
             </Link>
             <Typography color="textPrimary">
-              {`Отчёт по опросу ${surveyData?.name}`}
+              {`Отчёт по опросу ${surveyMinData?.name}`}
 
             </Typography>
           </Breadcrumbs>
@@ -154,7 +156,7 @@ class SurveyReportComponent extends React.Component {
                 >
                   { activeTab === 1
                     ? <StatusTable respondentsData={respondentsData} />
-                    : <SurveyResults answersData={answersData} />}
+                    : <SurveyResults answersData={answersData} respondentsCount={respondentsCount}/>}
                 </div>
               </div>
             )}
@@ -165,8 +167,8 @@ class SurveyReportComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  survey: surveyData,
   respondentsData: state.surveyReport.respondents,
+  respondentsCount: state.surveyReport.respondentsCount,
   answersData: state.surveyReport.answers,
   surveyMinData: state.surveyReport.surveyMinData,
   isLoading: state.surveyReport.isLoading,
