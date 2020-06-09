@@ -4,7 +4,7 @@
 образования на факультете ВМК МГУ. 
 
 #### Live demo
-Доступно по [cmcsurveyval.ru](cmcsurveyval.ru)
+Доступно по [cmcsurveyval.ru](http://cmcsurveyval.ru)
 
 #### Как собрать и запустить проект
 Для unix. В проекте используется python 3.6
