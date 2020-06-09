@@ -125,7 +125,7 @@ def survey_data(request, survey_id):
             answers = AnswerSelect.objects.select_related('answer_variant').filter(question_id=question.id)
             answers_count = answers.count()
             ans = answers.annotate(
-                num_answer_variants=Count('answer_variant'), answer_percentage=Count('answer_variant')/answers_count
+                num_answer_variants=Count('answer_variant'), answer_percentage=Count('answer_variant')/answers_count*100
             )
             print(ans)
             res[question.id] = {

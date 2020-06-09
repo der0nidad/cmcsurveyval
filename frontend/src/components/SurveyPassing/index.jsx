@@ -134,8 +134,9 @@ class SurveyPassingComponent extends React.Component {
   };
 
   validateAnswers = () => {
-    const { form } = this.state;
     const { surveyQuestions } = this.props;
+    if (!surveyQuestions.questionsList.length) return false;
+    const { form } = this.state;
     const unansweredQuestions = surveyQuestions.questionsList
       .filter((question) => (form[question.id].answerText === ''));
     return unansweredQuestions.length === 0;
@@ -209,7 +210,7 @@ class SurveyPassingComponent extends React.Component {
     return (
       <div>
         <Header
-          pageTitle="Линейная алгебра - опрос по курсу"
+          pageTitle={surveyQuestions?.name}
         />
         <Snackbar
           anchorOrigin={{
@@ -235,7 +236,7 @@ class SurveyPassingComponent extends React.Component {
             <Typography color="textPrimary">
               Прохождение опроса:
               {' '}
-              {123}
+              {surveyQuestions?.name}
             </Typography>
           </Breadcrumbs>
           { questionsData && questionsData.length

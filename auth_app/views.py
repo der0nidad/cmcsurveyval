@@ -43,9 +43,19 @@ class SelfUserView(LoginRequiredMixin, GenericAPIView):
     model = get_user_model()
     serializer_class = SelfUserSerializer
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         User = get_user_model()
-        user = User.objects.get(id=request.user.id)
+        next_url = '/'
+        try:
+            next_url = request.GET.get('next')
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return JsonResponse({'next': next_url}, status=400)
         user_response = {
             'username': user.username,
             'email': user.email,

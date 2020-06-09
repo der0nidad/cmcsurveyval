@@ -4,6 +4,7 @@ export const CLOSE_LEFT_MENU = 'CLOSE_LEFT_MENU';
 export const WHOAMI_START = 'WHOAMI_START';
 export const WHOAMI_SUCCESS = 'WHOAMI_SUCCESS';
 export const WHOAMI_FAIL = 'WHOAMI_FAIL';
+export const FLUSH_REDIRECT = 'FLUSH_REDIRECT';
 export const LOGOUT_START = 'LOGOUT_START';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAIL = 'LOGOUT_FAIL';

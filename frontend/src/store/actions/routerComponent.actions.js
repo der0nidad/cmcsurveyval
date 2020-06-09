@@ -2,11 +2,11 @@ import { createAction } from 'redux-api-middleware';
 import {
   LOGOUT_FAIL, LOGOUT_START, LOGOUT_SUCCESS, WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS,
 } from '../actionTypes';
-import {logOutEndpoint, whoAmI} from '../../components/RouterComponent/routerComponent.constants';
+import { logoutEndpoint, whoAmIWithNext } from '../../components/RouterComponent/routerComponent.constants';
 import { getCookie } from '../../common/helpers/csrf';
 
-export const whoAmIAction = () => createAction({
-  endpoint: whoAmI,
+export const whoAmIAction = (next) => createAction({
+  endpoint: whoAmIWithNext(next),
   method: 'GET',
   headers: { 'Content-Type': 'application/json' },
   types: [
@@ -18,7 +18,7 @@ export const whoAmIAction = () => createAction({
 
 
 export const logOutAction = () => createAction({
-  endpoint: logOutEndpoint,
+  endpoint: logoutEndpoint,
   method: 'POST',
   headers: {
     'X-CSRFTOKEN': getCookie('csrftoken'),
