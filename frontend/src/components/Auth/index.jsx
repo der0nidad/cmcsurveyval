@@ -18,8 +18,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="http://cmcsurveyval.ru">
+        Салимов Ярослав, 2020
       </Link>
       {' '}
       {new Date().getFullYear()}
@@ -116,7 +116,7 @@ export default class Auth extends React.Component {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email адрес"
               name="email"
               autoComplete="email"
               autoFocus
@@ -129,7 +129,7 @@ export default class Auth extends React.Component {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Пароль"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -139,7 +139,7 @@ export default class Auth extends React.Component {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Запомнить меня"
             />
             <Button
               type="submit"
@@ -150,20 +150,20 @@ export default class Auth extends React.Component {
               onClick={this.logUserIn}
               onKeyDown={this.handleKeyDown}
             >
-              Sign In
+              Войти
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="/reset-password" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  Don`&apos`t have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
+            {/*<Grid container>*/}
+            {/*  <Grid item xs>*/}
+            {/*    /!*<Link href="/reset-password" variant="body2">*!/*/}
+            {/*    /!*  Forgot password?*!/*/}
+            {/*    /!*</Link>*!/*/}
+            {/*  </Grid>*/}
+            {/*  <Grid item>*/}
+            {/*    /!*<Link href="/signup" variant="body2">*!/*/}
+            {/*    /!*  Don'&apos't have an account? Sign Up*!/*/}
+            {/*    /!*</Link>*!/*/}
+            {/*  </Grid>*/}
+            {/*</Grid>*/}
             {/* </form> */}
           </div>
           <Box mt={8}>
