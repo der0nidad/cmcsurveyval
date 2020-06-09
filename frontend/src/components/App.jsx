@@ -55,6 +55,8 @@ class App extends Component {
 }
 
 export default App;
+// TODO включай только в проде
+// TODO вынеси credentials в конфиг))0) и поменяй их, тк уже есть в репе
 // Sentry.init({ dsn: 'https://2113fb3057a84052bb68d9eb64fd4fa6@o394381.ingest.sentry.io/5244400' });
 
 const container = document.getElementById('app');

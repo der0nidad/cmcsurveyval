@@ -74,7 +74,6 @@ const group106 = [student4, student7].sort(nameComparator);
 const studentData = [...group102, ...group106];
 studentData.push(teacher);
 studentData.push(admin);
-console.log(studentData);
 
 function createData(studentDataDict) {
   return { ...studentDataDict };

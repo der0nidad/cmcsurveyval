@@ -35,7 +35,7 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect(LOGIN_URL)
+    return JsonResponse({'next': LOGIN_URL}, status=302)
 
 
 # TODO: проверь, почему не работает редирект на страницу логина, если пользователь не залогинен
@@ -43,9 +43,19 @@ class SelfUserView(LoginRequiredMixin, GenericAPIView):
     model = get_user_model()
     serializer_class = SelfUserSerializer
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            return self.get(request)
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
         User = get_user_model()
-        user = User.objects.get(id=request.user.id)
+        next_url = '/'
+        try:
+            next_url = request.GET.get('next')
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return JsonResponse({'next': next_url}, status=400)
         user_response = {
             'username': user.username,
             'email': user.email,

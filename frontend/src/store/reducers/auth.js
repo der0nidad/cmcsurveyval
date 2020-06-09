@@ -1,11 +1,14 @@
 import update from 'immutability-helper';
-import { WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS } from '../actionTypes';
+import {
+  FLUSH_REDIRECT, WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS,
+} from '../actionTypes';
 import { getCookie } from '../../common/helpers/csrf';
 
 const initialState = {
   user: null,
   userPermissions: null,
   csrf: null,
+  redirect: null,
 };
 const userSchemaExample = {
   username: '',
@@ -25,10 +28,18 @@ const auth = (state = initialState, action) => {
       return update(state, {
         user: { $set: action.payload.user },
         csrf: { $set: getCookie('csrftoken') },
+        redirect: { $set: null },
       });
     }
     case WHOAMI_FAIL: {
-      return update(state, {});
+      return update(state, {
+        redirect: { $set: action.payload.response.next },
+      });
+    }
+    case FLUSH_REDIRECT: {
+      return update(state, {
+        redirect: { $set: null },
+      });
     }
     default:
       return state;

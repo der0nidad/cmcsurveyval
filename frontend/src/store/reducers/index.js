@@ -6,6 +6,7 @@ import surveys from './surveys';
 import questionEdit from './questionEdit';
 import mySurveys from './mySurveys';
 import surveyPassing from './surveyPassing';
+import surveyReport from './surveyReport';
 
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   questionEdit,
   mySurveys,
   surveyPassing,
+  surveyReport,
 });
 
 export default rootReducer;

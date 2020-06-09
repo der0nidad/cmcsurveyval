@@ -9,3 +9,9 @@
 .status-table__header {
     padding: 10px;
 }
+
+.status-screen__spinner {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}

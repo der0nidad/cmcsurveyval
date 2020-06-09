@@ -74,6 +74,7 @@ export default class Auth extends React.Component {
         bodyformat: 'formdata',
       }).then(() => {
         // TODO: replace to props.history.push('/smth'), when add redux etc
+        // TODO мб добавить экшн FLUSH_REDIRECT  сюда?
         if (nextUrl) {
           window.location.replace(nextUrl);
         } else {

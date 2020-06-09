@@ -47,3 +47,11 @@ export const mySurveysMinSchema = PropTypes.shape({
   id: PropTypes.number,
   author: PropTypes.shape(userShape),
 });
+
+export const respondentsStatusDataSchema = PropTypes.shape({
+  username: PropTypes.string,
+  id: PropTypes.number,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  status: PropTypes.bool,
+});
