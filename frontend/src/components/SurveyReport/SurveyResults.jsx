@@ -55,6 +55,10 @@ const firstQuestionData = {
 };
 const questionsData = [secondQuestionData, firstQuestionData];
 class SurveyResults extends React.Component {
+
+  static propTypes = {
+    answersData: PropTypes.object
+  }
   render() {
     const data = questionsData.map((question) => {
       let answerData;

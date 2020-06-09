@@ -5,6 +5,8 @@ import { toCamel } from '../../common/helpers/toCamel';
 
 const initialState = {
   respondents: [],
+  answers: [],
+  surveyMinData: null,
   isLoading: false,
   errors: null,
 };
@@ -20,9 +22,12 @@ const surveyReport = (state = initialState, action) => {
       });
     }
     case STATUS_DATA_LOAD_SUCCESS: {
+      const data = toCamel(action.payload);
       return update(state, {
         isLoading: { $set: false },
-        respondents: { $set: toCamel(action.payload) },
+        respondents: { $set: data.surveyStatus },
+        answers: { $set: data.answersData },
+        surveyMinData: { $set: data.surveyData },
       });
     }
     case STATUS_DATA_LOAD_FAIL: {

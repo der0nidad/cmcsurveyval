@@ -74,13 +74,17 @@ class SurveyReportComponent extends React.Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     respondentsData: PropTypes.arrayOf(respondentsStatusDataSchema),
+    answersData: PropTypes.object, // TODO добавь шейп для ответов(там могут быть 2 типа для SO и ST)
     isLoading: PropTypes.bool,
+    surveyMinData: PropTypes.object,
   };
 
   static defaultProps = {
     survey: null,
     isLoading: false,
     respondentsData: null,
+    answersData: null,
+    surveyMinData: null,
   };
 
   state = {
@@ -107,14 +111,14 @@ class SurveyReportComponent extends React.Component {
   // и таб с результатами опроса. его пока не рендерим. всего 3 компонента: основной, таблица и результатыЫ
   render() {
     const { activeTab } = this.state;
-    const { respondentsData, isLoading } = this.props;
+    const { respondentsData, answersData, surveyMinData, isLoading } = this.props;
     if (isLoading && !respondentsData) return <div className="status-screen__spinner"><CircularProgress /></div>;
     // TODO в этом же компоненте(но наверное  вотдельном экшне, хз, хотя зачем в отдельном) подгружай нужные данные для
     // таблицы с резами
     return (
       <div>
         <Header
-          pageTitle={'Отчёт по опросу "Линейная алгебра - опрос по курсу"'}
+          pageTitle={`Отчёт по опросу ${surveyData?.name}`}
         />
         <Container maxWidth="sm">
           <Breadcrumbs
@@ -128,7 +132,7 @@ class SurveyReportComponent extends React.Component {
               Созданные мной опросы
             </Link>
             <Typography color="textPrimary">
-              Отчёт по опросу "Линейная алгебра - опрос по курсу"
+              {`Отчёт по опросу ${surveyData?.name}`}
 
             </Typography>
           </Breadcrumbs>
@@ -148,7 +152,9 @@ class SurveyReportComponent extends React.Component {
                 <div
                   style={{ minHeight: '10vh', marginTop: '2vh' }}
                 >
-                  { activeTab === 1 ? <StatusTable respondentsData={respondentsData} /> : <SurveyResults />}
+                  { activeTab === 1
+                    ? <StatusTable respondentsData={respondentsData} />
+                    : <SurveyResults answersData={answersData} />}
                 </div>
               </div>
             )}
@@ -161,6 +167,8 @@ class SurveyReportComponent extends React.Component {
 const mapStateToProps = (state) => ({
   survey: surveyData,
   respondentsData: state.surveyReport.respondents,
+  answersData: state.surveyReport.answers,
+  surveyMinData: state.surveyReport.surveyMinData,
   isLoading: state.surveyReport.isLoading,
 });
 

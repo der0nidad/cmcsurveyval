@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/surveys/<int:survey_id>/questions/', views.SurveyQuestionsView.as_view(), name='survey_questions'),
     path('api/surveys/<int:survey_id>/report/status/', views.SurveyStatus.as_view(), name='survey_status'),
     path('api/surveys/<int:survey_id>/report/data/', views.survey_data, name='survey_data_report'),
+    path('api/surveys/<int:survey_id>/report-data/', views.survey_full_report, name='survey_full_report'),
     path('api/questions/', views.QuestionCreate.as_view(), name='questions_get_create'),
     path('api/answer_variants/', views.AnswerVariantCreate.as_view(), name='answer_variant_get_create'),
     path('api/answer_variants/<int:answer_variant_id>/', views.AnswerVariantDetail.as_view(),

@@ -3,7 +3,7 @@ import json
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.db.models import Count
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
 
 from surveys.models import Survey, Question, AnswerVariant, AnswerText, AnswerSelect, Audience
@@ -108,7 +108,7 @@ class SurveyStatus(generics.ListAPIView):
         # return Survey.objects.get(id=survey_id).audience.all()
 
 
-def survey_data(request, survey_id):
+def get_survey_data(survey_id):
     questions = Question.objects.filter(survey_id=survey_id)
     res = {}
     for question in questions:
@@ -125,12 +125,13 @@ def survey_data(request, survey_id):
             answers = AnswerSelect.objects.select_related('answer_variant').filter(question_id=question.id)
             answers_count = answers.count()
             ans = answers.annotate(
-                num_answer_variants=Count('answer_variant'), answer_percentage=Count('answer_variant')/answers_count*100
+                num_answer_variants=Count('answer_variant'),
+                answer_percentage=Count('answer_variant') / answers_count * 100
             )
             print(ans)
             res[question.id] = {
                 'type': Question.SELECT_ONE,
-                'answers':  [{
+                'answers': [{
                     'var_count': answer.num_answer_variants,
                     'var_percentage': answer.answer_percentage,
                     'text': answer.answer_variant.name} for answer in ans]
@@ -140,8 +141,38 @@ def survey_data(request, survey_id):
             # посчитать количество разных групп. и поделить размер этих групп на общее количество вопросов.
             # записать в результат для каждого ответа доли ответов респондентов и количество голосов респондентов
             # и так же общее количество голосов
-            pass
+    return res
+
+
+def survey_data(request, survey_id):
     # надо ли кодировать res в json?
-    return JsonResponse(res, status=200)
+    res = get_survey_data(survey_id)
+    return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json")
 
 
+def survey_full_report(request, survey_id):
+    answers_data = get_survey_data(survey_id)
+
+    survey_obj = Survey.objects.select_related('author').get(id=survey_id)
+    users_survey_status = survey_obj.survey_audience.all().values('id', 'username', 'audience__status')
+    # TODO разберись с F() и мб перепиши
+    survey_status = []
+    survey_data = {
+        'name': survey_obj.name,
+        'author': survey_obj.author.get_full_name()
+    }
+    for user in users_survey_status:
+        User = get_user_model()
+        user_obj = User.objects.get(id=user['id'])
+        user['full_name'] = user_obj.get_full_name()
+        user['status'] = user['audience__status']
+        del user['audience__status']
+        print(user)
+        survey_status.append(user)
+    res = {
+        'answers_data': answers_data,
+        'survey_status': survey_status,
+        'surveyData': survey_data,
+    }
+    print(res)
+    return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json")

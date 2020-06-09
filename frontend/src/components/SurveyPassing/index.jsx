@@ -126,7 +126,7 @@ class SurveyPassingComponent extends React.Component {
       const { form } = this.state;
       saveSurveyAnswers(match.params.id, form)
         .then(() => {
-        // this.props.history.push(mySurveysRoute);
+          this.props.history.push(mySurveysRoute);
         });
     } else {
       this.setState({ error: true });
