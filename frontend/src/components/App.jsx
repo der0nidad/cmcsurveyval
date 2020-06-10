@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import * as Sentry from '@sentry/browser';
 import { RouterComponent } from './RouterComponent';
 import store from '../store';
-
+import 'normalize.css/normalize.css';
 
 const THEME = createMuiTheme({
   typography: {
