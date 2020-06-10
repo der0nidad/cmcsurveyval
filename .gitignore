@@ -94,3 +94,4 @@ local_settings.py
 db.sqlite3
 
 frontend/static
+frontend/stats.json

@@ -3,6 +3,7 @@ import {
   FLUSH_REDIRECT, WHOAMI_FAIL, WHOAMI_START, WHOAMI_SUCCESS,
 } from '../actionTypes';
 import { getCookie } from '../../common/helpers/csrf';
+import {toCamel} from '../../common/helpers/toCamel';
 
 const initialState = {
   user: null,
@@ -26,7 +27,7 @@ const auth = (state = initialState, action) => {
       });
     case WHOAMI_SUCCESS: {
       return update(state, {
-        user: { $set: action.payload.user },
+        user: { $set: toCamel(action.payload.user) },
         csrf: { $set: getCookie('csrftoken') },
         redirect: { $set: null },
       });

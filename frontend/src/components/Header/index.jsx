@@ -17,7 +17,7 @@ import { openLeftMenu } from '../../store/actions/flags.actions';
 import { userShape } from '../Auth/auth.schema';
 import { logOutAction } from '../../store/actions/routerComponent.actions';
 import historyRouter from '../../common/helpers/historyRouter';
-import {userProfileRoute} from '../RouterComponent/routerComponent.constants';
+import { userProfileRoute } from '../RouterComponent/routerComponent.constants';
 
 
 const mapStateToProps = (state) => ({
@@ -140,10 +140,10 @@ class HeaderComponent extends React.Component {
               { user
                 ? (
                   <Typography variant="subtitle1">
-                    {/* { user.username } */}
+                    { user.fullName }
                     {/* Иванов Иван */}
                     {/* Администратор Системы */}
-                    Петров Виктор Сергеевич
+                    {/* Петров Виктор Сергеевич */}
                     <AccountCircleIcon />
                     <IconButton
                       onClick={this.handlePopoverOpen}
