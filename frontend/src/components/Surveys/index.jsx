@@ -137,53 +137,57 @@ class SurveysComponent extends React.Component {
                 >
                   <DeleteIcon />
                 </IconButton>
-                {index !== 1 && <Button style={{ fontSize: '12px' }} size="small">Редактировать вопросы</Button>}
+                <Button style={{ fontSize: '12px' }} size="small"> <Link
+                  to={`/surveys/${survey.id}/`}
+                  style={{ textDecoration: 'none' }}
+                  color="primary"
+                >Редактировать вопросы</Link></Button>
                 {/* <Button color="primary" variant="contained">Редактировать вопросы</Button> */}
                 {/* <Button color="primary" variant="contained">Редактировать опрос</Button> */}
                 {/* <Button color="primary" variant="contained">Удалить опрос</Button> */}
-                {index !== 1
-                  ? (
-                    <Button
-                      style={{ fontSize: '12px' }}
-                      size="small"
-                      color="primary"
-                      variant="contained"
-                    >
-                      Опубликовать
-                    </Button>
-                  )
+                {/*{index !== 1*/}
+                {/*  ? (*/}
+                {/*    <Button*/}
+                {/*      style={{ fontSize: '12px' }}*/}
+                {/*      size="small"*/}
+                {/*      color="primary"*/}
+                {/*      variant="contained"*/}
+                {/*    >*/}
+                {/*      Опубликовать*/}
+                {/*    </Button>*/}
+                {/*  )*/}
 
-                  : (
-                    <Button
-                      style={{ fontSize: '12px' }}
-                      size="small"
-                      color="primary"
-                      variant="outlined"
-                      disabled
-                    >
-                      Опубликован
-                    </Button>
-                  )}
-                {index === 1 && (
-                  <div
-                    style={{ display: 'flex', justifyContent: 'space-around', minWidth: '300px' }}
-                  >
-                    <Typography
-                      variant="subtitle2"
-                      style={{ fontSize: '12px', maxWidth: '150px' }}
-                    >
-                      Опубликованные опросы нельзя редактировать
-                    </Typography>
-                    <Button
-                      style={{ fontSize: '12px', maxHeight: '30px', marginLeft: '30px' }}
-                      size="small"
-                      color="primary"
-                      variant="contained"
-                    >
-                      Закрыть опрос
-                    </Button>
-                  </div>
-                )}
+                {/*  : (*/}
+                {/*    <Button*/}
+                {/*      style={{ fontSize: '12px' }}*/}
+                {/*      size="small"*/}
+                {/*      color="primary"*/}
+                {/*      variant="outlined"*/}
+                {/*      disabled*/}
+                {/*    >*/}
+                {/*      Опубликован*/}
+                {/*    </Button>*/}
+                {/*  )}*/}
+                {/*{index === 1 && (*/}
+                {/*  <div*/}
+                {/*    style={{ display: 'flex', justifyContent: 'space-around', minWidth: '300px' }}*/}
+                {/*  >*/}
+                {/*    <Typography*/}
+                {/*      variant="subtitle2"*/}
+                {/*      style={{ fontSize: '12px', maxWidth: '150px' }}*/}
+                {/*    >*/}
+                {/*      Опубликованные опросы нельзя редактировать*/}
+                {/*    </Typography>*/}
+                {/*    <Button*/}
+                {/*      style={{ fontSize: '12px', maxHeight: '30px', marginLeft: '30px' }}*/}
+                {/*      size="small"*/}
+                {/*      color="primary"*/}
+                {/*      variant="contained"*/}
+                {/*    >*/}
+                {/*      Закрыть опрос*/}
+                {/*    </Button>*/}
+                {/*  </div>*/}
+                {/*)}*/}
               </CardActions>
             </Card>
           </Box>

@@ -72,6 +72,9 @@ class QuestionEditComponent extends React.Component {
   handleRedirectToSurveys = () => {
     this.props.history.push(surveysRoute);
   };
+  handleOpenQuestionForm = () => {
+    this.props.openQuestionForm();
+  }
 
   render() {
     const {
@@ -111,7 +114,7 @@ class QuestionEditComponent extends React.Component {
         <Container maxWidth="sm">
           {questions}
           <Button
-            onClick={openQuestionForm}
+            onClick={this.handleOpenQuestionForm}
             color="primary"
             variant="contained"
           >
@@ -135,8 +138,8 @@ const mapStateToProps = (state) => ({
   // editingSurvey: state.surveys.editingSurvey,
   user: state.auth.user,
   // survey: state.surveys.surveys.filter((survey) => survey.id === ownProps.match.params.id),
-  // survey: state.questionEdit.survey,
-  survey: currSurvey,
+  survey: state.questionEdit.survey,
+  // survey: currSurvey,
   questionFormOpened: state.flags.formOpened,
 });
 

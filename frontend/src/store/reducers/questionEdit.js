@@ -47,7 +47,7 @@ const questionsEdit = (state = initialState, action) => {
     }
     case OPEN_QUESTION_FORM: {
       const { questionId } = action.additionalData;
-      const currentQuestionData = state.questionsData[questionId];
+      const currentQuestionData = questionId ? state.questionsData[questionId] : null;
       return update(state, {
         currentQuestion: { $set: currentQuestionData },
       });
