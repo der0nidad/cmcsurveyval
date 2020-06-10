@@ -17,9 +17,9 @@ import { getCookie } from '../../common/helpers/csrf';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {/*{'Copyright © '}*/}
       <Link color="inherit" href="http://cmcsurveyval.ru">
-        Салимов Ярослав, 2020
+        Салимов Ярослав,
       </Link>
       {' '}
       {new Date().getFullYear()}

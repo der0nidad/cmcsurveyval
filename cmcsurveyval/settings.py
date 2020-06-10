@@ -24,7 +24,7 @@ SECRET_KEY = ')zztr#++x860w_0a=fvrg=@ts*zb6#^!h2wr7rxch1aier@kws'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cmcsurveyval.ru', '212.24.96.249', 'localhost']
+ALLOWED_HOSTS = ['cmcsurveyval.ru', '212.24.96.249', 'localhost', '127.0.0.1']
 
 
 # Application definition
