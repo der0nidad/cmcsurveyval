@@ -24,7 +24,7 @@ SECRET_KEY = ')zztr#++x860w_0a=fvrg=@ts*zb6#^!h2wr7rxch1aier@kws'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cmcsurveyval.ru', '212.24.96.249', 'localhost']
 
 
 # Application definition
@@ -164,6 +164,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 AUTH_USER_MODEL = 'users.User'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+
