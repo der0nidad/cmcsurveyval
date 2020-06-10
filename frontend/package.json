@@ -38,7 +38,6 @@
     "@sentry/browser": "^5.15.5",
     "classnames": "^2.2.6",
     "clsx": "^1.1.0",
-    "final-form": "^4.18.7",
     "formik": "^2.1.4",
     "formik-material-fields": "0.0.6",
     "formik-material-ui": "^2.0.0-beta.1",

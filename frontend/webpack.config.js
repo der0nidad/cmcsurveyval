@@ -2,7 +2,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   // entry: './index.jsx',
-  watch: true,
+  // watch: true,
   module: {
     rules: [
       {
