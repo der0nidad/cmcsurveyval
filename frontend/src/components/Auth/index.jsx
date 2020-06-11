@@ -24,6 +24,7 @@ function Copyright() {
       {' '}
       {new Date().getFullYear()}
       {'.'}
+      Логин для входа ivanov, пароль ivanov
     </Typography>
   );
 }

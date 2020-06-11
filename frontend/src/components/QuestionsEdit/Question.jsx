@@ -73,7 +73,6 @@ class QuestionComponent extends React.Component {
   }
 
   render() {
-    ша тще()
     const {
       match, questionData, deleteQuestion, openQuestionForm, questionFormOpened,
     } = this.props;
