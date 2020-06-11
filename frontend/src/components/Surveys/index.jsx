@@ -101,20 +101,21 @@ class SurveysComponent extends React.Component {
                     color="textSecondary"
                     gutterBottom
                   >
-                    {/* {survey.author} */}
-                    Автор: Кузнецов Сергей
+                    Автор:
+                     {survey.author}
+                    {/*Автор: Кузнецов Сергей*/}
                   </Typography>
-                  <Typography
-                    // style={{ display: 'inline-block', marginLeft: '30px' }}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {/* {survey.author} */}
-                    {index === 1
-                      ? '323 группа'
-                      : 'Аудитория: 1 поток, 2 поток, 3 поток'}
+                  {/*<Typography*/}
+                  {/*  // style={{ display: 'inline-block', marginLeft: '30px' }}*/}
+                  {/*  color="textSecondary"*/}
+                  {/*  gutterBottom*/}
+                  {/*>*/}
+                  {/*   {survey.author} */}
+                  {/*  {index === 1*/}
+                  {/*    ? '323 группа'*/}
+                  {/*    : 'Аудитория: 1 поток, 2 поток, 3 поток'}*/}
 
-                  </Typography>
+                  {/*</Typography>*/}
                 </Link>
               </CardContent>
               <CardActions>
