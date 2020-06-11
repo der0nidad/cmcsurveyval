@@ -143,6 +143,11 @@ class SurveysComponent extends React.Component {
                   style={{ textDecoration: 'none' }}
                   color="primary"
                 >Редактировать вопросы</Link></Button>
+                <Button style={{ fontSize: '12px' }} size="small"> <Link
+                  to={`/surveys/${survey.id}/report`}
+                  style={{ textDecoration: 'none' }}
+                  color="primary"
+                >Отчёт о прохождении</Link></Button>
                 {/* <Button color="primary" variant="contained">Редактировать вопросы</Button> */}
                 {/* <Button color="primary" variant="contained">Редактировать опрос</Button> */}
                 {/* <Button color="primary" variant="contained">Удалить опрос</Button> */}
